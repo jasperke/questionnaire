@@ -5,9 +5,35 @@
 	<title>問卷調查</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 	<script type="text/javascript" src="js/jquery.js" ></script>
+	<script type="text/javascript" src="js/underscore-min.js" ></script>
 	<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+	<script type="text/javascript" src="js/quizPool.js" ></script>	
+<script>
+var	quizzes=['G1','G2','G3',
+		{foreword:'以下是那些跟您有同樣疾病的人所認為重要的一些陳述，請在每一行陳述之後圈選出一個數字，以表達您認為在過去七天來各項陳述的真實程度'},
+		'GP1','GP2','GP3','GP4','GP5','GP6','GP7','GS1','GS2','GS3','GS4','GS5','GS6','GS7',
+		'GE1','GE2','GE3','GE4','GE5','GE6','GF1','GF2','GF3','GF4','GF5','GF6','GF7','E1',
+		'E2','E3','B1','B2','B3','B4','B5','B6','B7','B8','B9','P2','_PART_OF_PAIN','_SCORE_OF_PAIN'];
+
+
+$(function(){
+	var sheet_here=$('#sheet_here'),
+		quiz_counter=1;
+	$.each(quizzes,function(i,n){
+		var quiz;
+		if(typeof(n)=='string'){
+			quiz=quizPool[n];
+			sheet_here.append(quiz_view({quiz:quiz.quiz,name:n,options:quiz.options||commonOptions,idx:quiz_counter++}));
+		}else{
+			sheet_here.append(foreword_view({foreword:n.foreword}));
+		}
+	});
+});
+</script>
 </head>
 <body>
+<form method="post" action="counter.php" class="form-inline" role="form">
+<input type="hidden" name="Sheet" value="FACT-B">
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
@@ -26,438 +52,20 @@
 			</div>
 		</div>
 	</nav>
-	<div class="container paper">
-		<h3 style="margin:0;">FACT - B </h3>
+	<div class="container paper" id="sheet_here">
+		<h3 style="margin:0;">FACT - B</h3>
 		<hr/>
-		<form class="form-inline" role="form">
-			<div class="form-group" style="margin-right:20px;">
-				<label class="text-muted" for="p_id">病歷號</label>
-				<input type="text" class="form-control" style="width:auto;" id="p_id" name="p_id">
-			</div>
-			<div class="form-group">
-				<label class="text-muted" for="p_name">姓名</label>
-				<input type="text" class="form-control" style="width:auto;" id="p_name" name="p_name">
-			</div>
-			<div class="checkbox">
-				<label style="margin-left: 20px;"><input type="checkbox"> 男</label>
-				<label style="margin-left: 20px;"><input type="checkbox"> 女</label>
-			</div>
-		</form>
-		<hr/>
-		<h4>1. 工作雇用狀態</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="work" /> 全職</label>
-			<label class="checkbox-inline"><input type="radio" name="work" /> 兼職</label>
-			<label class="checkbox-inline"><input type="radio" name="work" /> 家庭主婦</label>
-			<label class="checkbox-inline"><input type="radio" name="work" /> 失業</label>
-			<label class="checkbox-inline"><input type="radio" name="work" /> 退休</label>
-			<label class="checkbox-inline"><input type="radio" name="work" /> 殘障不能就業</label>
+		<div class="form-group" style="margin-right:20px;">
+			<label class="text-muted" for="p_id">病歷號</label>
+			<input type="text" class="form-control" style="width:auto;" id="p_id" name="p_id">
 		</div>
-		<hr/>
-		<h4>2. 婚姻狀態</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="MARRIAGE" /> 已婚或同居</label>
-			<label class="checkbox-inline"><input type="radio" name="MARRIAGE" /> 未婚</label>
-			<label class="checkbox-inline"><input type="radio" name="MARRIAGE" /> 分居</label>
-			<label class="checkbox-inline"><input type="radio" name="MARRIAGE" /> 離婚</label>
-			<label class="checkbox-inline"><input type="radio" name="MARRIAGE" /> 喪偶</label>
+		<div class="form-group">
+			<label class="text-muted" for="p_name">姓名</label>
+			<input type="text" class="form-control" style="width:auto;" id="p_name" name="p_name">
 		</div>
-		<hr/>
-		<h4>3. 生活居住情形</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 獨居</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 與成人一同居住(無兒童)</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 與其他成人與兒童共同居住</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 只與兒童一同居住</label>
-		</div>
-		<hr/>
-		<small class="text-danger">以下是那些跟您有同樣疾病的人所認為重要的一些陳述，請在每一行陳述之後圈選出一個數字，以表達您認為在過去七天來各項陳述的真實程度</small>
-		<h4>4. 我精神不好</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>5. 我有噁心反胃的情形</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>6. 因為我的身體狀況，我有困難達到家人的需求</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>7. 我有疼痛</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>8. 我對治療的副作用感到困擾</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>9. 我覺得身體不適</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>10. 我因病被迫要臥床休息</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>11. 我覺得與我的朋友親近</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>12. 我從我家人獲得情緒上的支持</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>13. 我從我朋友獲得支持</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>14. 我家人已接受我的疾病</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>15. 我滿意家人之間對我疾病的溝通方式</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>16. 我覺得與我的伴侶(或我主要支持者)親近</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>17. 我對我的性生活感到滿意</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 不想回答</label>
-		</div>
-		<hr/>
-		<h4>18. 我感到悲傷</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>19. 我滿意自己處理疾病的方式</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>20. 我逐漸失去對抗我的疾病的希望</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>21. 我覺得緊張</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>22. 我擔心死亡</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>23. 我擔心我的狀況會惡化</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>24. 我能夠工作(包括在家的工作)</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>25. 我的工作(包括在家的工作)令人滿意</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>26. 我能夠享受生活</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>27. 我已接受我的疾病</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>28. 我睡得好</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>29. 我依然享受我以前常做的有趣的事</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>30. 我滿足我現在的生活品質</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>31. 我最近三個月的平均收入每個月約新台幣</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 無收入</label>
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 0-10,000元</label>
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 10,001-30,000元</label>
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 30,001-50,000元</label>
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 50,001-100,000元</label>
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 100,000-200,000元</label>
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 大於200,000元</label>
-		</div>
-		<hr/>
-		<h4>32. 我最近三個月平均每日工作時數約</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="WORKTIME" /> 無</label>
-			<label class="checkbox-inline"><input type="radio" name="WORKTIME" /> 0-2.0小時</label>
-			<label class="checkbox-inline"><input type="radio" name="WORKTIME" /> 2.1-4.0小時</label>
-			<label class="checkbox-inline"><input type="radio" name="WORKTIME" /> 4.1-8.0小時</label>
-			<label class="checkbox-inline"><input type="radio" name="WORKTIME" /> 8.1-10.0小時</label>
-			<label class="checkbox-inline"><input type="radio" name="WORKTIME" /> 大於10.1小時</label>
-		</div>
-		<hr/>
-		<h4>33. 我最近三個月可支配自由使用的錢約有</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 無收入</label>
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 0-10,000元</label>
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 10,001-30,000元</label>
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 30,001-50,000元</label>
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 50,001-100,000元</label>
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 100,000-200,000元</label>
-			<label class="checkbox-inline"><input type="radio" name="MONEY" /> 大於200,000元</label>
-		</div>
-		<hr/>
-		<h4>34. 我呼吸時曾有氣不足</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>35. 我在意自己的衣服穿著</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>36. 我有一側或兩側的手臂腫脹或疼痛</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>37. 我覺得自己是性感的</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>38. 我對失去頭髮感到困擾</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>39. 我擔心其他家人也會有得跟我同樣疾病的風險</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>40. 我擔心壓力會影響到我的疾病</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>41. 我對體重的改變感到困擾</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>42. 我能夠覺得自己像個女人</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>43. 我感到身體的某些部位有疼痛的症狀</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 一點也不</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有一點</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 有些</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 相當</label>
-			<label class="checkbox-inline"><input type="radio" name="LIFE" /> 非常</label>
-		</div>
-		<hr/>
-		<h4>44. 疼痛的部位</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 沒有疼痛</label>
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 頭頸部</label>
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 身體</label>
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 身體加頭頸部</label>
-		</div>
-		<hr/>
-		<h4>45. 疼痛十分量表</h4>
-		<div class="col-lg-12">
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 1</label>
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 2</label>
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 3</label>
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 4</label>
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 5</label>
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 6</label>
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 7</label>
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 8</label>
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 9</label>
-			<label class="checkbox-inline"><input type="checkbox" name="LIFE" /> 10</label>
+		<div class="checkbox">
+			<label style="margin-left: 20px;"><input name="gender" value="M" type="checkbox"> 男</label>
+			<label style="margin-left: 20px;"><input name="gender" value="F" type="checkbox"> 女</label>
 		</div>
 	</div>
 	<br/>
@@ -466,5 +74,6 @@
 		<button class="btn btn-default"> 取　消</button>
 		<button class="btn btn-success"> 送　出</button>
 	</center>
+</form>
 </body>
 </html>
