@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+	<meta charset="utf-8" />
+	<title>問卷調查</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<script type="text/javascript" src="js/jquery.js" ></script>
+	<script type="text/javascript" src="js/underscore-min.js" ></script>
+	<script type="text/javascript" src="js/bootstrap.min.js" ></script>
+	<script type="text/javascript" src="js/quizPool.js" ></script>
+	<style type="text/css">
+	* {
+		font-family: "微軟正黑體";
+	}
+	html, body, h3 small, h4 small {
+		font-size: 17px;
+		font-family: "微軟正黑體";
+	}
+	#optlist {
+		width: 90%;
+		margin: 10px 5%;
+	}
+	#optlist a.btn-default:hover,
+	#optlist a.btn-default.active {
+		background: #F0F0F0;
+	}
+	#optlist a.text-danger,
+	#optlist a.text-danger span {
+		color: #B94A48;
+	}
+	#optlist a span {
+		color: #999;
+		vertical-align: middle;
+		margin-right: 10px;
+	}
+	</style>
+<script>
+
+</script>
+</head>
+<body>
+<form method="post" action="counter.php" class="form-inline" role="form" onsubmit="return isValidForm(this);">
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">問卷調查</a>
+			</div>
+			<div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">回首頁</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<h3 style="margin:0;">
+			<span id="questionnaire_name"></span> <small class="pull-right text-info">病患：<span id="p_id"></span> <span id="p_name"></span></small>
+		</h3>
+	</div>
+
+	<div id="door" class="container paper">
+		<div class="form-group" style="margin-right:20px;">
+			<label class="text-muted" for="p_id">病歷號</label>
+			<input type="text" class="form-control" style="width:auto;" id="p_id" name="p_id">
+		</div>
+		<div class="form-group">
+			<label class="text-muted" for="p_name">姓名</label>
+			<input type="text" class="form-control" style="width:auto;" id="p_name" name="p_name">
+		</div>
+		<div class="checkbox">
+			<label style="margin-left: 20px;"><input name="p_gender" value="1" type="radio"> 男</label>
+			<label style="margin-left: 20px;"><input name="p_gender" value="2" type="radio"> 女</label>
+		</div>
+		<br><br>
+		<a id="startQ" onclick="startQuest();" class="btn btn-lg btn-default">開始</a>
+	</div>
+
+	<div id="paper" class="container paper" style="display:none">
+		<h1><span id="q_title"></span><span id="q_no" class="text-warning pull-right"></span></h1>
+		<hr/>
+		<div id="optlist" class="btn-group-vertical btn-group-lg"></div>
+		<hr/>
+		<a id="prevQ" onclick="setQuest(--q_no);" class="btn btn-lg btn-default"><i class="icon icon-chevron-left"></i> 上一題</a>
+		<a id="nextQ" onclick="if(answer[q_no]===undefined){alert('請確實回答！');}else{setQuest(++q_no);}" class="btn btn-lg btn-default pull-right">下一題 <i class="icon icon-chevron-right"></i></a>
+	</div>
+	<br/>
+	<center id="send" style="display: none;">
+		<button class="btn btn-lg btn-default"><i class="icon icon-remove"></i>  取　消</button>
+		<button id="submitButton" class="btn btn-lg btn-success"><i class="icon icon-ok"></i>  送　出</button>
+	</center>
+	<script type="text/javascript">
+		var q_no = 0,
+			answer = [],
+			quizzes,
+			params={};
+
+		function init(){
+			_.each(location.search.replace(/^\?/,'').split('&'),function(s){
+				s=s.split('=');
+				params[s[0]]=s[1];
+			});
+			if(params.questionnaire===undefined||questionnaireMap[params.questionnaire]==undefined){
+				window.location.replace('index.html');
+			}
+			$('#questionnaire_name').text(params.questionnaire);
+			quizzes=questionnaireMap[params.questionnaire];
+		}
+
+		$(function(){
+			init();
+
+			setQuest(q_no);
+			$("#optlist").on("click", "a.btn", function(event) {
+				$(this).addClass("active text-danger")
+				.find("span").removeClass("icon-unchecked").addClass("icon-check").end()
+				.siblings("a.active").removeClass("active").removeClass("text-danger")
+				.find("span").removeClass("icon-check").addClass("icon-unchecked");
+
+				answer[$(this).data('idx')]=$(this).data('val');
+				if(event.originalEvent&&q_no<quizzes.length-1){
+					setTimeout("setQuest(++q_no);",300);
+				}
+			});
+		});
+
+		function setQuest(no) {
+			if(!q_no) $("#prevQ").hide();
+			else $("#prevQ").show();
+
+			if( q_no+1==quizzes.length ) {
+				$("#nextQ").hide();
+				$("#send").show();
+			} else {
+				$("#nextQ").show();
+				$("#send").hide();
+			}
+
+			$("#q_no").html( (q_no+1)+"/"+quizzes.length );
+			$("#q_title").html(quizPool[quizzes[no]].quiz);
+
+			$("#optlist").empty();
+
+			$.each(quizPool[quizzes[no]].options||commonOptions, function(i){
+				$("#optlist").append(
+					$("<a/>").data({idx:no,val:i}).addClass("btn btn-default text-left").append(
+						$("<span/>").addClass("icon icon-unchecked")
+					).append(this)
+				);
+			});
+			if(_.include(['GS7'],quizzes[no])){
+				$("#optlist").append(
+					$("<a/>").data({idx:no,val:-1}).addClass("btn btn-default text-left").append(
+						$("<span/>").addClass("icon icon-unchecked")
+					).append('不想回答')
+				);
+			}
+			if(answer[no]!==undefined){
+				if(answer[no]!=-1){
+					$("#optlist").find('a.btn').eq(answer[no]).trigger('click');
+				}else{
+					$("#optlist").find('a.btn').last().trigger('click');
+				}
+			}
+		}
+		function isValidForm(f){
+			for(var i=quizzes.length-1; i>=0; i--){
+				if(answer[i]===undefined){
+					alert('請確實回答！');
+					return false;
+				}
+			}
+			saveQuestionnaire(params.questionnaire,f,answer,quizzes);
+			return false;
+		}
+		function startQuest(){
+			var f=document.forms[0];
+			if(f.p_id.value==''||f.p_name.value==''||!(f.p_gender[0].checked||f.p_gender[1].checked)){
+				alert('錯誤！\n\n資料輸入不完整！');
+				return;
+			}
+			$('#p_id').text(f.p_id.value);
+			$('#p_name').text(f.p_name.value);
+			$('#door').hide();
+			$('#paper').show();
+		}
+	</script>
+</form>
+</body>
+</html>
