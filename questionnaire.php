@@ -1,3 +1,18 @@
+<?php
+session_start();
+require_once('questionnaireMap.php');
+
+if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // 未登入
+	header('Location: ./login.php');
+	exit;
+}else{
+	if(!isset($questionnaire)||!isset($questionnaireMap[$questionnaire])){
+		header('Location: ./index.php');
+		exit;
+	}
+}
+?>
+
 <!DOCTYPE html>
 <html lang="zh-tw">
 <head>
@@ -53,7 +68,7 @@
 			</div>
 			<div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
 				<ul class="nav navbar-nav">
-					<li><a href="index.html">回首頁</a></li>
+					<li><a href="index.php">回首頁</a></li>
 				</ul>
 			</div>
 		</div>
@@ -69,13 +84,13 @@
 			<label class="text-muted" for="p_id">病歷號</label>
 			<input type="text" class="form-control" style="width:auto;" id="p_id" name="p_id">
 		</div>
-		<div class="form-group">
+		<div class="form-group" style="margin-right:20px;">
 			<label class="text-muted" for="p_name">姓名</label>
 			<input type="text" class="form-control" style="width:auto;" id="p_name" name="p_name">
 		</div>
-		<div class="checkbox">
-			<label style="margin-left: 20px;"><input name="p_gender" value="1" type="radio"> 男</label>
-			<label style="margin-left: 20px;"><input name="p_gender" value="2" type="radio"> 女</label>
+		<div class="form-group" style="margin-right:20px;">
+			<label class="text-muted" for="p_name">體重</label>
+			<input type="text" class="form-control" style="width:auto;" id="p_weight" name="p_weight"> kg
 		</div>
 		<br><br>
 		<a id="startQ" onclick="startQuest();" class="btn btn-lg btn-default">開始</a>
@@ -96,26 +111,14 @@
 		<button id="submitButton" class="btn btn-lg btn-success"><i class="icon icon-ok"></i>  送　出</button>
 	</center>
 	<script type="text/javascript">
-		var q_no = 0,
+		var q_id='<? echo $questionnaire;?>',
+			q_no = 0,
 			sub_q_no = -1,
 			answer = [],
-			quizzes,
-			params={};
-
-		function init(){
-			_.each(location.search.replace(/^\?/,'').split('&'),function(s){
-				s=s.split('=');
-				params[s[0]]=s[1];
-			});
-			if(params.questionnaire===undefined||questionnaireMap[params.questionnaire]==undefined){
-				window.location.replace('index.html');
-			}
-			$('#questionnaire_name').text(params.questionnaire);
-			quizzes=questionnaireMap[params.questionnaire];
-		}
+			quizzes=<? echo json_encode($questionnaireMap[$questionnaire]);?>;
 
 		$(function(){
-			init();
+			$('#questionnaire_name').text(q_id);
 
 			setQuest(0);
 			$("#optlist").on("click", "a.btn", function(event) {
@@ -269,17 +272,16 @@
 					questionnaire:q_name,
 					p_id:f.p_id.value,
 					p_name:f.p_name.value,
-					p_gender:f.p_gender[0].checked?1:2,
-					answer:answer,
-					quizzes:quizzes
+					p_weight:f.p_weight.value,
+					answer:answer
 				},
 				error:function(){
-					alert('error');
+					alert('error'); // TODO:
 				},
 				success:function(data){
 					if(data[0][0]==0){
 						alert('資料儲存完畢！\n謝謝您的合作！');
-						window.location.replace('index.html');
+						window.location.replace('index.php');
 					}else{
 						alert('錯誤！\n\n錯誤代碼：'+data[0][0]+'\n錯誤訊息：'+data[0][1]);
 					}
@@ -289,17 +291,20 @@
 		function isValidForm(f){
 			for(var i=quizzes.length-1; i>=0; i--){
 				if(answer[i]===undefined){
-					alert('請確實回答！');
+					alert('請確實回答！(第'+(i+1)+'題)');
 					return false;
 				}
 			}
-			saveQuestionnaire(params.questionnaire,f,answer,quizzes);
+			saveQuestionnaire(q_id,f,answer,quizzes);
 			return false;
 		}
 		function startQuest(){
 			var f=document.forms[0];
-			if(f.p_id.value==''||f.p_name.value==''||!(f.p_gender[0].checked||f.p_gender[1].checked)){
+			if(f.p_id.value==''||f.p_name.value==''||f.p_weight.value==''){
 				alert('錯誤！\n\n資料輸入不完整！');
+				return;
+			}else if(isNaN(f.p_weight.value)){
+				alert('錯誤！\n\n輸入體重格式不正確！');
 				return;
 			}
 			$('#p_id').text(f.p_id.value);

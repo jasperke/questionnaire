@@ -1,3 +1,11 @@
+<?
+session_start();
+
+if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // 未登入
+	header('Location: ./login.php');
+	exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="zh-tw">
 <head>
@@ -17,22 +25,33 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.html">問卷調查</a>
+				<a class="navbar-brand" href="index.html">長庚問卷調查系統</a>
+			</div>
+			<div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
+				<ul class="nav navbar-nav">
+					<li><a href="login.php?logout=1">登出</a></li>
+				</ul>
+			</div>
+			<div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
+				<ul class="nav navbar-nav">
+					<li><a href="list.php">問卷列表</a></li>
+				</ul>
 			</div>
 		</div>
 	</nav>
 	<div class="container">
+		<div>請選擇問卷：</div>
 		<div class="list-group">
-			<a href="questionnaire.html?questionnaire=FACT-B" class="list-group-item">
+			<a href="questionnaire.php?questionnaire=FACT-B" class="list-group-item">
 				FACT - B <i class="icon icon-chevron-right pull-right"></i>
 			</a>
-			<a href="questionnaire.html?questionnaire=FACT-ECO" class="list-group-item">
+			<a href="questionnaire.php?questionnaire=FACT-ECO" class="list-group-item">
 				FACT - ECO <i class="icon icon-chevron-right pull-right"></i>
 			</a>
-			<a href="questionnaire.html?questionnaire=FACT-HN-X" class="list-group-item">
+			<a href="questionnaire.php?questionnaire=FACT-HN-X" class="list-group-item">
 				FACT - HN-X <i class="icon icon-chevron-right pull-right"></i>
 			</a>
-			<a href="questionnaire.html?questionnaire=HN.COM" class="list-group-item">
+			<a href="questionnaire.php?questionnaire=HN.COM" class="list-group-item">
 				HN.COM <i class="icon icon-chevron-right pull-right"></i>
 			</a>
 		</div>

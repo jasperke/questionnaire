@@ -120,40 +120,4 @@ var commonOptions=['一點也不','有一點','有些','相當','非常'], // �
 			'<%});%>'+
 			'<label class="checkbox-inline"><input type="radio" name="<%= name %>" value="-1"/> 不想回答</label>'+
 			'</div>'
-		),
-	// quizzes為各問卷所含問題題號及其順序, 不可隨便調整, 否則db中儲存的答案會對映錯亂
-	questionnaireMap={
-			"HN.COM":['_HN1','_HN2','_HN3','_HN4','_HN5','_HN6','_HN7','_HN8','_HN9','_HN10','_HN11','_HN12','_HN13','_HN14','_HN15','_HN16','_HN17','_HN18','_HN19','_HN20','_HN21','_HN22'],
-			"FACT-B":['G1','G2','G3',
-				'GP1','GP2','GP3','GP4','GP5','GP6','GP7',
-				'GS1','GS2','GS3','GS4','GS5','GS6','GS7',
-				'GE1','GE2','GE3','GE4','GE5','GE6',
-				'GF1','GF2','GF3','GF4','GF5','GF6','GF7',
-				'E1','E2','E3',
-				'B1','B2','B3','B4','B5','B6','B7','B8','B9',
-				'P2',
-				'_PART_OF_PAIN','_SCORE_OF_PAIN'],
-			"FACT-ECO":['G1','G2','G3',
-				'GP1','GP2','GP3','GP4','GP5','GP6','GP7',
-				'GS1','GS2','GS3','GS4','GS5','GS6','GS7',
-				'GE1','GE2','GE3','GE4','GE5','GE6',
-				'GF1','GF2','GF3','GF4','GF5','GF6','GF7',
-				'E1','E2','E3',
-				'_PART_OF_PAIN','_SCORE_OF_PAIN'],
-			"FACT-HN-X":['G1','G2','G3',
-				'GP1','GP2','GP3','GP4','GP5','GP6','GP7',
-				'GS1','GS2','GS3','GS4','GS5','GS6','GS7',
-				'GE1','GE2','GE3','GE4','GE5','GE6',
-				'GF1','GF2','GF3','GF4','GF5','GF6','GF7',
-				'H&N1','H&N2','H&N3','H&N4','H&N5','H&N6','H&N7','H&N8','H&N9','H&NA','H&NB',
-				'X1','X2','X3','X4','X5','X6:X7,_X8,_X9,_X10,_X11,_X12,_X13,_X14,_X15',
-					// X6:X7,_X8,..... 冒號後表子問題群組, 可多個冒號區隔
-					// 第1個冒號後接著的表第1子群問題(主問題選第1項時才秀)
-					// 第2個冒號後接著的表第2子群問題(主問題選第2項時才秀)
-					// 依此類推
-				'E1','E2','E3',
-				'_HN1','_HN2','_HN3','_HN4','_HN5','_HN6','_HN7','_HN8','_HN9','_HN10',
-				'_HN11','_HN12','_HN13','_HN14','_HN15','_HN16','_HN17','_HN18','_HN19','_HN20',
-				'_HN21','_HN22',
-				'_PART_OF_PAIN','_SCORE_OF_PAIN']
-		};
+		);
