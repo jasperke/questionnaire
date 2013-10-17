@@ -303,7 +303,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 			if(f.p_id.value==''||f.p_name.value==''||f.p_weight.value==''){
 				alert('錯誤！\n\n資料輸入不完整！');
 				return;
-			}else if(isNaN(f.p_weight.value)){
+			}else if(isNaN(f.p_weight.value)||f.p_weight.value<5||f.p_weight.value>200){
 				alert('錯誤！\n\n輸入體重格式不正確！');
 				return;
 			}
