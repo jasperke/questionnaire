@@ -12,7 +12,7 @@ require_once('koala.Utility.php');
 require_once('common.Utility.php');
 require_once('rpc.Utility2.php');
 //require_once('questionnaireMap.php');
-//require_once('ChangGung.Utility.php');
+require_once('questionnaireUtility.php');
 define("CFG_FN", "/usr/local/koala/config.ini");
 
 $group_id=2; // OwnerID
@@ -51,7 +51,7 @@ if($db!=0){
 	<script type="text/javascript" src="js/bootstrap.min.js" ></script>
 	<script type="text/javascript" src="js/quizPool.js" ></script>
 <script>
-var	data=<? echo json_encode($out); ?>,
+var	data=<? echo QUtillity::decodeUnicodeString(json_encode($out)); ?>,
 	questionnaire='<? echo isset($questionnaire)?$questionnaire:"HN.COM"; ?>',
 	quizzes=<? echo json_encode($questionnaireMap[isset($questionnaire)?$questionnaire:'HN.COM']); ?>,
 	quiz_view;
@@ -116,7 +116,7 @@ $(function(){
 			<div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
 				<ul class="nav navbar-nav">
 					<li><a href="list.php">回列表</a></li>
-					<li><a href="index.php">回首頁</a></li>
+					<li><a href="./">回首頁</a></li>
 				</ul>
 			</div>
 		</div>

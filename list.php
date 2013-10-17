@@ -28,7 +28,7 @@ function getList(){
     data:{
       start:start,
       size:page_size,
-      order:document.forms[0].orderBy.options[document.forms[0].orderBy.selectedIndex].value
+      orderBy:document.forms[0].orderBy.options[document.forms[0].orderBy.selectedIndex].value
     },
     error:function(){
       alert('error'); // TODO:
@@ -73,7 +73,7 @@ $(function(){
   <tr>
     <td width="137" height="50" bgcolor="#000000">&nbsp;</td>
     <td width="978" bgcolor="#000000">t<font color="#999999" size="4">長庚問卷調查系統</font></td>
-    <td width="83" bgcolor="#000000"><a href="./index.php"><font color="#999999" size="4">回首頁</font></a></td>
+    <td width="83" bgcolor="#000000"><a href="./"><font color="#999999" size="4">回首頁</font></a></td>
     <td width="153" bgcolor="#000000"><select name="orderBy" onchange="start=0;getList();">
         <option selected value="time">依作答時間呈現</option>
         <option value="person">依人員呈現</option>

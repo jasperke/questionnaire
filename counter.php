@@ -1,12 +1,19 @@
 ﻿<?php
-//counter.php
+header('Content-Type: application/json; charset=utf-8');
+session_start();
+
 require_once('koala.Utility.php');
 require_once('common.Utility.php');
 require_once('rpc.Utility2.php');
 require_once('questionnaireMap.php');
-//require_once('ChangGung.Utility.php');
+require_once('questionnaireUtility.php');
 define("CFG_FN", "/usr/local/koala/config.ini");
 
+if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // 未登入
+	$out=array(array(902,"無權限使用！"));
+	echo QUtillity::decodeUnicodeString(json_encode($out));
+	exit;
+}
 
 final class Calculator{
 	static $GP=array(); // GP1~GP7
@@ -123,5 +130,5 @@ if($db!=0){
 	$out[0]=array(900,"資料庫連結失敗！");
 //	return;
 }
-echo json_encode($out);
+echo QUtillity::decodeUnicodeString(json_encode($out));
 ?>

@@ -7,7 +7,7 @@ if(isset($logout)){
 if(isset($login_id)&&strcmp($login_id,'admin')==0&&isset($login_pw)&&strcmp($login_pw,'111111')==0){
 	$_SESSION['admin']='changgung';
 //	session_write_close();
-	header('Location: ./index.php');
+	header('Location: ./');
 	exit;
 }
 ?>
@@ -35,7 +35,7 @@ if(isset($login_id)&&strcmp($login_id,'admin')==0&&isset($login_pw)&&strcmp($log
         </tr>
         <tr>
           <td><div align="center"><font color="#333333">帳號：</font>
-              <input name="login_id" type="text" size="15">
+              <input name="login_id" type="text" size="15" autocomplete="off">
               <font color="#333333">密碼：</font>
               <input name="login_pw" type="password" size="15">
             </div></td>
