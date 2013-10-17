@@ -108,16 +108,4 @@ var commonOptions=['一點也不','有一點','有些','相當','非常'], // �
 		_X15:{quiz:"我對鼻塞感到困擾"},
 
 		_BLANK:{quiz:''}
-	},
-	// 引言template(for後台)
-	foreword_view=_.template('<hr/><small class="text-danger"><%= foreword %></small>'),
-	// 問題template(for後台)
-	quiz_view=_.template(
-			'<hr/><h4><%= idx %>. <%= quiz %></h4>'+
-			'<div class="col-lg-12">'+
-			'<%_.forEach(options, function (o,i) {%>'+
-			'	<label class="checkbox-inline"><input type="radio" name="<%= name %>" value="<%= i %>"/> <%= o %></label>'+
-			'<%});%>'+
-			'<label class="checkbox-inline"><input type="radio" name="<%= name %>" value="-1"/> 不想回答</label>'+
-			'</div>'
-		);
+	};
