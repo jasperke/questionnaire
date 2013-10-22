@@ -124,27 +124,10 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 			.siblings("a.active").removeClass("active").removeClass("text-danger")
 			.find("span").removeClass("icon-check").addClass("icon-unchecked");
 
-			// 暫存答案至answer
 			var sub_q_no=$(this).data('sub_q_no'),
 				q_no=$(this).data('q_no'),
 				val=$(this).data('val');
-			if(sub_q_no==-1){ // 目前處在主問題
-				if(answer[q_no]!==undefined){ // 之前已作答過
-					var old_answer=answer[q_no].toString().split(':'); // ex. '1:0,1,2' 表示主問題選1,子問題群依序選0,1,2
-					if(val!=old_answer[0]){ // 換答案, 須清掉子問題已填的答案(如果有的話)
-						answer[q_no]=val;
-					}else{ // 未更換答案, 不需任何處理
-
-					}
-				}else{ // 頭一次作答
-					answer[q_no]=val;
-				}
-			}else{ // 目前處在子問題
-				var old_answer=answer[q_no].toString().split(':'),
-					sub_answer=(old_answer[1]===undefined||old_answer[1]=='')?[]:old_answer[1].toString().split(',');
-				sub_answer[sub_q_no]=val;
-				answer[q_no]=old_answer[0]+':'+sub_answer.join(',');
-			}
+			keepAnswer(q_no,sub_q_no,val); // 暫存答案至answer
 
 			if(event.originalEvent&&q_no<quizzes.length-1){ // user作答完, 自動換下一題
 															// 切換上下題時, 標示已填答案也是trigger click event, 但不必換題
@@ -152,7 +135,25 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 			}
 		});
 	});
+	function keepAnswer(q_no,sub_q_no,val){
+		if(sub_q_no==-1){ // 目前處在主問題
+			if(answer[q_no]!==undefined){ // 之前已作答過
+				var old_answer=answer[q_no].toString().split(':'); // ex. '1:0,1,2' 表示主問題選1,子問題群依序選0,1,2
+				if(val!=old_answer[0]){ // 換答案, 須清掉子問題已填的答案(如果有的話)
+					answer[q_no]=val;
+				}else{ // 未更換答案, 不需任何處理
 
+				}
+			}else{ // 頭一次作答
+				answer[q_no]=val;
+			}
+		}else{ // 目前處在子問題
+			var old_answer=answer[q_no].toString().split(':'),
+				sub_answer=(old_answer[1]===undefined||old_answer[1]=='')?[]:old_answer[1].toString().split(',');
+			sub_answer[sub_q_no]=val;
+			answer[q_no]=old_answer[0]+':'+sub_answer.join(',');
+		}
+	}
 	function setQuest(direction) {
 		var quiz_id,
 			sub_quizzes,
