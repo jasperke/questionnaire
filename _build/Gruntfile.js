@@ -3,7 +3,7 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 
 		BASE_PATH: '../',
-		LIB_PATH: '../bower_components/',
+		LIB_PATH: './bower_components/',
 		JS_PATH: '../js/',
 
 		banner: [

@@ -1,8 +1,6 @@
 _build/node_modules/
-bower_components/
+_build/bower_components/
 fonts/
 js/
 css/bootstrap*
-CVS/
-images/CVS/
-js/CVS/
+**CVS/
