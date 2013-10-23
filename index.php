@@ -12,7 +12,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	<meta charset="utf-8" />
 	<title>問卷調查</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-	<script type="text/javascript" src="js/jquery.js" ></script>
+	<script type="text/javascript" src="js/jquery.min.js" ></script>
 	<script type="text/javascript" src="js/bootstrap.min.js" ></script>
 </head>
 <body>

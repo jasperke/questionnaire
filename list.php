@@ -12,7 +12,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // æœ
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title></title>
-<script type="text/javascript" src="js/jquery.js" ></script>
+<script type="text/javascript" src="js/jquery.min.js" ></script>
 <script type="text/javascript" src="js/underscore-min.js" ></script>
 <script>
 var start=<? echo isset($_SESSION['skip_rows'])?$_SESSION['skip_rows']:0; ?>,
