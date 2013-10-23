@@ -1,0 +1,22 @@
+{
+  "name": "questionnaire",
+  "version": "1.0.0",
+  "authors": [
+    "Jasper Ke <jasperke@kinghood.com.tw>"
+  ],
+  "description": "Questionnaire for ChangGung",
+  "main": "index.php",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bootstrap": "~3.0.0",
+    "jquery": "~2.0.3",
+    "underscore": "~1.5.2"
+  }
+}
