@@ -14,13 +14,23 @@ module.exports = function(grunt) {
 				 '* Copyright(c): <%= grunt.template.today("yyyy") %>',
 				 '*/'
 		],
+
+		concat: {
+			dist: {
+				src: ['./src/main.js','./src/quizPool.js'],
+				dest: './tmp/main.js'
+			}
+		},
+		clean: {
+			dist: ['./tmp']
+		},
 		uglify: {
 			options: {
 				banner: '<%= banner.join("\\n") %>'
 			},
 			dist: {
-				src: ['../src/quizPool.js'],
-				dest: '<%= JS_PATH %>'+'quizPool.min.js'
+				src: ['./tmp/main.js'],
+				dest: '<%= JS_PATH %>'+'main.min.js'
 			}
 		},
 		copy: {
@@ -34,8 +44,12 @@ module.exports = function(grunt) {
 		}
 	});
 
+	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-clean');
 
-	grunt.registerTask('default', ['uglify','copy']);
+	grunt.registerTask('lib', ['copy']);
+	grunt.registerTask('js', ['concat','uglify','clean']);
+	grunt.registerTask('default', ['lib','js']);
 };
