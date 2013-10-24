@@ -89,7 +89,7 @@ function setQuest(direction) {
 
 	if (q_no === 0 && sub_q_no === -1) {
 		$("#prevQ").hide();
-	}else {
+	} else {
 		$("#prevQ").show();
 	}
 	if (q_no >= quizzes.length - 1) { // TODO: 若最後一題有子問題群, '下一題'會變得有點複雜, 有空再說...
