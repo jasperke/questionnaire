@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 		banner: [
 				 '/*',
 				 '* Project: <%= pkg.name %>',
-				 '* Version: <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd") %>)',
+				 '* Version: <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd HH:MM") %>)',
 				 '* Development By: <%= pkg.author %>',
 				 '* Copyright(c): <%= grunt.template.today("yyyy") %>',
 				 '*/',
@@ -46,6 +46,15 @@ module.exports = function(grunt) {
 					{expand:true, cwd:'<%= LIB_PATH %>'+'bootstrap/dist', src:'**', dest:'<%= BASE_PATH %>'}
 				]
 			}
+		},
+		watch: {
+			scripts: {
+				files: ['./src/*.js'],
+				tasks: ['development'],
+				options: {
+					spawn: true,
+				}
+		  	}
 		}
 	});
 
@@ -53,6 +62,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	grunt.registerTask('lib', ['copy']);
 
