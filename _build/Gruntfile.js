@@ -12,13 +12,18 @@ module.exports = function(grunt) {
 				 '* Version: <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd") %>)',
 				 '* Development By: <%= pkg.author %>',
 				 '* Copyright(c): <%= grunt.template.today("yyyy") %>',
-				 '*/'
+				 '*/',
+				 ''
 		],
 
 		concat: {
 			dist: {
 				src: ['./src/main.js','./src/quizPool.js'],
 				dest: './tmp/main.js'
+			},
+			dev: {
+				src: ['./src/main.js','./src/quizPool.js'],
+				dest: '<%= JS_PATH %>'+'main.min.js'
 			}
 		},
 		clean: {
@@ -50,6 +55,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 
 	grunt.registerTask('lib', ['copy']);
-	grunt.registerTask('js', ['concat','uglify','clean']);
-	grunt.registerTask('default', ['lib','js']);
+
+	grunt.registerTask('product', ['concat:dist','uglify','clean']);
+	grunt.registerTask('development', ['concat:dev']);
+
+	grunt.registerTask('default', ['lib','product']);
 };
