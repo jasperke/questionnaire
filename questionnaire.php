@@ -19,10 +19,10 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	<meta charset="utf-8" />
 	<title>問卷調查</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-	<script type="text/javascript" src="js/jquery.min.js" ></script>
-	<script type="text/javascript" src="js/underscore-min.js" ></script>
-	<script type="text/javascript" src="js/bootstrap.min.js" ></script>
-	<script type="text/javascript" src="js/main.min.js" ></script>
+	<script src="js/jquery.min.js" ></script>
+	<script src="js/underscore-min.js" ></script>
+	<script src="js/bootstrap.min.js" ></script>
+	<script src="js/main.min.js" ></script>
 	<style type="text/css">
 	* {
 		font-family: "微軟正黑體";
@@ -107,32 +107,23 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<!-- <button class="btn btn-lg btn-default"><i class="icon icon-remove"></i>  取　消</button> -->
 		<button id="submitButton" class="btn btn-lg btn-success"><i class="icon icon-ok"></i>  送　出</button>
 	</center>
-<script type="text/javascript">
-var q_id='<? echo $questionnaire;?>',
+<script>
+var q_id,
 	q_no = 0,
 	sub_q_no = -1,
 	answer = [],
-	quizzes=<? echo json_encode($questionnaireMap[$questionnaire]);?>;
+	quizzes;
 
 $(function(){
-	$('#questionnaire_name').text(q_id);
-
-	setQuest(0);
-	$("#optlist").on("click", "a.btn", function(event) {
-		$(this).addClass("active text-danger")
-		.find("span").removeClass("icon-unchecked").addClass("icon-check").end()
-		.siblings("a.active").removeClass("active").removeClass("text-danger")
-		.find("span").removeClass("icon-check").addClass("icon-unchecked");
-
-		var sub_q_no=$(this).data('sub_q_no'),
-			q_no=$(this).data('q_no'),
-			val=$(this).data('val');
-		keepAnswer(q_no,sub_q_no,val); // 暫存答案至answer
-
-		if(event.originalEvent&&q_no<quizzes.length-1){ // user作答完, 自動換下一題
-														// 切換上下題時, 標示已填答案也是trigger click event, 但不必換題
-			setTimeout("setQuest(1);",300);
-		}
+	var url_params={};
+	$.each(location.search.substr(1).split('&'),function(){
+		var p=this.split('=');
+		url_params[p[0]]=p[1];
+	});
+	q_id=url_params['questionnaire'];
+	$.getJSON('questionnaireMap.php',{q_id:q_id},function(data){
+		quizzes=data;
+		initQuestionnaire();
 	});
 });
 </script>

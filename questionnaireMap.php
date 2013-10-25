@@ -31,4 +31,19 @@ $questionnaireMap["FACT-HN-X"]=array('G1','G2','G3',
 	'_HN11','_HN12','_HN13','_HN14','_HN15','_HN16','_HN17','_HN18','_HN19','_HN20',
 	'_HN21','_HN22',
 	'_PART_OF_PAIN','_SCORE_OF_PAIN');
+
+function getQuestionnaire($q_id){
+	global $questionnaireMap;
+
+	if(isset($questionnaireMap[$q_id])){
+		return json_encode($questionnaireMap[$q_id]);
+	}else{
+		return json_encode(array());
+	}
+}
+if(isset($q_id)){ // 有傳q_id者, 為client讀取q_id問卷的題組
+	header('Content-Type: application/json; charset=utf-8');
+	echo getQuestionnaire($q_id);
+	exit;
+}
 ?>

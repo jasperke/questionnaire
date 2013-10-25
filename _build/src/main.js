@@ -1,3 +1,26 @@
+function initQuestionnaire() {
+	$('#questionnaire_name').text(q_id);
+
+	setQuest(0);
+	$("#optlist").on("click", "a.btn", function (event) {
+		$(this).addClass("active text-danger")
+		.find("span").removeClass("icon-unchecked").addClass("icon-check").end()
+		.siblings("a.active").removeClass("active").removeClass("text-danger")
+		.find("span").removeClass("icon-check").addClass("icon-unchecked");
+
+		var sub_q_no = $(this).data('sub_q_no'),
+			q_no = $(this).data('q_no'),
+			val = $(this).data('val');
+		keepAnswer(q_no, sub_q_no, val); // 暫存答案至answer
+
+		if (event.originalEvent && q_no < quizzes.length - 1) { // user作答完, 自動換下一題
+															// 切換上下題時, 標示已填答案也是trigger click event, 但不必換題
+			setTimeout(function () {
+				setQuest(1);
+			}, 300);
+		}
+	});
+}
 function keepAnswer(q_no, sub_q_no, val) {
 	var old_answer;
 	if (sub_q_no == -1) { // 目前處在主問題
