@@ -19,10 +19,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	<meta charset="utf-8" />
 	<title>問卷調查</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-	<script src="js/jquery.min.js" ></script>
-	<script src="js/underscore-min.js" ></script>
-	<script src="js/bootstrap.min.js" ></script>
-	<script src="js/main.min.js" ></script>
+	<script src="js/require.js" data-main="js/main"></script>
 	<style type="text/css">
 	* {
 		font-family: "微軟正黑體";
@@ -107,26 +104,6 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<!-- <button class="btn btn-lg btn-default"><i class="icon icon-remove"></i>  取　消</button> -->
 		<button id="submitButton" class="btn btn-lg btn-success"><i class="icon icon-ok"></i>  送　出</button>
 	</center>
-<script>
-var q_id,
-	q_no = 0,
-	sub_q_no = -1,
-	answer = [],
-	quizzes;
-
-$(function(){
-	var url_params={};
-	$.each(location.search.substr(1).split('&'),function(){
-		var p=this.split('=');
-		url_params[p[0]]=p[1];
-	});
-	q_id=url_params['questionnaire'];
-	$.getJSON('questionnaireMap.php',{q_id:q_id},function(data){
-		quizzes=data;
-		initQuestionnaire();
-	});
-});
-</script>
 </form>
 </body>
 </html>

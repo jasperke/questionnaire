@@ -7,6 +7,8 @@ module.exports = function(grunt) {
 		BASE_PATH: '../',
 		LIB_PATH: './bower_components/',
 		JS_PATH: '../js/',
+		TMP_PATH: '../js/',
+		SRC_PATH: './src/',
 
 		banner: [
 				 '/*',
@@ -21,7 +23,7 @@ module.exports = function(grunt) {
 		concat: {
 			dist: {
 				src: ['./src/main.js','./src/quizPool.js'],
-				dest: './tmp/main.js'
+				dest: '<%= TMP_PATH %>'+'main.js'
 			},
 			dev: {
 				src: ['./src/main.js','./src/quizPool.js'],
@@ -29,23 +31,28 @@ module.exports = function(grunt) {
 			}
 		},
 		clean: {
-			dist: ['./tmp']
+			dist: ['<%= TMP_PATH %>']
 		},
 		uglify: {
 			options: {
-				banner: '<%= banner.join("\\n") %>'
+				//banner: '<%= banner.join("\\n") %>'
 			},
 			dist: {
-				src: ['./tmp/main.js'],
-				dest: '<%= JS_PATH %>'+'main.min.js'
+				src: '<%= TMP_PATH %>'+'**/*.js',
+				dest: '<%= JS_PATH %>',
+				expand: true, 			// 須用expand:true, allow dynamic building
+				flatten: true 			// 移除原本在tmp/內的目錄結構, 全部直接產生在/js/目錄下
 			}
 		},
 		copy: {
 			dist: {
 				files: [
-					{expand:true, cwd:'<%= LIB_PATH %>'+'underscore', src:'underscore-min.js', dest:'<%= JS_PATH %>'},
-					{expand:true, cwd:'<%= LIB_PATH %>'+'jquery', src:'jquery.min.js', dest:'<%= JS_PATH %>'},
-					{expand:true, cwd:'<%= LIB_PATH %>'+'bootstrap/dist', src:'**', dest:'<%= BASE_PATH %>'}
+					{expand:true, cwd:'<%= LIB_PATH %>'+'underscore', src:'underscore.js', dest:'<%= TMP_PATH %>'},
+					{expand:true, cwd:'<%= LIB_PATH %>'+'jquery', src:'jquery.js', dest:'<%= TMP_PATH %>'},
+					{expand:true, cwd:'<%= LIB_PATH %>'+'bootstrap/dist', src:'**', dest:'<%= BASE_PATH %>'},
+					{expand:true, cwd:'<%= LIB_PATH %>'+'requirejs-domready', src:'domReady.js', dest:'<%= TMP_PATH %>'},
+					{expand:true, cwd:'<%= LIB_PATH %>'+'requirejs', src:'require.js', dest:'<%= JS_PATH %>'},
+					{expand:true, cwd: './src', src:'*.js', dest:'<%= TMP_PATH %>'}
 				]
 			}
 		},
@@ -71,5 +78,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('product', ['concat:dist','uglify','clean']);
 	grunt.registerTask('development', ['concat:dev']);
 
+	grunt.registerTask('try',['copy']);
 	grunt.registerTask('default', ['lib','product']);
 };
