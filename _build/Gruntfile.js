@@ -36,6 +36,7 @@ module.exports = function(grunt) {
 		uglify: {
 			options: {
 				//banner: '<%= banner.join("\\n") %>'
+				mangle:false
 			},
 			dist: {
 				src: '<%= TMP_PATH %>'+'**/*.js',
@@ -74,6 +75,14 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	grunt.registerTask('lib', ['copy']);
+	grunt.registerTask('bower', function() { // 試不出來??
+		grunt.util.spawn({
+			cmd: ['bower'],
+			args: ['install'],
+		}, function done() {
+			grunt.log.writeln('down bower');
+		});
+	});
 
 	grunt.registerTask('product', ['concat:dist','uglify','clean']);
 	grunt.registerTask('development', ['concat:dev']);

@@ -87,7 +87,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 			<input type="text" class="form-control" style="width:auto;" id="p_weight" name="p_weight"> kg
 		</div>
 		<br><br>
-		<a id="startQ" onclick="startQuest();" class="btn btn-lg btn-default">開始</a>
+		<a id="startQ" class="btn btn-lg btn-default">開始</a>
 	</div>
 
 	<div id="paper" class="container paper" style="display:none">
@@ -96,8 +96,8 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<hr/>
 		<div id="optlist" class="btn-group-vertical btn-group-lg"></div>
 		<hr/>
-		<a id="prevQ" onclick="setQuest(-1);" class="btn btn-lg btn-default"><i class="icon icon-chevron-left"></i> 上一題</a>
-		<a id="nextQ" onclick="setQuest(1);" class="btn btn-lg btn-default pull-right">下一題 <i class="icon icon-chevron-right"></i></a>
+		<a id="prevQ" class="btn btn-lg btn-default"><i class="icon icon-chevron-left"></i> 上一題</a>
+		<a id="nextQ" class="btn btn-lg btn-default pull-right">下一題 <i class="icon icon-chevron-right"></i></a>
 	</div>
 	<br/>
 	<center id="send" style="display: none;">
