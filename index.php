@@ -34,12 +34,20 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 			</div>
 			<div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
 				<ul class="nav navbar-nav">
-					<li><a href="list.php">問卷列表</a></li>
+					<li><a href="index.php">主選單</a></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
-	<div class="container">
+	<div id="mainMenu" class="container">
+		<h3>請選擇：</h3>
+		<div class="list-group">
+			<a id="patient" href="userList.php" class="list-group-item">患者基本資料 <i class="icon icon-chevron-right pull-right"></i></a>
+			<a id="questionnaire" herf="#" class="list-group-item">填寫問卷 <i class="icon icon-chevron-right pull-right"></i></a>
+			<a id="manager" href="#" class="list-group-item">問卷結果 <i class="icon icon-chevron-right pull-right"></i></a>
+		</div>
+	</div>
+	<div id="questionnaireSelector" class="container">
 		<h3>請選擇問卷：</h3>
 		<div class="list-group">
 			<a href="questionnaire.php?questionnaire=FACT-B" class="list-group-item" target="_blank">
@@ -56,5 +64,14 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 			</a>
 		</div>
 	</div>
+<script>
+$(function(){
+	$('#questionnaireSelector').hide();
+	$('#questionnaire').on('click',function(){
+		$('#mainMenu').hide();
+		$('#questionnaireSelector').show();
+	})
+});
+</script>
 </body>
 </html>

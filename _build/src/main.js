@@ -1,7 +1,5 @@
 function initQuestionnaire() {
 	$('#questionnaire_name').text(q_id);
-	$('#p_id').text(patient_id);
-	$('#p_name').text(patient_name);
 
 	setQuest(0);
 	$("#optlist").on("click", "a.btn", function (event) {
@@ -193,4 +191,36 @@ function alertModal(msg,title){
 	$('#modalTitle').html(title===undefined?'錯誤訊息！':title);
 	$('#errorMsgHere').html(msg.replace('\n','<br>'));
 	$('#errorModal').modal('show');
+}
+function startQuest() {
+	var f = document.forms[0];
+	if (f.p_id.value === '' || f.p_name.value === '' || f.p_weight.value === '') {
+		alert('錯誤！\n\n資料輸入不完整！\n或病患基本資料尚未建立！');
+		return;
+	} else if (isNaN(f.p_weight.value) || f.p_weight.value < 5 || f.p_weight.value > 200) {
+		alert('錯誤！\n\n輸入體重格式不正確！');
+		return;
+	}
+	$('#p_id').text(f.p_id.value);
+	$('#p_name').text(f.p_name.value);
+	$('#door').hide();
+	$('#paper').show();
+}
+function findPatient(no) {
+	$.ajax({
+		url: 'getUser.php',
+		dataType: 'json',
+		type: 'POST',
+		data: {no: no},
+		error: function () {
+			alert('error'); // TODO:
+		},
+		success: function (data) {
+			if (data[0][0] !== 0) {
+				alert('錯誤！\n\n錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);
+			} else {
+				document.forms[0].p_name.value = data[1] !== undefined ? data[1][4] : '';
+			}
+		}
+	});
 }

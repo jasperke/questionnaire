@@ -72,6 +72,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 </div><!-- /.modal -->
 
 <form method="post" action="counter.php" class="form-inline" role="form" onsubmit="return isValidForm(this);">
+<input type="hidden" name="patient_id">
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
@@ -96,14 +97,14 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		</h3>
 	</div>
 
-<!-- 	<div id="door" class="container paper">
+	<div id="door" class="container paper">
 		<div class="form-group" style="margin-right:20px;">
 			<label class="text-muted" for="p_id">病歷號</label>
-			<input type="text" class="form-control" style="width:auto;" id="p_id" name="p_id">
+			<input type="text" class="form-control" style="width:auto;" id="p_id" name="p_id" onKeyup="findPatient(this.value);">
 		</div>
 		<div class="form-group" style="margin-right:20px;">
 			<label class="text-muted" for="p_name">姓名</label>
-			<input type="text" class="form-control" style="width:auto;" id="p_name" name="p_name">
+			<input type="text" class="form-control" style="width:auto;" id="p_name" name="p_name" readOnly>
 		</div>
 		<div class="form-group" style="margin-right:20px;">
 			<label class="text-muted" for="p_name">體重</label>
@@ -111,9 +112,9 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		</div>
 		<br><br>
 		<a id="startQ" onclick="startQuest();" class="btn btn-lg btn-default">開始</a>
-	</div> -->
+	</div>
 
-	<div id="paper" class="container paper">
+	<div id="paper" class="container paper" style="display:none;">
 		<span id="foreword"></span><br>
 		<h1><span id="q_title"></span><span id="q_no" class="text-warning pull-right"></span></h1>
 		<hr/>
@@ -128,9 +129,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<button id="submitButton" class="btn btn-lg btn-success"><i class="icon icon-ok"></i>  送　出</button>
 	</center>
 <script>
-var patient_id = '',
-	patient_name = '',
-	q_id,
+var q_id,
 	q_no = 0,
 	sub_q_no = -1,
 	answer = [],
