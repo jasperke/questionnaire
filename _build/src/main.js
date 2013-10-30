@@ -1,12 +1,14 @@
 function initQuestionnaire() {
 	$('#questionnaire_name').text(q_id);
+	$('#p_id').text(patient_id);
+	$('#p_name').text(patient_name);
 
 	setQuest(0);
 	$("#optlist").on("click", "a.btn", function (event) {
 		$(this).addClass("active text-danger")
-		.find("span").removeClass("icon-unchecked").addClass("icon-check").end()
+		.find("span").removeClass("glyphicon-unchecked").addClass("glyphicon-check").end()
 		.siblings("a.active").removeClass("active").removeClass("text-danger")
-		.find("span").removeClass("icon-check").addClass("icon-unchecked");
+		.find("span").removeClass("glyphicon-check").addClass("glyphicon-unchecked");
 
 		var sub_q_no = $(this).data('sub_q_no'),
 			q_no = $(this).data('q_no'),
@@ -53,7 +55,7 @@ function setQuest(direction) {
 		// 依此類推
 	if (direction > 0) { // next
 		if (answer[q_no] === undefined) { // 避免快速亂按, 造成目前題未回答就要往下一題
-			alert('請確實回答！');
+			alertModal('請確實回答！');
 			return;
 		}
 		if (curr_quiz_def[1] === undefined) { // 當前問題無子問題群
@@ -126,14 +128,14 @@ function setQuest(direction) {
 
 
 	$("#q_no").html((q_no + 1) + "/" + quizzes.length);
-	$('#foreword').html((quizPool[quiz_id].foreword !== undefined) ? '<div class="text-danger">' + quizPool[quiz_id].foreword + '</div>' : '');
+	$('#foreword').html((quizPool[quiz_id].foreword !== undefined) ? '<h3><div class="text-danger">' + quizPool[quiz_id].foreword + '</div></h3>' : '');
 	$("#q_title").html(quizPool[quiz_id].quiz);
 	$("#optlist").empty();
 
 	$.each(quizPool[quiz_id].options || commonOptions, function (i) {
 		$("#optlist").append(
 			$("<a/>").data({q_no: q_no, sub_q_no: sub_q_no, val: i}).addClass("btn btn-default text-left").append(
-				$("<span/>").addClass("icon icon-unchecked")
+				$("<span/>").addClass("glyphicon glyphicon-unchecked")
 			).append(this)
 		);
 	});
@@ -150,6 +152,7 @@ function setQuest(direction) {
 			}
 		}
 	}
+	$(window).scrollTop(0);
 }
 function saveQuestionnaire(q_name, f, answer, quizzes) {
 	$.ajax({
@@ -164,14 +167,14 @@ function saveQuestionnaire(q_name, f, answer, quizzes) {
 			answer: answer
 		},
 		error: function (ajaxObj, errorType, exceptionObj) {
-			alert('錯誤！\n\n' + errorType + '\n' + exceptionObj);
+			alertModal(errorType + '\n' + exceptionObj);
 		},
 		success: function (data) {
 			if (data[0][0] === 0) {
-				alert('資料儲存完畢！\n謝謝您的合作！');
+				alertModal('資料儲存完畢！\n謝謝您的合作！', '');
 				window.location.replace('./');
 			} else {
-				alert('錯誤！\n\n錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);
+				alertModal('錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);
 			}
 		}
 	});
@@ -179,24 +182,15 @@ function saveQuestionnaire(q_name, f, answer, quizzes) {
 function isValidForm(f) {
 	for (var i = quizzes.length - 1; i >= 0; i--) {
 		if (answer[i] === undefined) {
-			alert('請確實回答！(第' + (i + 1) + '題)');
+			alertModal('請確實回答！(第' + (i + 1) + '題)');
 			return false;
 		}
 	}
 	saveQuestionnaire(q_id, f, answer, quizzes);
 	return false;
 }
-function startQuest() {
-	var f = document.forms[0];
-	if (f.p_id.value === '' || f.p_name.value === '' || f.p_weight.value === '') {
-		alert('錯誤！\n\n資料輸入不完整！');
-		return;
-	} else if (isNaN(f.p_weight.value) || f.p_weight.value < 5 || f.p_weight.value > 200) {
-		alert('錯誤！\n\n輸入體重格式不正確！');
-		return;
-	}
-	$('#p_id').text(f.p_id.value);
-	$('#p_name').text(f.p_name.value);
-	$('#door').hide();
-	$('#paper').show();
+function alertModal(msg,title){
+	$('#modalTitle').html(title===undefined?'錯誤訊息！':title);
+	$('#errorMsgHere').html(msg.replace('\n','<br>'));
+	$('#errorModal').modal('show');
 }

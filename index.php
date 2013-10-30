@@ -40,18 +40,18 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		</div>
 	</nav>
 	<div class="container">
-		<div>請選擇問卷：</div>
+		<h3>請選擇問卷：</h3>
 		<div class="list-group">
-			<a href="questionnaire.php?questionnaire=FACT-B" class="list-group-item">
+			<a href="questionnaire.php?questionnaire=FACT-B" class="list-group-item" target="_blank">
 				FACT - B <i class="icon icon-chevron-right pull-right"></i>
 			</a>
-			<a href="questionnaire.php?questionnaire=FACT-ECO" class="list-group-item">
+			<a href="questionnaire.php?questionnaire=FACT-ECO" class="list-group-item" target="_blank">
 				FACT - ECO <i class="icon icon-chevron-right pull-right"></i>
 			</a>
-			<a href="questionnaire.php?questionnaire=FACT-HN-X" class="list-group-item">
+			<a href="questionnaire.php?questionnaire=FACT-HN-X" class="list-group-item" target="_blank">
 				FACT - HN-X <i class="icon icon-chevron-right pull-right"></i>
 			</a>
-			<a href="questionnaire.php?questionnaire=HN.COM" class="list-group-item">
+			<a href="questionnaire.php?questionnaire=HN.COM" class="list-group-item" target="_blank">
 				HN.COM <i class="icon icon-chevron-right pull-right"></i>
 			</a>
 		</div>

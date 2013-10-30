@@ -35,6 +35,9 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		width: 90%;
 		margin: 10px 5%;
 	}
+	#optlist a.btn{
+		text-align: left;
+	}
 	#optlist a.btn-default:hover,
 	#optlist a.btn-default.active {
 		background: #F0F0F0;
@@ -51,23 +54,40 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	</style>
 </head>
 <body>
+<div id="errorModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 id="modalTitle" class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <p><h3><span id="errorMsgHere" class="text-warning"></span><h3></p>
+      </div>
+      <div class="modal-footer text-center">
+        <button type="button" class="btn btn-default" data-dismiss="modal">確定</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <form method="post" action="counter.php" class="form-inline" role="form" onsubmit="return isValidForm(this);">
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+<!-- 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
 					<span class="sr-only">Toggle navigation</span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="index.html">問卷調查</a>
+				</button> -->
+				<a class="navbar-brand" href="#">長庚問卷調查系統</a>
 			</div>
-			<div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
+<!-- 			<div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
 				<ul class="nav navbar-nav">
 					<li><a href="./">回首頁</a></li>
 				</ul>
-			</div>
+			</div> -->
 		</div>
 	</nav>
 	<div class="container">
@@ -76,7 +96,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		</h3>
 	</div>
 
-	<div id="door" class="container paper">
+<!-- 	<div id="door" class="container paper">
 		<div class="form-group" style="margin-right:20px;">
 			<label class="text-muted" for="p_id">病歷號</label>
 			<input type="text" class="form-control" style="width:auto;" id="p_id" name="p_id">
@@ -91,9 +111,9 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		</div>
 		<br><br>
 		<a id="startQ" onclick="startQuest();" class="btn btn-lg btn-default">開始</a>
-	</div>
+	</div> -->
 
-	<div id="paper" class="container paper" style="display:none">
+	<div id="paper" class="container paper">
 		<span id="foreword"></span><br>
 		<h1><span id="q_title"></span><span id="q_no" class="text-warning pull-right"></span></h1>
 		<hr/>
@@ -108,7 +128,9 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<button id="submitButton" class="btn btn-lg btn-success"><i class="icon icon-ok"></i>  送　出</button>
 	</center>
 <script>
-var q_id,
+var patient_id = '',
+	patient_name = '',
+	q_id,
 	q_no = 0,
 	sub_q_no = -1,
 	answer = [],
