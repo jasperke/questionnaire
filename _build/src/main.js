@@ -118,7 +118,7 @@ function setQuest(direction) {
 	if (q_no >= quizzes.length - 1) { // TODO: 若最後一題有子問題群, '下一題'會變得有點複雜, 有空再說...
 									// 先只考慮是否是最後一大題
 		$("#nextQ").hide();
-		$("#send").show();
+		if(!sent) $("#send").show();
 	} else {
 		$("#nextQ").show();
 		$("#send").hide();
@@ -153,6 +153,7 @@ function setQuest(direction) {
 	$(window).scrollTop(0);
 }
 function saveQuestionnaire(q_name, f, answer, quizzes) {
+	$("#send").hide();
 	$.ajax({
 		url: 'counter.php',
 		dataType: 'json',
@@ -169,10 +170,11 @@ function saveQuestionnaire(q_name, f, answer, quizzes) {
 		},
 		success: function (data) {
 			if (data[0][0] === 0) {
-				alertModal('資料儲存完畢！\n謝謝您的合作！', '');
-				window.location.replace('./');
+				alertModal('資料儲存完畢！\n謝謝您的合作！', '　');
+				sent=true;
 			} else {
 				alertModal('錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);
+				$("#send").show();
 			}
 		}
 	});
@@ -187,9 +189,9 @@ function isValidForm(f) {
 	saveQuestionnaire(q_id, f, answer, quizzes);
 	return false;
 }
-function alertModal(msg,title){
-	$('#modalTitle').html(title===undefined?'錯誤訊息！':title);
-	$('#errorMsgHere').html(msg.replace('\n','<br>'));
+function alertModal(msg, title) {
+	$('#modalTitle').html(title === undefined ? '錯誤訊息！' : title);
+	$('#errorMsgHere').html(msg.replace('\n', '<br>'));
 	$('#errorModal').modal('show');
 }
 function startQuest() {
@@ -219,7 +221,14 @@ function findPatient(no) {
 			if (data[0][0] !== 0) {
 				alert('錯誤！\n\n錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);
 			} else {
-				document.forms[0].p_name.value = data[1] !== undefined ? data[1][4] : '';
+				var p_name = '',
+					_tmp;
+				if (data[1] !== undefined) {
+					_tmp = data[1][4].split('');
+					_tmp[1] = '○';
+					p_name = _tmp.join('');
+				}
+				document.forms[0].p_name.value = p_name;
 			}
 		}
 	});

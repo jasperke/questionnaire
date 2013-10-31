@@ -37,9 +37,9 @@ $SiteLoginPWD=kwut2_readini(CFG_FN,"KOALA","SitePWD");
 $db=kwcr2_mapdb('CyberSite',$SiteLoginUID,$SiteLoginPWD);
 if($db!=0){
 	if($orderBy=='person'){
-		$s="select CreateTime,RandNum,Questionnaire,No,Score,Name,Weight from MUST_Questionnaire where OwnerID=? order by No";
+		$s="select q.CreateTime,q.RandNum,q.Questionnaire,q.No,q.Score,u.Name,q.Weight from MUST_Questionnaire q left outer join MUST_QuestionnaireUser u on q.No=u.No where q.OwnerID=? order by q.No";
 	}else{
-		$s="select CreateTime,RandNum,Questionnaire,No,Score,Name,Weight from MUST_Questionnaire where OwnerID=? order by CreateTime desc";
+		$s="select q.CreateTime,q.RandNum,q.Questionnaire,q.No,q.Score,u.Name,q.Weight from MUST_Questionnaire q left outer join MUST_QuestionnaireUser u on q.No=u.No where q.OwnerID=? order by q.CreateTime desc";
 	}
 	$rs=read_multi_record($db, $s, array($group_id), $fetch_range);
 	if($rs===false){

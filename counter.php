@@ -116,11 +116,11 @@ $SiteLoginPWD=kwut2_readini(CFG_FN,"KOALA","SitePWD");
 $db=kwcr2_mapdb('CyberSite',$SiteLoginUID,$SiteLoginPWD);
 if($db!=0){
 	if($score===null){
-		$s="insert into MUST_Questionnaire (OwnerID,Questionnaire,No,Answer,Name,Weight) values (?,?,?,?,?,?)";
-		$p=array($group_id,$questionnaire,$p_id,json_encode($answer),$p_name,$p_weight);
+		$s="insert into MUST_Questionnaire (OwnerID,Questionnaire,No,Answer,Weight) values (?,?,?,?,?)";
+		$p=array($group_id,$questionnaire,$p_id,json_encode($answer),$p_weight);
 	}else{
-		$s="insert into MUST_Questionnaire (OwnerID,Questionnaire,No,Answer,Score,Name,Weight) values (?,?,?,?,?,?,?)";
-		$p=array($group_id,$questionnaire,$p_id,json_encode($answer),$score,$p_name,$p_weight);
+		$s="insert into MUST_Questionnaire (OwnerID,Questionnaire,No,Answer,Score,Weight) values (?,?,?,?,?,?)";
+		$p=array($group_id,$questionnaire,$p_id,json_encode($answer),$score,$p_weight);
 	}
 	if(!kwcr2_rawqueryexec($db, $s, $p, "")){
 		$out[0]=array(900,"資料儲存失敗！(".kwcr2_geterrormsg($db,1).")");

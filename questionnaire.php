@@ -82,7 +82,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button> -->
-				<a class="navbar-brand" href="#">長庚問卷調查系統</a>
+				<a class="navbar-brand">長庚問卷調查系統</a>
 			</div>
 <!-- 			<div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
 				<ul class="nav navbar-nav">
@@ -133,7 +133,8 @@ var q_id,
 	q_no = 0,
 	sub_q_no = -1,
 	answer = [],
-	quizzes;
+	quizzes,
+	sent=false;
 
 $(function(){
 	var url_params={};

@@ -25,7 +25,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.html">長庚問卷調查系統</a>
+				<a class="navbar-brand" href="./">長庚問卷調查系統</a>
 			</div>
 			<div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
 				<ul class="nav navbar-nav">
@@ -34,7 +34,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 			</div>
 			<div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
 				<ul class="nav navbar-nav">
-					<li><a href="index.php">主選單</a></li>
+					<li><a href="./">主選單</a></li>
 				</ul>
 			</div>
 		</div>
@@ -43,8 +43,8 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<h3>請選擇：</h3>
 		<div class="list-group">
 			<a id="patient" href="userList.php" class="list-group-item">患者基本資料 <i class="icon icon-chevron-right pull-right"></i></a>
-			<a id="questionnaire" herf="#" class="list-group-item">填寫問卷 <i class="icon icon-chevron-right pull-right"></i></a>
-			<a id="manager" href="#" class="list-group-item">問卷結果 <i class="icon icon-chevron-right pull-right"></i></a>
+			<a id="questionnaire" href="#" class="list-group-item">填寫問卷 <i class="icon icon-chevron-right pull-right"></i></a>
+			<a id="manager" href="list.php" class="list-group-item">問卷結果 <i class="icon icon-chevron-right pull-right"></i></a>
 		</div>
 	</div>
 	<div id="questionnaireSelector" class="container">

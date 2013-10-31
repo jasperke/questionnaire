@@ -24,7 +24,7 @@ $SiteLoginPWD=kwut2_readini(CFG_FN,"KOALA","SitePWD");
 $db=kwcr2_mapdb('CyberSite',$SiteLoginUID,$SiteLoginPWD);
 if($db!=0){
 	$gukey=global_unique_key_decode($id);
-	$s="select Questionnaire,No,Answer,Score,Version,Name,Weight,CreateTime from MUST_Questionnaire where OwnerID=? and CreateTime=? and RandNum=?";
+	$s="select q.Questionnaire,q.No,q.Answer,q.Score,q.Version,u.Name,q.Weight,q.CreateTime from MUST_Questionnaire q left outer join MUST_QuestionnaireUser u on q.No=u.No where q.OwnerID=? and q.CreateTime=? and q.RandNum=?";
 	$p=array($group_id,$gukey[0],$gukey[1]);
 	$r=read_one_record($db, $s, $p);
 	if($r===false){
