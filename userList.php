@@ -198,49 +198,53 @@ function MM_dragLayer(objName,x,hL,hT,hW,hH,toFront,dropBack,cU,cD,cL,cR,targL,t
     <td width="908" bgcolor="#000000">t<font color="#999999" size="4">長庚問卷調查系統
       - 病患列表</font></td>
     <td width="83" bgcolor="#000000"><a href="index.php"><font color="#999999" size="4">回上頁</font></a></td>
-    <td width="153" bgcolor="#000000"><a href="#"><font color="#999999" size="4" onclick="showEditor({});">新增</font></a></td>
+    <td width="153" bgcolor="#000000"><a href="javascript:void(0);"><font color="#999999" size="4" onclick="showEditor({});">新增</font></a></td>
     <td width="70" bgcolor="#000000"><a href="login.php?logout=1"><font color="#999999" size="4">登出</font></a></td>
   </tr>
   <tr>
     <td id="userListHere" colspan="5"><table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr bgcolor="#CCCCCC">
-          <td width="14%" height="30"> <div align="center"><font size="4">病例號</font></div></td>
-          <td width="14%"> <div align="center">身分證字號</div></td>
+          <td width="4%" height="30">&nbsp;</td>
+          <td width="14%"> <div align="center"><font size="4">病例號</font></div></td>
+          <td width="12%"> <div align="center">身分證字號</div></td>
           <td width="9%" bgcolor="#CCCCCC"> <div align="center">性別</div></td>
           <td width="12%" bgcolor="#CCCCCC"><div align="center">姓名</div></td>
           <td width="12%" bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
           <td width="10%" bgcolor="#CCCCCC"><div align="center">行動電話</div></td>
-          <td width="20%" bgcolor="#CCCCCC"><div align="center">email</div></td>
+          <td width="18%" bgcolor="#CCCCCC"><div align="center">email</div></td>
           <td width="9%"> <div align="center"><font size="4">功能</font></div></td>
         </tr>
         <tr bgcolor="#666666">
-          <td colspan="8"><img src="images/dot.gif" width="1" height="1"></td>
+          <td colspan="9"><img src="images/dot.gif" width="1" height="1"></td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
-    <td colspan="5">&nbsp;</td>
+    <td colspan="5"><div align="center" style="padding:4px;"><span id="pageSwitcher"></span></div></td>
   </tr>
 </table>
 <script type="text/template" id="row_template">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr><td width="14%" height="30" bgcolor="#FFFFFF"> <div align="center"><font color="#555555" face="Arial, Helvetica, sans-serif"><%= no %></font></div></td>
-    <td width="14%" bgcolor="#FFFFFF" align="center"><%= id %></td>
+  <tr>
+    <td width="4%" height="30" bgcolor="#FFFFFF" align="center"><%= start+idx+1 %>.</td>
+    <td width="14%" bgcolor="#FFFFFF" align="center"><font color="#555555" face="Arial, Helvetica, sans-serif"><%= no %></font></div></td>
+    <td width="12%" bgcolor="#FFFFFF" align="center"><%= id %></td>
     <td width="9%" bgcolor="#FFFFFF" align="center"><%= gender?(gender==1?'男':'女'):'' %></td>
     <td width="12%" bgcolor="#FFFFFF" align="center"><%= name %></td>
     <td width="12%" bgcolor="#FFFFFF" align="center"><%= birthday %></td>
     <td width="10%" bgcolor="#FFFFFF" align="center"><%= phone %></td>
-    <td width="20%" bgcolor="#FFFFFF" align="center"><%= email %></td>
+    <td width="18%" bgcolor="#FFFFFF" align="center"><%= email %></td>
     <td width="9%" bgcolor="#FFFFFF" align="center"><a data-idx="<%= idx %>" style="cursor:pointer;">編輯</a></td></tr>
-  <tr><td colspan="8" bgcolor="#dddddd"><img src="images/dot.gif" width="1" height="1"></td></tr>
+  <tr><td colspan="9" bgcolor="#dddddd"><img src="images/dot.gif" width="1" height="1"></td></tr>
 </table>
 </script>
 <script>
 var start=0,
   page_size=20,
   row_template,
-  user_list;
+  user_list,
+  user_total_count;
 
 function getUsers(){
   $.ajax({
@@ -249,7 +253,8 @@ function getUsers(){
     type:'POST',
     data:{
       start:start,
-      size:page_size
+      size:page_size,
+      total_count:1
     },
     error:function(){
       alert('error'); // TODO:
@@ -258,8 +263,10 @@ function getUsers(){
       if(data[0][0]!=0){
         alert('錯誤！\n\n錯誤代碼：'+data[0][0]+'\n錯誤訊息：'+data[0][1]);
       }else{
-        user_list=data.slice(1);
+        user_total_count=data[1][0];
+        user_list=data.slice(2);
         tableBuilder();
+        refreshPageSwitcher();
       }
     }
   });
@@ -281,6 +288,24 @@ function tableBuilder(){
         email: data[i][7],
         phone: data[i][8]
       }));
+  }
+}
+function refreshPageSwitcher(){
+  var switcher=$('#pageSwitcher').empty();
+  if(start>0){
+    $('<a>').text('上一頁').css({cursor:'pointer',color:'#0000FF',textDecoration:'underline'}).on('click',function(){
+      start-=page_size;
+      if(start<0) start=0;
+      getUsers();
+    }).appendTo(switcher);
+  }
+  if(start+page_size<user_total_count){
+    if(start>0)
+      switcher.append(' | ');
+    $('<a>').text('下一頁').css({cursor:'pointer',color:'#0000FF',textDecoration:'underline'}).on('click',function(){
+      start+=page_size;
+      getUsers();
+    }).appendTo(switcher);
   }
 }
 function isValidDate(yy,mm,dd){

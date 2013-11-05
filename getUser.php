@@ -39,12 +39,24 @@ if($db!=0){
 		$p=array($group_id,$no);
 		$fetch_range=array('skip_rows'=>0,'max_fetch_raw'=>1);
 	}else{
+		if(isset($total_count)&&strcmp($total_count,'1')==0){
+			$s="select count(*) from MUST_QuestionnaireUser where OwnerID=?";
+			$p=array($group_id);
+			$r=read_one_record($db, $s, $p);
+			if($r===false||!isset($r)){
+				$out[0]=array(900,"讀取資料失敗(0)！".kwcr2_geterrormsg($db, 1));
+				echo json_encode($out);
+				exit;
+			}else{
+				$out[1]=array($r[0]);
+			}
+		}
 		$s="select CreateTime,RandNum,No,Id,Name,Gender,Birthday,Email,Phone from MUST_QuestionnaireUser where OwnerID=? order by CreateTime desc";
 		$p=array($group_id);
 	}
 	$rs=read_multi_record($db, $s, $p, $fetch_range);
 	if($rs===false){
-		$out[0]=array(900,"資料讀取失敗！(".kwcr2_geterrormsg($db,1).")");
+		$out[0]=array(900,"資料讀取失敗(1)！(".kwcr2_geterrormsg($db,1).")");
 	}else if(isset($rs)){
 		foreach($rs as $r)
 			$out[]=$r;

@@ -14,6 +14,7 @@ Questionnaire for ChangGung
 	1. cd \_build/bower_components/bootstrap
 	1. npm install
 	1. grunt dist-css
+	1. cd ../../
 1. grunt
 
 ### Table Schema
@@ -29,7 +30,7 @@ Questionnaire for ChangGung
 		SCORE  INTEGER default null ,
 		VERSION  INTEGER default null ,
 		WEIGHT  DECIMAL(4, 1) default null );
-		
+
 	create table MUST_QUESTIONNAIREUSER (
 		OWNERID  INTEGER default null ,
 		SITEID  INTEGER default null ,

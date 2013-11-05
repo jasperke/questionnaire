@@ -2,7 +2,9 @@
 // questionnaireMap暫時定義在程式碼內, 需與quizPool.js同步
 // 日後要進db再來調整
 $questionnaireMap=array();
-$questionnaireMap["HN.COM"]=array('_HN1','_HN2','_HN3','_HN4','_HN5','_HN6','_HN7','_HN8','_HN9','_HN10','_HN11','_HN12','_HN13','_HN14','_HN15','_HN16','_HN17','_HN18','_HN19','_HN20','_HN21','_HN22');
+$questionnaireMap["HN.COM"]=array('_HN1','_HN2','_HN3','_HN4','_HN5','_HN6','_HN7','_HN8','_HN9','_HN10',
+	'_HN11','_HN12','_HN13','_HN14','_HN15','_HN16','_HN17','_HN18','_HN19','_HN20','_HN21','_HN22',
+	'_PART_OF_PAIN','_SCORE_OF_PAIN');
 $questionnaireMap["FACT-B"]=array('G1','G2','G3',
 	'GP1','GP2','GP3','GP4','GP5','GP6','GP7',
 	'GS1','GS2','GS3','GS4','GS5','GS6','GS7',
