@@ -15,8 +15,8 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	exit;
 }
 
-if(!isset($no)){
-	$out=array(array(903,"缺必要參數（no）！"));
+if(!isset($no)||strcmp($no,'')==0){
+	$out=array(array(903,"缺必要參數（病歷號）！"));
 	echo QUtillity::decodeUnicodeString(json_encode($out));
 	exit;
 }
