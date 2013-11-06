@@ -118,7 +118,7 @@ function setQuest(direction) {
 	if (q_no >= quizzes.length - 1) { // TODO: 若最後一題有子問題群, '下一題'會變得有點複雜, 有空再說...
 									// 先只考慮是否是最後一大題
 		$("#nextQ").hide();
-		if(!sent) $("#send").show();
+		if (!sent) $("#send").show();
 	} else {
 		$("#nextQ").show();
 		$("#send").hide();
@@ -170,7 +170,7 @@ function saveQuestionnaire(q_name, f, answer, quizzes) {
 		},
 		success: function (data) {
 			if (data[0][0] === 0) {
-				alertModal('資料儲存完畢！\n謝謝您的合作！', '　');
+				alertModal('謝謝您的合作！', '　');
 				sent=true;
 			} else {
 				alertModal('錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);
