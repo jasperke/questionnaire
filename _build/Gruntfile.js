@@ -55,6 +55,11 @@ module.exports = function(grunt) {
 					{expand:true, cwd:'<%= LIB_PATH %>bootstrap/dist', src:'**', dest:'<%= BASE_PATH %>'},
 					{expand:true, cwd:'./src', src:'*.js', dest:'<%= JS_PATH %>src/'}
 				]
+			},
+			less: {
+				files: [
+					{expand:true, cwd:'./src', src:'*.less', dest:'<%= LIB_PATH %>bootstrap/less/'}
+				]
 			}
 		},
 		watch: {
@@ -74,11 +79,25 @@ module.exports = function(grunt) {
 	//grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
-	grunt.registerTask('lib', ['copy']);
+	grunt.registerTask('lib', ['copy:dist']);
 
 	//grunt.registerTask('product', ['concat:dist','uglify','clean']);
 	grunt.registerTask('product', ['lib','uglify']);
 	grunt.registerTask('development', ['concat:dev']);
 
-	grunt.registerTask('default', ['lib','product']);
+	grunt.registerTask('default', ['product']);
+
+	grunt.registerTask('rebuild_bootstrap', function () {
+	    var done = this.async();
+	    grunt.util.spawn({
+	        grunt: true,
+	        args: ['dist'],
+	        opts: {
+	            cwd: 'bower_components/bootstrap'
+	        }
+	    }, function (err, result, code) {
+	        done();
+	    });
+	});
+	grunt.registerTask('bootstrap', ['copy:less','rebuild_bootstrap','copy:dist']);
 };
