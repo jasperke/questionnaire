@@ -140,12 +140,18 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<!-- <div id="optlist" class="btn-group-vertical btn-group-lg"></div> -->
 		<div id="optlist" class="btn-group btn-group-lg"></div>
 		<hr/>
-		<a id="prevQ" onclick="setQuest(-1);" class="btn btn-default"><i class="icon icon-chevron-left"></i> 上一題</a>
-		<a id="nextQ" onclick="setQuest(1);" class="btn btn-default pull-right">下一題 <i class="icon icon-chevron-right"></i></a>
-	</div>
-	<div id="send" class="text-center" style="display: none;">
-		<!-- <button class="btn btn-lg btn-default"><i class="icon icon-remove"></i>  取　消</button> -->
-		<button id="submitButton" class="btn btn-success"><i class="icon icon-ok"></i>  送　出</button>
+
+		<div class="row">
+			<div class="col-md-1">
+				<a id="prevQ" onclick="setQuest(-1);" class="btn btn-default"><i class="icon icon-chevron-left"></i> 上一題</a>
+			</div>
+			<div class="col-md-2 col-md-offset-4">
+				<button id="send" class="btn btn-success text-center"><i class="icon icon-ok"></i>  送　出</button>
+			</div>
+			<div class="col-md-1 col-md-offset-4">
+				<a id="nextQ" onclick="setQuest(1);" class="btn btn-default pull-right">下一題 <i class="icon icon-chevron-right"></i></a>
+			</div>
+		</div>
 	</div>
 <script>
 var q_id,
