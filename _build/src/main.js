@@ -130,6 +130,12 @@ function setQuest(direction) {
 	$("#q_title").html(quizPool[quiz_id].quiz);
 	$("#optlist").empty();
 
+	if (quizPool[quiz_id].image !== undefined) {
+		$("#fore_img").append($('<img>', {src: quizPool[quiz_id].image}));
+	} else {
+		$("#fore_img").empty();
+	}
+
 	$.each(quizPool[quiz_id].options || commonOptions, function (i) {
 		$("#optlist").append(
 			$("<a/>").data({q_no: q_no, sub_q_no: sub_q_no, val: i}).addClass("btn btn-default text-left").css({whiteSpace: 'normal'}).append(
