@@ -71,7 +71,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<form method="post" action="counter.php" class="form-inline" role="form" onsubmit="return isValidForm(this);">
+<form method="post" action="counter.php" class="form-horizontal" role="form" onsubmit="return isValidForm(this);">
 <input type="hidden" name="patient_id">
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
@@ -92,42 +92,60 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		</div>
 	</nav>
 	<div class="container">
-		<h3 style="margin:0;">
+		<h4 style="margin:0;">
 			<span id="questionnaire_name"></span> <small class="pull-right text-info">病患：<span id="p_id"></span> <span id="p_name"></span></small>
-		</h3>
+		</h4>
 	</div>
 
-	<div id="door" class="container paper">
-		<div class="form-group" style="margin-right:20px;">
-			<label class="text-muted" for="p_id">病歷號</label>
-			<input type="text" class="form-control" style="width:auto;" id="p_id" name="p_id" onKeyup="findPatient(this.value);">
+	<div id="door" class="container">
+		<br>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="form-group">
+					<label class="text-muted" for="p_id">病歷號</label>
+					<input type="text" class="form-control" style="width:100%;" id="p_id" name="p_id" onKeyup="findPatient(this.value);">
+				</div>
+			</div>
 		</div>
-		<div class="form-group" style="margin-right:20px;">
-			<label class="text-muted" for="p_name">姓名</label>
-			<input type="text" class="form-control" style="width:auto;" id="p_name" name="p_name" readOnly>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="form-group">
+					<label class="text-muted" for="p_name">姓名</label>
+					<input type="text" class="form-control" style="width:100%;" id="p_name" name="p_name" readOnly>
+				</div>
+			</div>
 		</div>
-		<div class="form-group" style="margin-right:20px;">
-			<label class="text-muted" for="p_name">體重</label>
-			<input type="text" class="form-control" style="width:auto;" id="p_weight" name="p_weight"> kg
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="form-group">
+					<label class="text-muted" for="p_name">體重(kg)</label>
+					<input type="text" class="form-control" style="width:auto;" id="p_weight" name="p_weight">
+				</div>
+			</div>
 		</div>
-		<br><br>
-		<a id="startQ" onclick="startQuest();" class="btn btn-lg btn-default">開始</a>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="text-center">
+					<a id="startQ" onclick="startQuest();" class="btn btn-default">開始</a>
+				</div>
+			</div>
+		</div>
 	</div>
 
-	<div id="paper" class="container paper" style="display:none;">
-		<span id="foreword"></span><br>
-		<h1><span id="q_title"></span><span id="q_no" class="text-warning pull-right"></span></h1>
+	<div id="paper" class="container" style="display:none;">
+		<div id="foreword"></div>
+		<h3><span id="q_title"></span><span id="q_no" class="text-warning pull-right"></span></h3>
 		<hr/>
-		<div id="optlist" class="btn-group-vertical btn-group-lg"></div>
+		<!-- <div id="optlist" class="btn-group-vertical btn-group-lg"></div> -->
+		<div id="optlist" class="btn-group btn-group-lg"></div>
 		<hr/>
-		<a id="prevQ" onclick="setQuest(-1);" class="btn btn-lg btn-default"><i class="icon icon-chevron-left"></i> 上一題</a>
-		<a id="nextQ" onclick="setQuest(1);" class="btn btn-lg btn-default pull-right">下一題 <i class="icon icon-chevron-right"></i></a>
+		<a id="prevQ" onclick="setQuest(-1);" class="btn btn-default"><i class="icon icon-chevron-left"></i> 上一題</a>
+		<a id="nextQ" onclick="setQuest(1);" class="btn btn-default pull-right">下一題 <i class="icon icon-chevron-right"></i></a>
 	</div>
-	<br/>
-	<center id="send" style="display: none;">
+	<div id="send" class="text-center" style="display: none;">
 		<!-- <button class="btn btn-lg btn-default"><i class="icon icon-remove"></i>  取　消</button> -->
-		<button id="submitButton" class="btn btn-lg btn-success"><i class="icon icon-ok"></i>  送　出</button>
-	</center>
+		<button id="submitButton" class="btn btn-success"><i class="icon icon-ok"></i>  送　出</button>
+	</div>
 <script>
 var q_id,
 	q_no = 0,

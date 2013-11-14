@@ -126,13 +126,13 @@ function setQuest(direction) {
 
 
 	$("#q_no").html((q_no + 1) + "/" + quizzes.length);
-	$('#foreword').html((quizPool[quiz_id].foreword !== undefined) ? '<h3><div class="text-danger">' + quizPool[quiz_id].foreword + '</div></h3>' : '');
+	$('#foreword').html((quizPool[quiz_id].foreword !== undefined) ? '<h4><div class="text-danger">' + quizPool[quiz_id].foreword + '</div></h4>' : '');
 	$("#q_title").html(quizPool[quiz_id].quiz);
 	$("#optlist").empty();
 
 	$.each(quizPool[quiz_id].options || commonOptions, function (i) {
 		$("#optlist").append(
-			$("<a/>").data({q_no: q_no, sub_q_no: sub_q_no, val: i}).addClass("btn btn-default text-left").append(
+			$("<a/>").data({q_no: q_no, sub_q_no: sub_q_no, val: i}).addClass("btn btn-default text-left").css({whiteSpace: 'normal'}).append(
 				$("<span/>").addClass("glyphicon glyphicon-unchecked")
 			).append(this)
 		);
@@ -171,7 +171,7 @@ function saveQuestionnaire(q_name, f, answer, quizzes) {
 		success: function (data) {
 			if (data[0][0] === 0) {
 				alertModal('謝謝您的合作！', '　');
-				sent=true;
+				sent = true;
 			} else {
 				alertModal('錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);
 				$("#send").show();
