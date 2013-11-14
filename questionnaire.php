@@ -93,7 +93,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	</nav>
 	<div class="container">
 		<h4 style="margin:0;">
-			<span id="questionnaire_name"></span> <small class="pull-right text-info">病患：<span id="p_id"></span> <span id="p_name"></span></small>
+			<span id="questionnaire_name"></span> <small class="pull-right text-info">病患：<span id="p_id">?</span> <span id="p_name"></span>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo  $_SESSION['doctor'];?></small>
 		</h4>
 	</div>
 

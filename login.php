@@ -4,11 +4,32 @@ session_start();
 if(isset($logout)){
 	unset($_SESSION['admin']);
 }
-if(isset($login_id)&&strcmp($login_id,'admin')==0&&isset($login_pw)&&strcmp($login_pw,'111111')==0){
-	$_SESSION['admin']='changgung';
-//	session_write_close();
-	header('Location: ./');
-	exit;
+
+if(isset($login_id,$login_pw)){
+  require_once('koala.Utility.php');
+  require_once('common.Utility.php');
+  require_once('rpc.Utility2.php');
+  define("CFG_FN", "/usr/local/koala/config.ini");
+
+  $SiteLoginUID=kwut2_readini(CFG_FN,"KOALA","SiteUID");
+  $SiteLoginPWD=kwut2_readini(CFG_FN,"KOALA","SitePWD");
+  $db=kwcr2_mapdb('CyberSite',$SiteLoginUID,$SiteLoginPWD);
+  if($db!=0){
+    $s="select CreateTime,RandNum,Name from MUST_Staff where Account=? and Password=?";
+    $p=array($login_id,$login_pw);
+    $r=read_one_record($db, $s, $p);
+    if($r===false||!isset($r)){
+
+    }else{
+      $_SESSION['admin']='changgung';
+      $_SESSION['staffId']=$r[0].';'.$r[1];
+      $_SESSION['doctor']=$r[2];
+      header('Location: ./');
+      exit;
+    }
+  }else{ // failed to connect to DB
+
+  }
 }
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

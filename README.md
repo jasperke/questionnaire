@@ -43,3 +43,13 @@ Questionnaire for ChangGung
 		BIRTHDAY  DATE default null ,
 		EMAIL  VARCHAR(100) default null ,
 		PHONE  VARCHAR(50) default null );
+
+	create table MUST_Staff (
+		OWNERID  INTEGER default null ,
+		SITEID  INTEGER default null ,
+		CREATETIME  TIMESTAMP default now() ,
+		RANDNUM  INTEGER default rand() ,
+		Account char(20) primary key,
+		Password char(12),
+		Name varchar(30) );
+
