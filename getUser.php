@@ -35,11 +35,11 @@ $SiteLoginPWD=kwut2_readini(CFG_FN,"KOALA","SitePWD");
 $db=kwcr2_mapdb('CyberSite',$SiteLoginUID,$SiteLoginPWD);
 if($db!=0){
 	if(isset($no)){
-		$s="select CreateTime,RandNum,No,Id,Name,Gender,Birthday,Email,Phone from MUST_QuestionnaireUser where OwnerID=? and No=?";
+		$s="select CreateTime,RandNum,No,Id,Name,Gender,Birthday,Email,Phone,Weight from MUST_QuestionnaireUser where OwnerID=? and No=?";
 		$p=array($group_id,$no);
 		$fetch_range=array('skip_rows'=>0,'max_fetch_raw'=>1);
 	}else{
-		if(isset($total_count)&&strcmp($total_count,'1')==0){
+		if(isset($total_count)&&strcmp($total_count,'1')==0){ // 須回傳總筆數
 			$s="select count(*) from MUST_QuestionnaireUser where OwnerID=?";
 			$p=array($group_id);
 			$r=read_one_record($db, $s, $p);

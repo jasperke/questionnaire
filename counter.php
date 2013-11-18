@@ -115,6 +115,12 @@ $SiteLoginUID=kwut2_readini(CFG_FN,"KOALA","SiteUID");
 $SiteLoginPWD=kwut2_readini(CFG_FN,"KOALA","SitePWD");
 $db=kwcr2_mapdb('CyberSite',$SiteLoginUID,$SiteLoginPWD);
 if($db!=0){
+	if(!kwcr2_starttransaction($db)){
+		$out[0]=array(900,"failed to start transaction!(".kwcr2_geterrormsg($db,1).")");
+		echo QUtillity::decodeUnicodeString(json_encode($out));
+		exit;
+	}
+
 	if($score===null){
 		$s="insert into MUST_Questionnaire (OwnerID,Questionnaire,No,Answer,Weight,StaffID) values (?,?,?,?,?,?)";
 		$p=array($group_id,$questionnaire,$p_id,json_encode($answer),$p_weight,$_SESSION['staffId']);
@@ -123,9 +129,22 @@ if($db!=0){
 		$p=array($group_id,$questionnaire,$p_id,json_encode($answer),$score,$p_weight,$_SESSION['staffId']);
 	}
 	if(!kwcr2_rawqueryexec($db, $s, $p, "")){
-		$out[0]=array(900,"資料儲存失敗！(".kwcr2_geterrormsg($db,1).")");
-//		return;
+		$out[0]=array(900,"資料儲存失敗(1)！(".kwcr2_geterrormsg($db,1).")");
+		kwcr2_rollbacktransaction($db);
+		echo QUtillity::decodeUnicodeString(json_encode($out));
+		exit;
 	}
+	// 記最近體重
+	$s="update MUST_QuestionnaireUser set Weight=? where No=?";
+	$p=array($p_weight,$p_id);
+	if(!kwcr2_rawqueryexec($db, $s, $p, "")){
+		$out[0]=array(900,"資料儲存失敗(2)！(".kwcr2_geterrormsg($db,1).")");
+		kwcr2_rollbacktransaction($db);
+		echo QUtillity::decodeUnicodeString(json_encode($out));
+		exit;
+	}
+
+	kwcr2_committransaction($db);
 }else{
 	$out[0]=array(900,"資料庫連結失敗！");
 //	return;

@@ -209,6 +209,11 @@ function startQuest() {
 		alert('錯誤！\n\n輸入體重格式不正確！');
 		return;
 	}
+	if (f.p_last_weight.value !== '' && Math.abs(f.p_last_weight.value - f.p_weight.value) > 3) {
+		if (!confirm('體重與上次填問卷時的體重差異超過3公斤!\n確定正確？')) { // TODO: 等提供顯示訊息
+			return;
+		}
+	}
 	$('#p_id').text(f.p_id.value);
 	$('#p_name').text(f.p_name.value);
 	$('#door').hide();
@@ -229,12 +234,17 @@ function findPatient(no) {
 			} else {
 				var p_name = '',
 					_tmp;
-				if (data[1] !== undefined) {
+				if (data[1] !== undefined) { // 名字第二字替換成○
 					_tmp = data[1][4].split('');
 					_tmp[1] = '○';
 					p_name = _tmp.join('');
+
+					document.forms[0].p_name.value = p_name;
+					document.forms[0].p_last_weight.value = data[1][9] || '';
+				} else {
+					document.forms[0].p_name.value = '';
+					document.forms[0].p_last_weight.value = '';
 				}
-				document.forms[0].p_name.value = p_name;
 			}
 		}
 	});

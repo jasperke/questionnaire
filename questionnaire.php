@@ -118,7 +118,8 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="form-group">
-					<label class="text-muted" for="p_name">體重(kg)</label>
+					<input type="hidden" name="p_last_weight">
+					<label class="text-muted" for="p_weight">體重(kg)</label>
 					<input type="text" class="form-control" style="width:auto;" id="p_weight" name="p_weight">
 				</div>
 			</div>
