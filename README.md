@@ -29,7 +29,8 @@ Questionnaire for ChangGung
 		ANSWER  VARCHAR(500) default null ,
 		SCORE  INTEGER default null ,
 		VERSION  INTEGER default null ,
-		WEIGHT  DECIMAL(4, 1) default null );
+		WEIGHT  DECIMAL(4, 1) default null,
+		StaffID varchar(34) default null );
 
 	create table MUST_QUESTIONNAIREUSER (
 		OWNERID  INTEGER default null ,
@@ -37,12 +38,17 @@ Questionnaire for ChangGung
 		CREATETIME  TIMESTAMP default now() ,
 		RANDNUM  INTEGER default rand() ,
 		"NO"  VARCHAR(10) primary key ,
-		ID  VARCHAR(10) default null ,
 		NAME  VARCHAR(30) default null ,
 		GENDER  CHAR(1) default null ,
 		BIRTHDAY  DATE default null ,
 		EMAIL  VARCHAR(100) default null ,
-		PHONE  VARCHAR(50) default null );
+		PHONE  VARCHAR(50) default null,
+		Volition char(1) default null,
+		Weight Decimal(4, 1) default null,
+		Caregiver char(1) default null,
+		FirstDate date default null,
+		LastDate data default null,
+		Memo varchar(1500) default null );
 
 	create table MUST_Staff (
 		OWNERID  INTEGER default null ,
