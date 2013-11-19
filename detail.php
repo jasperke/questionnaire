@@ -116,7 +116,8 @@ $(function(){
 			<div class="collapse navbar-collapse navbar-ex1-collapse pull-right">
 				<ul class="nav navbar-nav">
 					<li><a href="list.php">回列表</a></li>
-					<li><a href="./">回首頁</a></li>
+					<li><a href="./">主選單</a></li>
+					<li><a href="login.php?logout=1">登出</a></li>
 				</ul>
 			</div>
 		</div>

@@ -72,15 +72,16 @@ $(function(){
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="137" height="50" bgcolor="#000000">&nbsp;</td>
-    <td width="978" bgcolor="#000000">t<font color="#999999" size="4">長庚問卷調查系統</font></td>
-    <td width="83" bgcolor="#000000"><a href="./"><font color="#999999" size="4">回首頁</font></a></td>
+    <td width="900" bgcolor="#000000">t<font color="#999999" size="4">長庚問卷調查系統</font></td>
+    <td width="83" bgcolor="#000000"><a href="./"><font color="#999999" size="4">主選單</font></a></td>
     <td width="153" bgcolor="#000000"><select name="orderBy" onchange="start=0;getList();">
         <option selected value="time">依作答時間呈現</option>
         <option value="person">依人員呈現</option>
       </select></td>
+    <td width="78" bgcolor="#000000"><a href="login.php?logout=1"><font color="#999999" size="4">登出</font></a></td>
   </tr>
   <tr>
-    <td colspan="4" id="listHere">
+    <td colspan="5" id="listHere">
       <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr bgcolor="#CCCCCC">
           <td width="4%" height="30"> <div align="center"><font size="4" face="Arial, Helvetica, sans-serif">No.</font></div></td>
@@ -96,7 +97,7 @@ $(function(){
     </td>
   </tr>
   <tr>
-    <td colspan="4">&nbsp;</td>
+    <td colspan="5">&nbsp;</td>
   </tr>
 </table>
 </form>

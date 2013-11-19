@@ -197,7 +197,7 @@ function MM_dragLayer(objName,x,hL,hT,hW,hH,toFront,dropBack,cU,cD,cL,cR,targL,t
     <td width="137" height="50" bgcolor="#000000">&nbsp;</td>
     <td width="908" bgcolor="#000000">t<font color="#999999" size="4">長庚問卷調查系統
       - 病患列表</font></td>
-    <td width="83" bgcolor="#000000"><a href="index.php"><font color="#999999" size="4">回上頁</font></a></td>
+    <td width="83" bgcolor="#000000"><a href="index.php"><font color="#999999" size="4">主選單</font></a></td>
     <td width="153" bgcolor="#000000"><a href="javascript:void(0);"><font color="#999999" size="4" onclick="showEditor({});">新增</font></a></td>
     <td width="70" bgcolor="#000000"><a href="login.php?logout=1"><font color="#999999" size="4">登出</font></a></td>
   </tr>
