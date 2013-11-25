@@ -138,8 +138,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // æœ
 		<h3><span id="q_title"></span><span id="q_no" class="text-warning pull-right"></span></h3>
 		<hr/>
 		<div id="fore_img" class="text-center"></div>
-		<!-- <div id="optlist" class="btn-group-vertical btn-group-lg"></div> -->
-		<div id="optlist" class="btn-group btn-group-lg"></div>
+		<div id="optlist" class="btn-group-vertical btn-group-lg"></div>
 		<hr/>
 
 		<div class="row">
