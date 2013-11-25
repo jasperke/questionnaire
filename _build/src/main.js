@@ -46,7 +46,8 @@ function setQuest(direction) {
 		sub_quizzes,
 		curr_quiz_def = quizzes[q_no].toString().split(':'),
 		next_quiz_def,
-		prev_quiz_def;
+		prev_quiz_def,
+		optlistHere;
 		// ex. 'X6:X7,_X8,.....,_X22:A1,A2,...:...' 如有冒號, 冒號後表子問題群組, 可多個冒號區隔
 		// 第1個冒號後接著的表第1子群問題(主問題選第1項時才秀)
 		// 第2個冒號後接著的表第2子群問題(主問題選第2項時才秀)
@@ -128,7 +129,16 @@ function setQuest(direction) {
 	$("#q_no").html((q_no + 1) + "/" + quizzes.length);
 	$('#foreword').html((quizPool[quiz_id].foreword !== undefined) ? '<h4><div class="text-danger">' + quizPool[quiz_id].foreword + '</div></h4>' : '');
 	$("#q_title").html(quizPool[quiz_id].quiz);
-	$("#optlist").empty();
+
+	optlistHere = $("#optlist");
+	optlistHere.empty();
+
+
+	if (quiz_id == '_SCORE_OF_PAIN') { // 疼痛指數, 特例橫排
+		optlistHere.removeClass('btn-group-vertical').addClass('btn-group');
+	} else {
+		optlistHere.removeClass('btn-group').addClass('btn-group-vertical');
+	}
 
 	if (quizPool[quiz_id].image !== undefined) {
 		$("#fore_img").append($('<img>', {src: quizPool[quiz_id].image}));
