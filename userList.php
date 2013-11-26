@@ -205,7 +205,7 @@ function MM_dragLayer(objName,x,hL,hT,hW,hH,toFront,dropBack,cU,cD,cL,cR,targL,t
     <td id="userListHere" colspan="5"><table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr bgcolor="#CCCCCC">
           <td width="4%" height="30">&nbsp;</td>
-          <td width="14%"> <div align="center"><font size="4">病例號</font></div></td>
+          <td width="14%"> <form name="filerForm" style="margin:0px;"><div align="center"><font size="4">病例號</font> <input type="text" name="no_filter" style="width:60px;" onkeyup="filterUser(this.value);"></div></form></td>
           <td width="12%"> <div align="center">身分證字號</div></td>
           <td width="9%" bgcolor="#CCCCCC"> <div align="center">性別</div></td>
           <td width="12%" bgcolor="#CCCCCC"><div align="center">姓名</div></td>
@@ -242,10 +242,22 @@ function MM_dragLayer(objName,x,hL,hT,hW,hH,toFront,dropBack,cU,cD,cL,cR,targL,t
 <script>
 var start=0,
   page_size=20,
+  filterUserNo='',
   row_template,
   user_list,
-  user_total_count;
+  user_total_count,
+  filterUserTimerId;
 
+function filterUser(no){
+  if(filterUserTimerId){
+    clearTimeout(filterUserTimerId);
+  }
+  filterUserTimerId=setTimeout(function(){
+    filterUserNo=no;
+    start=0;
+    getUsers();
+  },200);
+}
 function getUsers(){
   $.ajax({
     url:'rpc/getUser.php',
@@ -254,7 +266,8 @@ function getUsers(){
     data:{
       start:start,
       size:page_size,
-      total_count:1
+      total_count:1,
+      filterNo:filterUserNo
     },
     error:function(){
       alert('error'); // TODO:
@@ -263,6 +276,8 @@ function getUsers(){
       if(data[0][0]!=0){
         alert('錯誤！\n\n錯誤代碼：'+data[0][0]+'\n錯誤訊息：'+data[0][1]);
       }else{
+        if(data[1][1]!=filterUserNo) // 取回資料採非目前過濾條件者
+          return;
         user_total_count=data[1][0];
         user_list=data.slice(2);
         tableBuilder();
