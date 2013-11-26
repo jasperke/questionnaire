@@ -186,6 +186,7 @@ function saveQuestionnaire(q_name, f, answer, quizzes) {
 		},
 		success: function (data) {
 			if (data[0][0] === 0) {
+				$("#prevQ").hide();
 				alertModal('謝謝您的合作！', '　');
 				sent = true;
 			} else {
