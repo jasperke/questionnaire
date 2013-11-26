@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('questionnaireMap.php');
+require_once('rpc/questionnaireMap.php');
 
 if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // 未登入
   header('Location: ./login.php');
@@ -11,8 +11,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 require_once('koala.Utility.php');
 require_once('common.Utility.php');
 require_once('rpc.Utility2.php');
-//require_once('questionnaireMap.php');
-require_once('questionnaireUtility.php');
+require_once('rpc/questionnaireUtility.php');
 define("CFG_FN", "/usr/local/koala/config.ini");
 
 $group_id=2; // OwnerID

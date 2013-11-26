@@ -248,7 +248,7 @@ var start=0,
 
 function getUsers(){
   $.ajax({
-    url:'getUser.php',
+    url:'rpc/getUser.php',
     dataType:'json',
     type:'POST',
     data:{
@@ -366,7 +366,7 @@ function saveUser(){
     data.birthday=f.birthday_yy.value+'-'+f.birthday_mm.value+'-'+f.birthday_dd.value;
 
   $.ajax({
-    url: 'editUser.php',
+    url: 'rpc/editUser.php',
     dataType: 'json',
     type: 'POST',
     data: data,
@@ -388,7 +388,7 @@ function saveUser(){
 }
 function checkPatient(no) {
   $.ajax({
-    url: 'getUser.php',
+    url: 'rpc/getUser.php',
     dataType: 'json',
     type: 'POST',
     data: {no: no},

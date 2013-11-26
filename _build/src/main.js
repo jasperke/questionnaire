@@ -171,7 +171,7 @@ function setQuest(direction) {
 function saveQuestionnaire(q_name, f, answer, quizzes) {
 	$("#send").hide();
 	$.ajax({
-		url: 'counter.php',
+		url: 'rpc/counter.php',
 		dataType: 'json',
 		type: 'POST',
 		data: {
@@ -231,7 +231,7 @@ function startQuest() {
 }
 function findPatient(no) {
 	$.ajax({
-		url: 'getUser.php',
+		url: 'rpc/getUser.php',
 		dataType: 'json',
 		type: 'POST',
 		data: {no: no},

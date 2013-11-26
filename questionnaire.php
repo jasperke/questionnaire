@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('questionnaireMap.php');
+require_once('rpc/questionnaireMap.php');
 
 if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // 未登入
 	header('Location: ./login.php');
@@ -71,7 +71,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<form method="post" action="counter.php" class="form-horizontal" role="form" onsubmit="return isValidForm(this);">
+<form method="post" action="rpc/counter.php" class="form-horizontal" role="form" onsubmit="return isValidForm(this);">
 <input type="hidden" name="patient_id">
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
@@ -168,7 +168,7 @@ $(function(){
 		url_params[p[0]]=p[1];
 	});
 	q_id=url_params['questionnaire'];
-	$.getJSON('questionnaireMap.php',{q_id:q_id},function(data){
+	$.getJSON('rpc/questionnaireMap.php',{q_id:q_id},function(data){
 		quizzes=data;
 		initQuestionnaire();
 	});
