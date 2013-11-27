@@ -38,6 +38,8 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	}
 	#optlist a.btn{
 		text-align: left;
+		padding: 24px 14px;
+		margin: 6px auto;
 	}
 	#optlist a.btn-default:hover,
 	#optlist a.btn-default.active {
@@ -52,6 +54,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		vertical-align: middle;
 		margin-right: 10px;
 	}
+	#foreword {padding-top:26px;}
 	</style>
 </head>
 <body>
@@ -94,41 +97,41 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	</nav>
 	<div class="container">
 		<h4 style="margin:0;">
-			<span id="questionnaire_name"></span> <small class="pull-right text-info">病患：<span id="p_id">?</span> <span id="p_name"></span>&nbsp;&nbsp;&nbsp;&nbsp;醫師：<?php echo  $_SESSION['doctor'];?></small>
+			<span id="questionnaire_name"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="q_no" class="text-warning invisible"></span> <span class="pull-right text-info"><span id="p_name"></span> <span id="p_id"></span>&nbsp;&nbsp;&nbsp;&nbsp;醫師：<?php echo  $_SESSION['doctor'];?></span>
 		</h4>
 	</div>
 
 	<div id="door" class="container">
 		<br>
 		<div class="row">
-			<div class="col-md-6 col-md-offset-3">
+			<div class="col-sm-6 col-sm-offset-3">
 				<div class="form-group">
-					<label class="text-muted" for="p_id">病歷號</label>
+					<label class="text-muted" for="p_id" style="font-size:24px;">病歷號</label>
 					<input type="text" class="form-control" style="width:100%;" id="p_id" name="p_id" onKeyup="findPatient(this.value);">
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6 col-md-offset-3">
+			<div class="col-sm-6 col-sm-offset-3">
 				<div class="form-group">
-					<label class="text-muted" for="p_name">姓名</label>
+					<label class="text-muted" for="p_name" style="font-size:24px;">姓名</label>
 					<input type="text" class="form-control" style="width:100%;" id="p_name" name="p_name" readOnly>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6 col-md-offset-3">
+			<div class="col-sm-6 col-sm-offset-3">
 				<div class="form-group">
 					<input type="hidden" name="p_last_weight">
-					<label class="text-muted" for="p_weight">體重(kg)</label>
+					<label class="text-muted" for="p_weight" style="font-size:24px;">體重(kg)</label>
 					<input type="text" class="form-control" style="width:auto;" id="p_weight" name="p_weight">
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6 col-md-offset-3">
-				<div class="text-center">
-					<a id="startQ" onclick="startQuest();" class="btn btn-default">開始</a>
+			<div class="col-sm-6 col-sm-offset-3">
+				<div class="text-center" style="margin-top:24px;">
+					<a id="startQ" onclick="startQuest();"  style="font-size:20px;" class="btn btn-default">開始</a>
 				</div>
 			</div>
 		</div>
@@ -136,20 +139,20 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 
 	<div id="paper" class="container" style="display:none;">
 		<div id="foreword"></div>
-		<h3><span id="q_title"></span><span id="q_no" class="text-warning pull-right"></span></h3>
+		<h3><span id="q_title"></span></h3>
 		<hr/>
-		<div id="fore_img" style="padding-left:52px;"></div>
+		<div id="fore_img" style="padding-left:10px;"></div>
 		<div id="optlist" class="btn-group-vertical btn-group-lg"></div>
 		<hr/>
 
 		<div class="row">
-			<div class="col-md-1">
+			<div class="col-sm-3">
 				<a id="prevQ" onclick="setQuest(-1);" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> 上一題</a>
 			</div>
-			<div class="col-md-2 col-md-offset-4">
+			<div class="col-sm-2 col-sm-offset-2">
 				<button id="send" class="btn btn-success text-center"><i class="icon icon-ok"></i>  送　出</button>
 			</div>
-			<div class="col-md-1 col-md-offset-4">
+			<div class="col-sm-3 col-sm-offset-2">
 				<a id="nextQ" onclick="setQuest(1);" class="btn btn-default pull-right">下一題 <i class="glyphicon glyphicon-chevron-right"></i></a>
 			</div>
 		</div>

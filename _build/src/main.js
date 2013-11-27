@@ -125,14 +125,12 @@ function setQuest(direction) {
 		$("#send").hide();
 	}
 
-
 	$("#q_no").html((q_no + 1) + "/" + quizzes.length);
 	$('#foreword').html((quizPool[quiz_id].foreword !== undefined) ? '<h4><div class="text-danger">' + quizPool[quiz_id].foreword + '</div></h4>' : '');
 	$("#q_title").html(quizPool[quiz_id].quiz);
 
 	optlistHere = $("#optlist");
 	optlistHere.empty();
-
 
 	if (quiz_id == '_SCORE_OF_PAIN') { // 疼痛指數, 特例橫排
 		optlistHere.removeClass('btn-group-vertical').addClass('btn-group');
@@ -147,11 +145,17 @@ function setQuest(direction) {
 	}
 
 	$.each(quizPool[quiz_id].options || commonOptions, function (i) {
-		$("#optlist").append(
-			$("<a/>").data({q_no: q_no, sub_q_no: sub_q_no, val: i}).addClass("btn btn-default text-left").css({whiteSpace: 'normal'}).append(
-				$("<span/>").addClass("glyphicon glyphicon-unchecked")
-			).append(this)
-		);
+		var $a = $("<a/>").data({q_no: q_no, sub_q_no: sub_q_no, val: i})
+				.addClass("btn btn-default").css({whiteSpace: 'normal'})
+				.append($("<span/>").addClass("glyphicon glyphicon-unchecked"));
+		if (quiz_id != '_SCORE_OF_PAIN') {
+			$a.addClass("text-left");
+		} else { // 疼痛指數橫排項目太多, checkbox icon後需換行, 居中
+			$a.addClass('text-center')
+				.css({width: '58px'}).append($("<br/>")).append($("<br/>")).append(' ');
+		}
+		$a.append(this);
+		$("#optlist").append($a);
 	});
 	if (answer[q_no] !== undefined) {
 		if (sub_q_no == -1) {
