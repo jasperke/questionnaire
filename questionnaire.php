@@ -71,9 +71,27 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
       <div class="modal-footer text-center">
         <button type="button" class="btn btn-default" data-dismiss="modal">確定</button>
       </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+    </div>
+  </div>
+</div>
+
+<div id="confirmModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4>注意</h4>
+		</div>
+		<div class="modal-body">
+			<p><h4>體重與上次填問卷時的體重差異超過3公斤！<br>確定正確？</h4></p>
+		</div>
+		<div class="modal-footer text-center">
+			<button type="button" class="btn" data-dismiss="modal">重填</button>
+			<button id="weightOkButton" type="button" class="btn btn-primary" data-dismiss="ok">確定</button>
+		</div>
+    </div>
+  </div>
+</div>
 
 <form method="post" action="rpc/counter.php" class="form-horizontal" role="form" onsubmit="return isValidForm(this);">
 <input type="hidden" name="patient_id">

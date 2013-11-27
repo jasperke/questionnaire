@@ -218,21 +218,23 @@ function alertModal(msg, title) {
 function startQuest() {
 	var f = document.forms[0];
 	if (f.p_id.value === '' || f.p_name.value === '' || f.p_weight.value === '') {
-		alert('錯誤！\n\n資料輸入不完整！\n或病患基本資料尚未建立！');
+		alertModal('資料輸入不完整！\n或病患基本資料尚未建立！');
 		return;
 	} else if (isNaN(f.p_weight.value) || f.p_weight.value < 5 || f.p_weight.value > 200) {
-		alert('錯誤！\n\n輸入體重格式不正確！');
+		alertModal('輸入體重格式不正確！');
 		return;
 	}
 	if (f.p_last_weight.value !== '' && Math.abs(f.p_last_weight.value - f.p_weight.value) > 3) {
-		if (!confirm('體重與上次填問卷時的體重差異超過3公斤!\n確定正確？')) { // TODO: 等提供顯示訊息
-			return;
-		}
+		$('#weightOkButton').on('click', function () {
+			$('#confirmModal').modal('hide');
+			$('#q_no').removeClass('invisible');
+			$('#p_name').text('病患：' + f.p_name.value);
+			$('#p_id').text('(' + f.p_id.value + ')');
+			$('#door').hide();
+			$('#paper').show();
+		});
+		$('#confirmModal').modal('show');
 	}
-	$('#p_id').text(f.p_id.value);
-	$('#p_name').text(f.p_name.value);
-	$('#door').hide();
-	$('#paper').show();
 }
 function findPatient(no) {
 	$.ajax({
