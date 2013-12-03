@@ -43,7 +43,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // æœ
 	}
 	#optlist a.btn-default:hover,
 	#optlist a.btn-default.active {
-		background: #F0F0F0;
+		background: #FFFFFF;
 	}
 	#optlist a.text-danger,
 	#optlist a.text-danger span {
