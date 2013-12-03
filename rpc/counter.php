@@ -15,73 +15,6 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	exit;
 }
 
-final class Calculator{
-	static $GP=array(); // GP1~GP7
-	static $GS=array(); // GS1~GS7
-	static $GE=array(); // GE1~GE6
-	static $GF=array(); // GF1~GF7
-	static $HN=array(); // H&N1~H&N11
-
-	private function __construct(){
-
-	}
-	public static function inputAnswer($q_id,$answer){
-		if(in_array($q_id,array('GP1','GP2','GP3','GP4','GP5','GP6','GP7'))){ // 全必填
-			$idx=(int)substr($q_id,2,1);
-			self::$GP[$idx]=4-(int)$answer;
-		}else if(in_array($q_id,array('GS1','GS2','GS3','GS4','GS5','GS6','GS7'))){
-			if($q_id=='GS7'&&$answer==5){ // GS7特殊題, 允許答5:不想回答
-				// 不必記入$GS array, 但之後除以'回答的題數'=6
-			}else{
-				$idx=(int)substr($q_id,2);
-				self::$GS[$idx]=(int)$answer;
-			}
-		}else if(in_array($q_id,array('GE1','GE2','GE3','GE4','GE5','GE6'))){ // 全必填
-			$idx=(int)substr($q_id,2);
-			if($idx==2){
-				self::$GE[$idx]=(int)$answer;
-			}else{
-				self::$GE[$idx]=4-(int)$answer;
-			}
-		}else if(in_array($q_id,array('GF1','GF2','GF3','GF4','GF5','GF6','GF7'))){ // 全必填
-			$idx=(int)substr($q_id,2);
-			self::$GF[$idx]=(int)$answer;
-		}else if(in_array($q_id,array('H&N1','H&N4','H&N5','H&N7','H&N10','H&N11'))){
-			$idx=(int)substr($q_id,3);
-			self::$HN[$idx]=(int)$answer;
-		}else if(in_array($q_id,array('H&N2','H&N3','H&N6'))){
-			$idx=(int)substr($q_id,3);
-			self::$HN[$idx]=4-(int)$answer;
-		}
-	}
-	public static function outSum(){
-		$sum=0;
-		$needScore=false;
-		// [題目分數的加總]*[題數]/[回答的題數]
-		if(count(self::$GP)){
-			$needScore=true;
-			$sum+=array_sum(self::$GP);
-		}
-		if(count(self::$GS)){
-			$needScore=true;
-			$sum+=array_sum(self::$GS)*7/count(self::$GS); // GS7不答的話, 題數與回答題數不會相等, 須乘除
-		}
-		if(count(self::$GE)){
-			$needScore=true;
-			$sum+=array_sum(self::$GE);
-		}
-		if(count(self::$GF)){
-			$needScore=true;
-			$sum+=array_sum(self::$GF);
-		}
-		if(count(self::$HN)){
-			$needScore=true;
-			$sum+=array_sum(self::$HN);
-		}
-		return $needScore?$sum:null;
-	}
-}
-
 /*
 $questionnaire="HN.COM";
 $p_id="898989";
@@ -105,7 +38,8 @@ foreach($answer as $idx=>$ans){
 		}
 	}*/
 }
-$score=Calculator::outSum();
+$detail=Calculator::outSum();
+$score=$detail['SUM'];
 
 $out=array(array(0,''));
 $group_id=2; // OwnerID
@@ -121,14 +55,16 @@ if($db!=0){
 		exit;
 	}
 
-	if($score===null){
-		$s="insert into MUST_Questionnaire (OwnerID,Questionnaire,No,Answer,Weight,StaffID) values (?,?,?,?,?,?)";
-		$p=array($group_id,$questionnaire,$p_id,json_encode($answer),$p_weight,$_SESSION['staffId']);
-	}else{
-		$s="insert into MUST_Questionnaire (OwnerID,Questionnaire,No,Answer,Score,Weight,StaffID) values (?,?,?,?,?,?,?)";
-		$p=array($group_id,$questionnaire,$p_id,json_encode($answer),$score,$p_weight,$_SESSION['staffId']);
-	}
-	if(!kwcr2_rawqueryexec($db, $s, $p, "")){
+	$s1='OwnerID,Questionnaire,No,Answer,Weight,StaffID';
+	$s2='?,?,?,?,?,?';
+	$p=array($group_id,$questionnaire,$p_id,json_encode($answer),$p_weight,$_SESSION['staffId']);
+	if($score!==null){$s1.=',Score'; $s2.=',?'; $p[]=$score;}
+	if(isset($detail['GP'])){$s1.=',GP'; $s2.=',?'; $p[]=$detail['GP'];}
+	if(isset($detail['GS'])){$s1.=',GS'; $s2.=',?'; $p[]=$detail['GS'];}
+	if(isset($detail['GE'])){$s1.=',GE'; $s2.=',?'; $p[]=$detail['GE'];}
+	if(isset($detail['GF'])){$s1.=',GF'; $s2.=',?'; $p[]=$detail['GF'];}
+	if(isset($detail['H&N'])){$s1.=',HANDN'; $s2.=',?'; $p[]=$detail['H&N'];}
+	if(!kwcr2_rawqueryexec($db, "insert into MUST_Questionnaire ($s1) values ($s2)", $p, "")){
 		$out[0]=array(900,"資料儲存失敗(1)！(".kwcr2_geterrormsg($db,1).")");
 		kwcr2_rollbacktransaction($db);
 		echo QUtillity::decodeUnicodeString(json_encode($out));
