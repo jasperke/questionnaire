@@ -18,23 +18,23 @@ module.exports = function(grunt) {
 				 ''
 		],
 
-		// concat: {
-		// 	dist: {
-		// 		src: ['./src/main.js','./src/quizPool.js'],
-		// 		dest: './tmp/main.js'
-		// 	},
-		// 	dev: {
-		// 		src: ['./src/main.js','./src/quizPool.js'],
-		// 		dest: '<%= JS_PATH %>main.min.js'
-		// 	}
-		// },
+		concat: {
+			// dist: {
+			// 	src: ['./src/main.js','./src/quizPool.js'],
+			// 	dest: './tmp/main.js'
+			// },
+			dev: {
+				src: ['./src/main.js','./src/quizPool.js','./src/cancerPool.js','<%= JS_PATH %>src/datePicker.js'],
+				dest: '<%= JS_PATH %>main.min.js'
+			}
+		},
 		// clean: {
 		// 	dist: ['./tmp']
 		// },
 		uglify: {
 			options: {
 				banner: '<%= banner.join("\\n") %>',
-				beautify : {ascii_only: true},
+				beautify : {ascii_only: false},
 				mangle: false,
 				sourceMap: '<%= JS_PATH %>main.min.map',
 				sourceMapRoot: '<%= JS_PATH %>',
@@ -43,7 +43,7 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				files: {
-					'<%= JS_PATH %>main.min.js': ['<%= JS_PATH %>src/quizPool.js','<%= JS_PATH %>src/main.js']
+					'<%= JS_PATH %>main.min.js': ['<%= JS_PATH %>src/quizPool.js','<%= JS_PATH %>src/cancerPool.js','<%= JS_PATH %>src/main.js','<%= JS_PATH %>src/datePicker.js']
 				}
 			}
 		},
@@ -53,6 +53,12 @@ module.exports = function(grunt) {
 					{expand:true, cwd:'<%= LIB_PATH %>underscore', src:'underscore-min.js', dest:'<%= JS_PATH %>'},
 					{expand:true, cwd:'<%= LIB_PATH %>jquery', src:'jquery.min.js', dest:'<%= JS_PATH %>'},
 					{expand:true, cwd:'<%= LIB_PATH %>bootstrap/dist', src:'**', dest:'<%= BASE_PATH %>'},
+					{expand:true, cwd:'<%= LIB_PATH %>datePicker', src:'datePicker.js', dest:'<%= JS_PATH %>src/'},
+					{expand:true, cwd:'./src', src:'*.js', dest:'<%= JS_PATH %>src/'}
+				]
+			},
+			js: {
+				files: [
 					{expand:true, cwd:'./src', src:'*.js', dest:'<%= JS_PATH %>src/'}
 				]
 			},
@@ -65,7 +71,7 @@ module.exports = function(grunt) {
 		watch: {
 			scripts: {
 				files: ['./src/*.js'],
-				tasks: ['product'],
+				tasks: ['dev'],
 				options: {
 					spawn: true,
 				}
@@ -73,7 +79,7 @@ module.exports = function(grunt) {
 		}
 	});
 
-	//grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	//grunt.loadNpmTasks('grunt-contrib-clean');
@@ -83,7 +89,11 @@ module.exports = function(grunt) {
 
 	//grunt.registerTask('product', ['concat:dist','uglify','clean']);
 	grunt.registerTask('product', ['lib','uglify']);
-	grunt.registerTask('development', ['concat:dev']);
+	grunt.registerTask('dev', ['copy:js','uglify']);
+
+	grunt.registerTask('debug', ['copy:js','concat']);
+
+//	grunt.registerTask('development', ['concat:dev']);
 
 	grunt.registerTask('default', ['product']);
 

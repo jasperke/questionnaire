@@ -37,7 +37,7 @@ $SiteLoginPWD=kwut2_readini(CFG_FN,"KOALA","SitePWD");
 $db=kwcr2_mapdb('CyberSite',$SiteLoginUID,$SiteLoginPWD);
 if($db!=0){
 	if(isset($no)){
-		$s="select CreateTime,RandNum,No,Id,Name,Gender,Birthday,Email,Phone,Weight from MUST_QuestionnaireUser where OwnerID=? and No=?";
+		$s="select CreateTime,RandNum,No,Name,Gender,Birthday,Email,Phone,Weight,Cancer,Volition,Caregiver,FirstDate,LastDate,Memo from MUST_QuestionnaireUser where OwnerID=? and No=?";
 		$p=array($group_id,$no);
 		$fetch_range=array('skip_rows'=>0,'max_fetch_raw'=>1);
 	}else{
@@ -57,7 +57,7 @@ if($db!=0){
 				$out[1]=array($r[0],$filterNo);
 			}
 		}
-		$s="select CreateTime,RandNum,No,Id,Name,Gender,Birthday,Email,Phone from MUST_QuestionnaireUser where OwnerID=?";
+		$s="select CreateTime,RandNum,No,Name,Gender,Birthday,Email,Phone,Weight,Cancer,Volition,Caregiver,FirstDate,LastDate,Memo from MUST_QuestionnaireUser where OwnerID=?";
 		$p=array($group_id);
 		if(strcmp($filterNo,'')!=0){
 			$s.=" and SUBSTRING(No,1,?)=?";
@@ -69,8 +69,14 @@ if($db!=0){
 	if($rs===false){
 		$out[0]=array(900,"資料讀取失敗(1)！(".kwcr2_geterrormsg($db,1).")");
 	}else if(isset($rs)){
-		foreach($rs as $r)
+		foreach($rs as $r){
+			if(strcmp($r[9],'')==0){ // 癌別json字串須轉成array
+				$r[9]=array();
+			}else{
+				$r[9]=json_decode($r[9]);
+			}
 			$out[]=$r;
+		}
 	}
 }else{
 	$out[0]=array(900,"資料庫連結失敗！");

@@ -1,6 +1,6 @@
 <?
 // questionnaireMap暫時定義在程式碼內, 需與quizPool.js同步
-// 日後要進db再來調整
+// TODO: 日後要進db再來調整
 $questionnaireMap=array();
 $questionnaireMap["HN.COM"]=array('_HN1','_HN2','_HN3','_HN4','_HN5','_HN6','_HN7','_HN8','_HN9','_HN10',
 	'_HN11','_HN12','_HN13','_HN14','_HN15','_HN16','_HN17','_HN18','_HN19','_HN20','_HN21','_HN22',

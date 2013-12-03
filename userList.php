@@ -2,8 +2,8 @@
 session_start();
 
 if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // 未登入
-  header('Location: ./login.php');
-  exit;
+	header('Location: ./login.php');
+	exit;
 }
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -13,442 +13,485 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 <title></title>
 <script src="js/jquery.min.js" ></script>
 <script src="js/underscore-min.js" ></script>
-<script language="JavaScript" type="text/JavaScript">
-<!--
-function MM_reloadPage(init) {  //reloads the window if Nav4 resized
-  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
-    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
-  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
-}
-MM_reloadPage(true);
-
-function MM_findObj(n, d) { //v4.01
-  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
-    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
-  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
-  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
-  if(!x && d.getElementById) x=d.getElementById(n); return x;
-}
-
-function MM_showHideLayers() { //v6.0
-  var i,p,v,obj,args=MM_showHideLayers.arguments;
-  for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { v=args[i+2];
-    if (obj.style) { obj=obj.style; v=(v=='show')?'visible':(v=='hide')?'hidden':v; }
-    obj.visibility=v; }
-}
-
-function MM_dragLayer(objName,x,hL,hT,hW,hH,toFront,dropBack,cU,cD,cL,cR,targL,targT,tol,dropJS,et,dragJS) { //v4.01
-  //Copyright 1998 Macromedia, Inc. All rights reserved.
-  var i,j,aLayer,retVal,curDrag=null,curLeft,curTop,IE=document.all,NS4=document.layers;
-  var NS6=(!IE&&document.getElementById), NS=(NS4||NS6); if (!IE && !NS) return false;
-  retVal = true; if(IE && event) event.returnValue = true;
-  if (MM_dragLayer.arguments.length > 1) {
-    curDrag = MM_findObj(objName); if (!curDrag) return false;
-    if (!document.allLayers) { document.allLayers = new Array();
-      with (document) if (NS4) { for (i=0; i<layers.length; i++) allLayers[i]=layers[i];
-        for (i=0; i<allLayers.length; i++) if (allLayers[i].document && allLayers[i].document.layers)
-          with (allLayers[i].document) for (j=0; j<layers.length; j++) allLayers[allLayers.length]=layers[j];
-      } else {
-        if (NS6) { var spns = getElementsByTagName("span"); var all = getElementsByTagName("div");
-          for (i=0;i<spns.length;i++) if (spns[i].style&&spns[i].style.position) allLayers[allLayers.length]=spns[i];}
-        for (i=0;i<all.length;i++) if (all[i].style&&all[i].style.position) allLayers[allLayers.length]=all[i];
-    } }
-    curDrag.MM_dragOk=true; curDrag.MM_targL=targL; curDrag.MM_targT=targT;
-    curDrag.MM_tol=Math.pow(tol,2); curDrag.MM_hLeft=hL; curDrag.MM_hTop=hT;
-    curDrag.MM_hWidth=hW; curDrag.MM_hHeight=hH; curDrag.MM_toFront=toFront;
-    curDrag.MM_dropBack=dropBack; curDrag.MM_dropJS=dropJS;
-    curDrag.MM_everyTime=et; curDrag.MM_dragJS=dragJS;
-    curDrag.MM_oldZ = (NS4)?curDrag.zIndex:curDrag.style.zIndex;
-    curLeft= (NS4)?curDrag.left:(NS6)?parseInt(curDrag.style.left):curDrag.style.pixelLeft;
-    if (String(curLeft)=="NaN") curLeft=0; curDrag.MM_startL = curLeft;
-    curTop = (NS4)?curDrag.top:(NS6)?parseInt(curDrag.style.top):curDrag.style.pixelTop;
-    if (String(curTop)=="NaN") curTop=0; curDrag.MM_startT = curTop;
-    curDrag.MM_bL=(cL<0)?null:curLeft-cL; curDrag.MM_bT=(cU<0)?null:curTop-cU;
-    curDrag.MM_bR=(cR<0)?null:curLeft+cR; curDrag.MM_bB=(cD<0)?null:curTop+cD;
-    curDrag.MM_LEFTRIGHT=0; curDrag.MM_UPDOWN=0; curDrag.MM_SNAPPED=false; //use in your JS!
-    document.onmousedown = MM_dragLayer; document.onmouseup = MM_dragLayer;
-    if (NS) document.captureEvents(Event.MOUSEDOWN|Event.MOUSEUP);
-  } else {
-    var theEvent = ((NS)?objName.type:event.type);
-    if (theEvent == 'mousedown') {
-      var mouseX = (NS)?objName.pageX : event.clientX + document.body.scrollLeft;
-      var mouseY = (NS)?objName.pageY : event.clientY + document.body.scrollTop;
-      var maxDragZ=null; document.MM_maxZ = 0;
-      for (i=0; i<document.allLayers.length; i++) { aLayer = document.allLayers[i];
-        var aLayerZ = (NS4)?aLayer.zIndex:parseInt(aLayer.style.zIndex);
-        if (aLayerZ > document.MM_maxZ) document.MM_maxZ = aLayerZ;
-        var isVisible = (((NS4)?aLayer.visibility:aLayer.style.visibility).indexOf('hid') == -1);
-        if (aLayer.MM_dragOk != null && isVisible) with (aLayer) {
-          var parentL=0; var parentT=0;
-          if (NS6) { parentLayer = aLayer.parentNode;
-            while (parentLayer != null && parentLayer.style.position) {
-              parentL += parseInt(parentLayer.offsetLeft); parentT += parseInt(parentLayer.offsetTop);
-              parentLayer = parentLayer.parentNode;
-          } } else if (IE) { parentLayer = aLayer.parentElement;
-            while (parentLayer != null && parentLayer.style.position) {
-              parentL += parentLayer.offsetLeft; parentT += parentLayer.offsetTop;
-              parentLayer = parentLayer.parentElement; } }
-          var tmpX=mouseX-(((NS4)?pageX:((NS6)?parseInt(style.left):style.pixelLeft)+parentL)+MM_hLeft);
-          var tmpY=mouseY-(((NS4)?pageY:((NS6)?parseInt(style.top):style.pixelTop) +parentT)+MM_hTop);
-          if (String(tmpX)=="NaN") tmpX=0; if (String(tmpY)=="NaN") tmpY=0;
-          var tmpW = MM_hWidth;  if (tmpW <= 0) tmpW += ((NS4)?clip.width :offsetWidth);
-          var tmpH = MM_hHeight; if (tmpH <= 0) tmpH += ((NS4)?clip.height:offsetHeight);
-          if ((0 <= tmpX && tmpX < tmpW && 0 <= tmpY && tmpY < tmpH) && (maxDragZ == null
-              || maxDragZ <= aLayerZ)) { curDrag = aLayer; maxDragZ = aLayerZ; } } }
-      if (curDrag) {
-        document.onmousemove = MM_dragLayer; if (NS4) document.captureEvents(Event.MOUSEMOVE);
-        curLeft = (NS4)?curDrag.left:(NS6)?parseInt(curDrag.style.left):curDrag.style.pixelLeft;
-        curTop = (NS4)?curDrag.top:(NS6)?parseInt(curDrag.style.top):curDrag.style.pixelTop;
-        if (String(curLeft)=="NaN") curLeft=0; if (String(curTop)=="NaN") curTop=0;
-        MM_oldX = mouseX - curLeft; MM_oldY = mouseY - curTop;
-        document.MM_curDrag = curDrag;  curDrag.MM_SNAPPED=false;
-        if(curDrag.MM_toFront) {
-          eval('curDrag.'+((NS4)?'':'style.')+'zIndex=document.MM_maxZ+1');
-          if (!curDrag.MM_dropBack) document.MM_maxZ++; }
-        retVal = false; if(!NS4&&!NS6) event.returnValue = false;
-    } } else if (theEvent == 'mousemove') {
-      if (document.MM_curDrag) with (document.MM_curDrag) {
-        var mouseX = (NS)?objName.pageX : event.clientX + document.body.scrollLeft;
-        var mouseY = (NS)?objName.pageY : event.clientY + document.body.scrollTop;
-        newLeft = mouseX-MM_oldX; newTop  = mouseY-MM_oldY;
-        if (MM_bL!=null) newLeft = Math.max(newLeft,MM_bL);
-        if (MM_bR!=null) newLeft = Math.min(newLeft,MM_bR);
-        if (MM_bT!=null) newTop  = Math.max(newTop ,MM_bT);
-        if (MM_bB!=null) newTop  = Math.min(newTop ,MM_bB);
-        MM_LEFTRIGHT = newLeft-MM_startL; MM_UPDOWN = newTop-MM_startT;
-        if (NS4) {left = newLeft; top = newTop;}
-        else if (NS6){style.left = newLeft; style.top = newTop;}
-        else {style.pixelLeft = newLeft; style.pixelTop = newTop;}
-        if (MM_dragJS) eval(MM_dragJS);
-        retVal = false; if(!NS) event.returnValue = false;
-    } } else if (theEvent == 'mouseup') {
-      document.onmousemove = null;
-      if (NS) document.releaseEvents(Event.MOUSEMOVE);
-      if (NS) document.captureEvents(Event.MOUSEDOWN); //for mac NS
-      if (document.MM_curDrag) with (document.MM_curDrag) {
-        if (typeof MM_targL =='number' && typeof MM_targT == 'number' &&
-            (Math.pow(MM_targL-((NS4)?left:(NS6)?parseInt(style.left):style.pixelLeft),2)+
-             Math.pow(MM_targT-((NS4)?top:(NS6)?parseInt(style.top):style.pixelTop),2))<=MM_tol) {
-          if (NS4) {left = MM_targL; top = MM_targT;}
-          else if (NS6) {style.left = MM_targL; style.top = MM_targT;}
-          else {style.pixelLeft = MM_targL; style.pixelTop = MM_targT;}
-          MM_SNAPPED = true; MM_LEFTRIGHT = MM_startL-MM_targL; MM_UPDOWN = MM_startT-MM_targT; }
-        if (MM_everyTime || MM_SNAPPED) eval(MM_dropJS);
-        if(MM_dropBack) {if (NS4) zIndex = MM_oldZ; else style.zIndex = MM_oldZ;}
-        retVal = false; if(!NS) event.returnValue = false; }
-      document.MM_curDrag = null;
-    }
-    if (NS) document.routeEvent(objName);
-  } return retVal;
-}
-//-->
-</script>
+<script src="js/main.min.js" ></script>
 </head>
 
 <body bgcolor="#EEEEEE" leftmargin="0" topmargin="0">
-<div id="Layer1" style="position:absolute; left:0px; top:100px; width:100%; z-index:1; visibility: hidden;">
-<form name='editUserForm' style='margin:0px;'>
+<div id="Mask" style="position:absolute; left:0px; top:0px; width:100%; z-index:1; display:none; background-color:#EEEEEE;">&nbsp;</div>
+<div id="Layer1" style="position:absolute; left:0px; top:0px; width:100%; z-index:2; display:none;">
+<form name='editUserForm' style='margin:50px;'>
 <input type="hidden" name="patient_id">
-  <table width="750" border="1" align="center" cellpadding="1" cellspacing="0" bordercolor="#dddddd" bgcolor="#EEEEEE">
-    <tr>
-      <td height="55" colspan="4">
-        <div align="center"><font size="6"><font color="#555555">編輯病患基本資料</font></font></div></td>
-    </tr>
-    <tr>
-      <td width="146" height="40" bgcolor="#CCCCCC"><div align="center">病例號</div></td>
-      <td width="252"><input type="text" name="no" onkeyup="checkPatient(this.value);"></td>
-      <td width="146" bgcolor="#CCCCCC"><div align="center">身分證字號</div></td>
-      <td width="246"><input name="id_no" type="text" size="30" maxlength="10"></td>
-    </tr>
-    <tr>
-      <td height="40" bgcolor="#CCCCCC"><div align="center">姓名</div></td>
-      <td><input type="text" name="patient_name"></td>
-      <td bgcolor="#CCCCCC"><div align="center">性別</div></td>
-      <td><label><input type="radio" name="gender" value="1"> 男</label>&nbsp;&nbsp;
-        <label><input type="radio" name="gender" value="2"> 女</label></td>
-    </tr>
-    <tr>
-      <td height="40" bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
-      <td>西元
-        <input name="birthday_yy" type="text" size="6" maxlength="4"> 年
-        <input name="birthday_mm" type="text" size="2" maxlength="2"> 月
-        <input name="birthday_dd" type="text" size="2" maxlength="2"> 日</td>
-      <td bgcolor="#CCCCCC"><div align="center">行動電話</div></td>
-      <td><input name="phone" type="text" size="22"></td>
-    </tr>
-    <tr>
-      <td height="40" bgcolor="#CCCCCC"><div align="center">email</div></td>
-      <td colspan="3"><input name="email" type="text" size="50"> <div align="center"></div></td>
-    </tr>
-    <tr>
-      <td height="50" colspan="4">
-        <div align="center">
-          <input name="submitButton" type="button" onClick="saveUser();" value="確定">
-          <input name="cancelButton" type="button" onClick="MM_showHideLayers('Layer1','','hide')" value="取消">
-        </div></td>
-    </tr>
-  </table>
+
+	<table width="900" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#eeeeee" style="padding:5px; border:1px solid #6078B9;"> <!-- bordercolor="#dddddd"  -->
+		<tr>
+			<td colspan="4" bgcolor="#0B1F80">
+				<div align="center" style="color:#ffffff; font-size:20px;">編輯病患基本資料</div></td>
+		</tr>
+		<tr>
+			<td width="146" bgcolor="#CCCCCC"><div align="center">病例號</div></td>
+			<td width="252" colspan="3"><input type="text" name="no" onkeyup="checkPatient(this.value);"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><div align="center">姓名</div></td>
+			<td><input type="text" name="patient_name"></td>
+			<td bgcolor="#CCCCCC"><div align="center">性別</div></td>
+			<td><label><input type="radio" name="gender" value="1"> 男</label>&nbsp;&nbsp;
+				<label><input type="radio" name="gender" value="2"> 女</label></td>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
+			<td><input class="date" name="birthday" type="text" size="16"></td>
+			<td bgcolor="#CCCCCC"><div align="center">行動電話</div></td>
+			<td><input name="phone" type="text" size="22"></td>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><div align="center">email</div></td>
+			<td colspan="3"><input name="email" type="text" size="70"></td>
+		</tr>
+		<tr><td bgcolor="#CCCCCC"><div align="center">第一次訪談日</div></td>
+			<td><input class="date" name="first_date" type="text" size="16"></td>
+			<td bgcolor="#CCCCCC"><div align="center">最近一次訪談日</div></td>
+			<td><input class="date" name="last_date" type="text" size="16"></td></tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><div align="center">主要照顧者</div></td>
+			<td><label><input type="radio" name="caregiver" value="0">配偶</label>&nbsp;
+				<label><input type="radio" name="caregiver" value="1">父母</label>&nbsp;
+				<label><input type="radio" name="caregiver" value="2">子女</label>&nbsp;
+				<label><input type="radio" name="caregiver" value="3">親友</label>&nbsp;
+				<label><input type="radio" name="caregiver" value="4">無</label></td>
+			<td bgcolor="#CCCCCC"><div align="center">問卷</div></td>
+			<td><label><input type="radio" name="volition" value="0">不需要</label>&nbsp;
+				<label><input type="radio" name="volition" value="1">需要</label>&nbsp;
+				<label><input type="radio" name="volition" value="2">拒作</label></td></tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><div align="center">癌別 <img src="images/plus-button.png" style="vertical-align:middle; cursor:pointer;" onclick="cancerFieldBuilder();"></div></td>
+			<td colspan="3"><div id="cancer_fields">
+
+<script type="text/template" id="cancer_template">
+			<div id="cancer_div_<%= idx %>">
+				<img data-rowid="<%= idx %>" src="images/minus-button.png" style="vertical-align:middle; cursor:pointer" onclick="removeCancer(<%= idx %>);">
+				<input type="text" name="cancer_code_<%= idx %>" size="6" readOnly>
+				<select data-rowid="<%= idx %>" name="cancer_category_<%= idx %>"></select>
+				<select data-rowid="<%= idx %>" name="cancer_<%= idx %>"></select>
+				<div style="margin:0px 0px 0px 76px; font-size:13px;">開始日：<input class="date" type="text" name="cancerStartDate_<%= idx %>" value="<%= startDate %>" size="16">&nbsp;
+				結束日：<input class="date" type="text" name="cancerEndDate_<%= idx %>" value="<%= endDate %>" size="16">
+				</div>
+			</div>
+</script>
+
+				</div>
+			</td></tr>
+		</tr>
+		<tr>
+			<td bgcolor="#CCCCCC"><div align="center">備註</div></td>
+			<td colspan="3"><textarea name="memo" style="width:100%; height:60px;"></textarea></td>
+		</tr>
+		<tr>
+			<td height="40" colspan="4">
+				<div align="center">
+					<input name="submitButton" type="button" onClick="saveUser();" value="確定">
+					<input name="cancelButton" type="button" onClick="showEditorLayer(0);" value="取消">
+				</div></td>
+		</tr>
+	</table>
 </form>
 </div>
 
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td width="137" height="50" bgcolor="#000000">&nbsp;</td>
-    <td width="908" bgcolor="#000000">t<font color="#999999" size="4">長庚問卷調查系統
-      - 病患列表</font></td>
-    <td width="83" bgcolor="#000000"><a href="index.php"><font color="#999999" size="4">主選單</font></a></td>
-    <td width="153" bgcolor="#000000"><a href="javascript:void(0);"><font color="#999999" size="4" onclick="showEditor({});">新增</font></a></td>
-    <td width="70" bgcolor="#000000"><a href="login.php?logout=1"><font color="#999999" size="4">登出</font></a></td>
-  </tr>
-  <tr>
-    <td id="userListHere" colspan="5"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr bgcolor="#CCCCCC">
-          <td width="4%" height="30">&nbsp;</td>
-          <td width="14%"> <form name="filerForm" style="margin:0px;"><div align="center"><font size="4">病例號</font> <input type="text" name="no_filter" style="width:60px;" onkeyup="filterUser(this.value);"></div></form></td>
-          <td width="12%"> <div align="center">身分證字號</div></td>
-          <td width="9%" bgcolor="#CCCCCC"> <div align="center">性別</div></td>
-          <td width="12%" bgcolor="#CCCCCC"><div align="center">姓名</div></td>
-          <td width="12%" bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
-          <td width="10%" bgcolor="#CCCCCC"><div align="center">行動電話</div></td>
-          <td width="18%" bgcolor="#CCCCCC"><div align="center">email</div></td>
-          <td width="9%"> <div align="center"><font size="4">功能</font></div></td>
-        </tr>
-        <tr bgcolor="#666666">
-          <td colspan="9"><img src="images/dot.gif" width="1" height="1"></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="5"><div align="center" style="padding:4px;"><span id="pageSwitcher"></span></div></td>
-  </tr>
+	<tr>
+		<td width="137" height="50" bgcolor="#000000">&nbsp;</td>
+		<td width="908" bgcolor="#000000">t<font color="#999999" size="4">長庚問卷調查系統
+			- 病患列表</font></td>
+		<td width="83" bgcolor="#000000"><a href="index.php"><font color="#999999" size="4">主選單</font></a></td>
+		<td width="153" bgcolor="#000000"><a href="javascript:void(0);"><font color="#999999" size="4" onclick="showEditor({});">新增</font></a></td>
+		<td width="70" bgcolor="#000000"><a href="login.php?logout=1"><font color="#999999" size="4">登出</font></a></td>
+	</tr>
+	<tr>
+		<td id="userListHere" colspan="5"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr bgcolor="#CCCCCC">
+					<td width="6%" height="30">&nbsp;</td>
+					<td width="16%"> <form name="filerForm" style="margin:0px;"><div align="center"><font size="4">病例號</font> <input type="text" name="no_filter" style="width:60px;" onkeyup="filterUser(this.value);"></div></form></td>
+					<td width="10%" bgcolor="#CCCCCC"> <div align="center">性別</div></td>
+					<td width="13%" bgcolor="#CCCCCC"><div align="center">姓名</div></td>
+					<td width="14%" bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
+					<td width="12%" bgcolor="#CCCCCC"><div align="center">行動電話</div></td>
+					<td width="20%" bgcolor="#CCCCCC"><div align="center">email</div></td>
+					<td width="10%"> <div align="center"><font size="4">功能</font></div></td>
+				</tr>
+				<tr bgcolor="#666666">
+					<td colspan="8"><img src="images/dot.gif" width="1" height="1"></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="5"><div align="center" style="padding:4px;"><span id="pageSwitcher"></span></div></td>
+	</tr>
 </table>
 <script type="text/template" id="row_template">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td width="4%" height="30" bgcolor="#FFFFFF" align="center"><%= start+idx+1 %>.</td>
-    <td width="14%" bgcolor="#FFFFFF" align="center"><font color="#555555" face="Arial, Helvetica, sans-serif"><%= no %></font></div></td>
-    <td width="12%" bgcolor="#FFFFFF" align="center"><%= id %></td>
-    <td width="9%" bgcolor="#FFFFFF" align="center"><%= gender?(gender==1?'男':'女'):'' %></td>
-    <td width="12%" bgcolor="#FFFFFF" align="center"><%= name %></td>
-    <td width="12%" bgcolor="#FFFFFF" align="center"><%= birthday %></td>
-    <td width="10%" bgcolor="#FFFFFF" align="center"><%= phone %></td>
-    <td width="18%" bgcolor="#FFFFFF" align="center"><%= email %></td>
-    <td width="9%" bgcolor="#FFFFFF" align="center"><a data-idx="<%= idx %>" style="cursor:pointer;">編輯</a></td></tr>
-  <tr><td colspan="9" bgcolor="#dddddd"><img src="images/dot.gif" width="1" height="1"></td></tr>
+	<tr>
+		<td width="6%" height="30" bgcolor="#FFFFFF" align="center"><%= start+idx+1 %>.</td>
+		<td width="16%" bgcolor="#FFFFFF" align="center"><font color="#555555" face="Arial, Helvetica, sans-serif"><%= no %></font></div></td>
+		<td width="10%" bgcolor="#FFFFFF" align="center"><%= gender?(gender==1?'男':'女'):'' %></td>
+		<td width="13%" bgcolor="#FFFFFF" align="center"><%= name %></td>
+		<td width="13%" bgcolor="#FFFFFF" align="center"><%= birthday %></td>
+		<td width="12%" bgcolor="#FFFFFF" align="center"><%= phone %></td>
+		<td width="20%" bgcolor="#FFFFFF" align="center"><%= email %></td>
+		<td width="10%" bgcolor="#FFFFFF" align="center"><a data-idx="<%= idx %>" style="cursor:pointer;">編輯</a></td></tr>
+	<tr><td colspan="9" bgcolor="#dddddd"><img src="images/dot.gif" width="1" height="1"></td></tr>
 </table>
 </script>
 <script>
 var start=0,
-  page_size=20,
-  filterUserNo='',
-  row_template,
-  user_list,
-  user_total_count,
-  filterUserTimerId;
+	page_size=20,
+	filterUserNo='',
+	row_template,
+	cancerField_template,
+	user_list,
+	user_total_count,
+	filterUserTimerId;
 
+function showEditorLayer(show){
+	if(show){
+		$('#Mask').css({height:$('body').height()}).show();
+		$('#Layer1').show();
+	}else{
+		$('#Mask').hide();
+		$('#Layer1').hide();
+	}
+}
 function filterUser(no){
-  if(filterUserTimerId){
-    clearTimeout(filterUserTimerId);
-  }
-  filterUserTimerId=setTimeout(function(){
-    filterUserNo=no;
-    start=0;
-    getUsers();
-  },200);
+	if(filterUserTimerId){
+		clearTimeout(filterUserTimerId);
+	}
+	filterUserTimerId=setTimeout(function(){
+		filterUserNo=no;
+		start=0;
+		getUsers();
+	},200);
 }
 function getUsers(){
-  $.ajax({
-    url:'rpc/getUser.php',
-    dataType:'json',
-    type:'POST',
-    data:{
-      start:start,
-      size:page_size,
-      total_count:1,
-      filterNo:filterUserNo
-    },
-    error:function(){
-      alert('error'); // TODO:
-    },
-    success:function(data){
-      if(data[0][0]!=0){
-        alert('錯誤！\n\n錯誤代碼：'+data[0][0]+'\n錯誤訊息：'+data[0][1]);
-      }else{
-        if(data[1][1]!=filterUserNo) // 取回資料採非目前過濾條件者
-          return;
-        user_total_count=data[1][0];
-        user_list=data.slice(2);
-        tableBuilder();
-        refreshPageSwitcher();
-      }
-    }
-  });
+	$.ajax({
+		url:'rpc/getUser.php',
+		dataType:'json',
+		type:'POST',
+		data:{
+			start:start,
+			size:page_size,
+			total_count:1,
+			filterNo:filterUserNo
+		},
+		error:function(){
+			alert('error'); // TODO:
+		},
+		success:function(data){
+			if(data[0][0]!=0){
+				alert('錯誤！\n\n錯誤代碼：'+data[0][0]+'\n錯誤訊息：'+data[0][1]);
+			}else{
+				if(data[1][1]!=filterUserNo) // 取回資料採非目前過濾條件者
+					return;
+				user_total_count=data[1][0];
+				user_list=data.slice(2);
+				tableBuilder();
+				refreshPageSwitcher();
+			}
+		}
+	});
 }
 function tableBuilder(){
-  var listHere=$('#userListHere'),
-    data=user_list;
-  listHere.find('table:gt(0)').remove();
-  for(var i=0; i<data.length; i++){
-    listHere.append( // CreateTime,RandNum,No,Id,Name,Gender,Birthday,Email,Phone
-      row_template({
-        pid: data[i][0]+';'+data[i][1],
-        idx: i,
-        no: data[i][2],
-        id: data[i][3],
-        name: data[i][4],
-        gender: data[i][5],
-        birthday: data[i][6],
-        email: data[i][7],
-        phone: data[i][8]
-      }));
-  }
+	var listHere=$('#userListHere'),
+		data=user_list;
+	listHere.find('table:gt(0)').remove();
+	for(var i=0; i<data.length; i++){
+		listHere.append( // CreateTime,RandNum,No,Name,Gender,Birthday,Email,Phone,Weight,Cancer,Volition,Caregiver,FirstDate,LastDate,Memo
+			row_template({
+				pid: data[i][0]+';'+data[i][1],
+				idx: i,
+				no: data[i][2],
+				name: data[i][3],
+				gender: data[i][4],
+				birthday: data[i][5],
+				email: data[i][6],
+				phone: data[i][7]
+			}));
+	}
 }
 function refreshPageSwitcher(){
-  var switcher=$('#pageSwitcher').empty();
-  if(start>0){
-    $('<a>').text('上一頁').css({cursor:'pointer',color:'#0000FF',textDecoration:'underline'}).on('click',function(){
-      start-=page_size;
-      if(start<0) start=0;
-      getUsers();
-    }).appendTo(switcher);
-  }
-  if(start+page_size<user_total_count){
-    if(start>0)
-      switcher.append(' | ');
-    $('<a>').text('下一頁').css({cursor:'pointer',color:'#0000FF',textDecoration:'underline'}).on('click',function(){
-      start+=page_size;
-      getUsers();
-    }).appendTo(switcher);
-  }
+	var switcher=$('#pageSwitcher').empty();
+	if(start>0){
+		$('<a>').text('上一頁').css({cursor:'pointer',color:'#0000FF',textDecoration:'underline'}).on('click',function(){
+			start-=page_size;
+			if(start<0) start=0;
+			getUsers();
+		}).appendTo(switcher);
+	}
+	if(start+page_size<user_total_count){
+		if(start>0)
+			switcher.append(' | ');
+		$('<a>').text('下一頁').css({cursor:'pointer',color:'#0000FF',textDecoration:'underline'}).on('click',function(){
+			start+=page_size;
+			getUsers();
+		}).appendTo(switcher);
+	}
 }
 function isValidDate(yy,mm,dd){
-  if(isNaN(yy)||isNaN(mm)||isNaN(dd)){return false;}
-  if(yy<=0||mm<=0||mm>12||dd<=0||dd>31){return false;}
-  if((mm==4||mm==6||mm==9||mm==11)&&dd>30){return false;}
-  if(mm==2){
-    if((yy%4==0&&yy%100!=0)||yy%1000==0){
-      if(dd>29){return false;}
-    }else{
-      if(dd>28){return false;}
-    }
-  }
-  return true;
+	if(isNaN(yy)||isNaN(mm)||isNaN(dd)){return false;}
+	if(yy<=0||mm<=0||mm>12||dd<=0||dd>31){return false;}
+	if((mm==4||mm==6||mm==9||mm==11)&&dd>30){return false;}
+	if(mm==2){
+		if((yy%4==0&&yy%100!=0)||yy%1000==0){
+			if(dd>29){return false;}
+		}else{
+			if(dd>28){return false;}
+		}
+	}
+	return true;
 };
 function showEditor(opt){
-  var f=document.editUserForm;
-  if(opt.patient_id){
-    f.patient_id.value=opt.patient_id;
-//    $(f.no).attr('readOnly','readOnly');
-  }else{
-    f.patient_id.value='';
-//    $(f.no).removeAttr('readOnly');
-  }
-  f.no.value=opt.no||'';
-  f.id_no.value=opt.id_no||'';
-  f.patient_name.value=opt.patient_name||'';
-  if(opt.gender&&opt.gender==2)
-    f.gender[1].checked=true;
-  else
-    f.gender[0].checked=true;
-  if(opt.birthday){
-    var birth=opt.birthday.split('-');
-    f.birthday_yy.value=birth[0];
-    f.birthday_mm.value=birth[1];
-    f.birthday_dd.value=birth[2];
-  }else{
-    f.birthday_yy.value='';
-    f.birthday_mm.value='';
-    f.birthday_dd.value='';
-  }
-  f.phone.value=opt.phone||'';
-  f.email.value=opt.email||'';
+	cancerFieldBuilder.counter=0;
 
-  MM_showHideLayers('Layer1','','show')
+	var f=document.editUserForm;
+	if(opt.patient_id){
+		f.patient_id.value=opt.patient_id;
+	}else{
+		f.patient_id.value='';
+	}
+	f.no.value=opt.no||'';
+	f.patient_name.value=opt.patient_name||'';
+	if(opt.gender){
+		if(opt.gender==2)
+			f.gender[1].checked=true;
+		else
+			f.gender[0].checked=true;
+	}else{
+		$(f.gender).each(function(){
+			this.checked=false;
+		})
+	}
+	f.birthday.value=opt.birthday||'';
+	f.phone.value=opt.phone||'';
+	f.email.value=opt.email||'';
+	f.first_date.value=opt.first_date||'';
+	f.last_date.value=opt.last_data||'';
+	if(opt.caregiver!==undefined&&opt.caregiver!==''){
+		f.caregiver[opt.caregiver].checked=true;
+	}else{
+		$(f.caregiver).each(function(){
+			this.checked=false;
+		})
+	}
+	if(opt.volition!==undefined&&opt.volition!==''){
+		f.volition[opt.volition].checked=true;
+	}else{
+		$(f.volition).each(function(){
+			this.checked=false;
+		})
+	}
+	f.memo.value=opt.memo||'';
+
+	$('#cancer_fields').empty();
+	if(opt.cancer&&opt.cancer.length){
+		$(opt.cancer).each(function(){
+			cancerFieldBuilder({
+				val: this[0],
+				startDate: this[1],
+				endDate: this[2]
+			})
+		});
+	}else{
+		cancerFieldBuilder();
+	}
+
+	showEditorLayer(1);
 }
 function saveUser(){
-  var f=document.editUserForm,
-    data={no:f.no.value,
-      gender:f.gender[0].checked?1:2,
-      patient_id:f.patient_id.value,
-      id_no:f.id_no.value,
-      patient_name:f.patient_name.value,
-      email:f.email.value,
-      phone:f.phone.value
-    };
-  if(isValidDate(f.birthday_yy.value,f.birthday_mm.value,f.birthday_dd.value))
-    data.birthday=f.birthday_yy.value+'-'+f.birthday_mm.value+'-'+f.birthday_dd.value;
+	var f=document.editUserForm,
+			data={no:f.no.value,
+				patient_id:f.patient_id.value,
+				patient_name:f.patient_name.value,
+				email:f.email.value,
+				phone:f.phone.value,
+				first_date:f.first_date.value,
+				last_date:f.last_date.value,
+				memo:f.memo.value
+			};
+	if(f.gender[0].checked)
+		data.gender=1;
+	if(f.gender[1].checked)
+		data.gender=2;
 
-  $.ajax({
-    url: 'rpc/editUser.php',
-    dataType: 'json',
-    type: 'POST',
-    data: data,
-    error: function (ajaxObj, errorType, exceptionObj) {
-      alert(errorType + '\n' + exceptionObj);
-    },
-    success: function (data) {
-      if (data[0][0] === 0) {
-        alert('資料儲存完畢！');
+	if(f.birthday.value)
+		data.birthday=f.birthday.value;
 
-        start=0;
-        getUsers();
-      } else {
-        alert('錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);
-      }
-      MM_showHideLayers('Layer1','','hide');
-    }
-  });
+	$(f.caregiver).each(function(){
+		if(this.checked) data.caregiver=this.value;
+	});
+	$(f.volition).each(function(){
+		if(this.checked) data.volition=this.value;
+	})
+
+	data.cancer=[];
+	$('input[name^="cancer_code_"]').each(function(){
+		var f=document.editUserForm,
+				rowid=this.name.replace('cancer_code_','');
+		if(f['cancer_code_'+rowid].value)
+			data.cancer.push([f['cancer_code_'+rowid].value,f['cancerStartDate_'+rowid].value,f['cancerEndDate_'+rowid].value]);
+	})
+
+	$.ajax({
+		url: 'rpc/editUser.php',
+		dataType: 'json',
+		type: 'POST',
+		data: data,
+		error: function (ajaxObj, errorType, exceptionObj) {
+			alert(errorType + '\n' + exceptionObj);
+		},
+		success: function (data) {
+			if (data[0][0] === 0) {
+				alert('資料儲存完畢！');
+
+				start=0;
+				getUsers();
+			} else {
+				alert('錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);
+			}
+			showEditorLayer(0);
+		}
+	});
 }
 function checkPatient(no) {
-  $.ajax({
-    url: 'rpc/getUser.php',
-    dataType: 'json',
-    type: 'POST',
-    data: {no: no},
-    error: function () {
-      alert('error'); // TODO:
-    },
-    success: function (data) {
-      if (data[0][0] !== 0) {
-        alert('錯誤！\n\n錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);
-      } else {
-        if(data.length>1){
-          showEditor({ // CreateTime,RandNum,No,Id,Name,Gender,Birthday,Email,Phone
-                patient_id:data[1][0]+';'+data[1][1],
-                no:data[1][2],
-                id_no:data[1][3],
-                patient_name:data[1][4],
-                gender:data[1][5],
-                birthday:data[1][6],
-                phone:data[1][8],
-                email:data[1][7]
-              });
-        }else{
-          document.editUserForm.patient_id.value='';
-        }
-      }
-    }
-  });
+	$.ajax({
+		url: 'rpc/getUser.php',
+		dataType: 'json',
+		type: 'POST',
+		data: {no: no},
+		error: function () {
+			alert('error'); // TODO:
+		},
+		success: function (data) {
+			if (data[0][0] !== 0) {
+				alert('錯誤！\n\n錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);
+			} else {
+				if(data.length>1){
+					showEditor({ // CreateTime,RandNum,No,Name,Gender,Birthday,Email,Phone,Weight,Cancer,Volition,Caregiver,FirstDate,LastDate,Memo
+								patient_id:data[1][0]+';'+data[1][1],
+								no:data[1][2],
+								patient_name:data[1][3],
+								gender:data[1][4],
+								birthday:data[1][5],
+								phone:data[1][7],
+								email:data[1][6],
+								cancer:data[1][9],
+								first_date:data[1][12],
+								last_data:data[1][13],
+								caregiver:data[1][11],
+								volition:data[1][10],
+								memo:data[1][14]
+							});
+				}else{
+					document.editUserForm.patient_id.value='';
+				}
+			}
+		}
+	});
 }
+function refreshCancerSubSelector(event){
+	var idx=$(event.target).data('rowid'),
+			cancerList=cancerTaxonomy.cancerList(document.editUserForm['cancer_category_'+idx].selectedIndex),
+			i;
+	for(i=document.editUserForm['cancer_'+idx].length-1; i>=0; i--){
+		document.editUserForm['cancer_'+idx].options[i]=null;
+	}
+	for(i=0; i<cancerList.length; i++){
+		document.editUserForm['cancer_'+idx].appendChild(new Option(cancerList[i][1],cancerList[i][0]));
+	}
+	$(document.editUserForm['cancer_'+idx]).trigger('change');
+}
+
+function cancerFieldBuilder(cancer){
+	var i=0,
+			cancerCategory=cancerTaxonomy.categoryList(),
+			selectedIndex;
+
+	$('#cancer_fields').append(cancerField_template($.extend({idx:cancerFieldBuilder.rowid}, cancer||{
+		val: '',
+		startDate: '',
+		endDate: ''
+	})));
+	// 癌別開始/結束日
+	$('#cancer_div_'+cancerFieldBuilder.rowid+' .date').datePicker({
+		weekName:['日','一','二','三','四','五','六'],
+		monthName:['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+	});
+
+	for(i=0; i<cancerCategory.length; i++){
+		document.editUserForm['cancer_category_'+cancerFieldBuilder.rowid].appendChild(new Option(cancerCategory[i],i));
+	}
+
+	$(document.editUserForm['cancer_category_'+cancerFieldBuilder.rowid]).on('change',refreshCancerSubSelector).trigger('change');
+	$(document.editUserForm['cancer_'+cancerFieldBuilder.rowid]).on('change',function(event){
+		var idx=$(event.target).data('rowid');
+		document.editUserForm['cancer_code_'+idx].value=this.options[this.selectedIndex].value;
+	});
+
+	if(cancer!==undefined){
+		selectedIndex=cancerTaxonomy.categoryIdx(cancer.val);
+		document.editUserForm['cancer_category_'+cancerFieldBuilder.rowid].selectedIndex=selectedIndex;
+		$(document.editUserForm['cancer_category_'+cancerFieldBuilder.rowid]).trigger('change');
+		$(document.editUserForm['cancer_'+cancerFieldBuilder.rowid]).val(cancer.val).trigger('change');
+	}
+
+	cancerFieldBuilder.rowid++;
+	cancerFieldBuilder.counter++;
+}
+cancerFieldBuilder.rowid=0;
+cancerFieldBuilder.counter=0;
+
+function removeCancer(rowid){
+	$('div#cancer_div_'+rowid).remove();
+	cancerFieldBuilder.counter--;
+	if(cancerFieldBuilder.counter==0){ // 至少留一組空白欄
+		cancerFieldBuilder();
+	}
+}
+
 $(function(){
-  $('#userListHere').on('click','a',function(event){
-    var i=$(this).data('idx');
-    showEditor({ // CreateTime,RandNum,No,Id,Name,Gender,Birthday,Email,Phone
-      patient_id:user_list[i][0]+';'+user_list[i][1],
-      no:user_list[i][2],
-      id_no:user_list[i][3],
-      patient_name:user_list[i][4],
-      gender:user_list[i][5],
-      birthday:user_list[i][6],
-      phone:user_list[i][8],
-      email:user_list[i][7]
-    });
-  });
-  row_template=_.template($("#row_template").html());
-  getUsers();
-})
+	// 生日/訪談日
+	$('.date').datePicker({
+		weekName:['日','一','二','三','四','五','六'],
+		monthName:['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+	});
+
+	$('#userListHere').on('click','a',function(event){
+		var i=$(this).data('idx'),
+				user={ // CreateTime,RandNum,No,Name,Gender,Birthday,Email,Phone,Weight,Cancer,Volition,Caregiver,FirstDate,LastDate,Memo
+					patient_id:user_list[i][0]+';'+user_list[i][1],
+					no:user_list[i][2],
+					patient_name:user_list[i][3],
+					gender:user_list[i][4],
+					birthday:user_list[i][5],
+					phone:user_list[i][7],
+					email:user_list[i][6],
+					first_date:user_list[i][12],
+					last_data:user_list[i][13],
+					memo:user_list[i][14],
+					cancer:user_list[i][9]
+				}
+		if(user_list[i][11]!==undefined&&user_list[i][11]!=='')
+			user.caregiver=user_list[i][11];
+		if(user_list[i][10]!==undefined&&user_list[i][10]!=='')
+			user.volition=user_list[i][10];
+
+		showEditor(user);
+	});
+	row_template=_.template($("#row_template").html());
+	getUsers();
+
+	cancerField_template=_.template($('#cancer_template').html());
+	cancerFieldBuilder();
+});
 </script>
 </body>
 </html>

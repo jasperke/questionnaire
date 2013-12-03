@@ -248,16 +248,16 @@ function findPatient(no) {
 		success: function (data) {
 			if (data[0][0] !== 0) {
 				alert('錯誤！\n\n錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);
-			} else {
+			} else { // CreateTime,RandNum,No,Name,Gender,Birthday,Email,Phone,Weight
 				var p_name = '',
 					_tmp;
 				if (data[1] !== undefined) { // 名字第二字替換成○
-					_tmp = data[1][4].split('');
+					_tmp = data[1][3].split('');
 					_tmp[1] = '○';
 					p_name = _tmp.join('');
 
 					document.forms[0].p_name.value = p_name;
-					document.forms[0].p_last_weight.value = data[1][9] || '';
+					document.forms[0].p_last_weight.value = data[1][8] || '';
 				} else {
 					document.forms[0].p_name.value = '';
 					document.forms[0].p_last_weight.value = '';
