@@ -20,42 +20,48 @@ Questionnaire for ChangGung
 ### Table Schema
 
 	create table MUST_QUESTIONNAIRE (
-		OWNERID  INTEGER default null ,
-		SITEID  INTEGER default null ,
-		CREATETIME  TIMESTAMP default now() ,
-		RANDNUM  INTEGER default rand() ,
-		QUESTIONNAIRE  VARCHAR(50) default null ,
-		"NO"  VARCHAR(10) default null ,
-		ANSWER  VARCHAR(500) default null ,
-		SCORE  INTEGER default null ,
-		VERSION  INTEGER default null ,
-		WEIGHT  DECIMAL(4, 1) default null,
-		StaffID varchar(34) default null );
+		OWNERID INTEGER default null ,
+		SITEID INTEGER default null ,
+		CREATETIME TIMESTAMP default now() ,
+		RANDNUM INTEGER default rand() ,
+		QUESTIONNAIRE VARCHAR(50) default null ,
+		"NO" VARCHAR(10) default null ,
+		ANSWER VARCHAR(500) default null ,
+		SCORE smallint default null ,
+		VERSION smallint default null ,
+		WEIGHT DECIMAL(4, 1) default null,
+		StaffID varchar(34) default null,
+		GP smallint default null,
+		GS smallint default null,
+		GE smallint default null,
+		GF smallint default null,
+		HANDN smallint default null);
+	create index IDXQuest on MUST_QUESTIONNAIRE ("NO", Questionnaire) ;
 
 	create table MUST_QUESTIONNAIREUSER (
-		OWNERID  INTEGER default null ,
-		SITEID  INTEGER default null ,
-		CREATETIME  TIMESTAMP default now() ,
-		RANDNUM  INTEGER default rand() ,
-		"NO"  VARCHAR(10) primary key ,
-		NAME  VARCHAR(30) default null ,
-		GENDER  CHAR(1) default null ,
-		BIRTHDAY  DATE default null ,
-		EMAIL  VARCHAR(100) default null ,
-		PHONE  VARCHAR(50) default null,
+		OWNERID INTEGER default null ,
+		SITEID INTEGER default null ,
+		CREATETIME TIMESTAMP default now() ,
+		RANDNUM INTEGER default rand() ,
+		"NO" VARCHAR(10) primary key ,
+		NAME VARCHAR(30) default null ,
+		GENDER CHAR(1) default null ,
+		BIRTHDAY DATE default null ,
+		EMAIL VARCHAR(100) default null ,
+		PHONE VARCHAR(50) default null,
 		Volition char(1) default null,
 		Weight Decimal(4, 1) default null,
 		Caregiver char(1) default null,
 		FirstDate date default null,
 		LastDate data default null,
-		Memo varchar(1500) default null );
+		Memo varchar(1500) default null,
+		Cancer varchar(300) default null );
 
 	create table MUST_Staff (
-		OWNERID  INTEGER default null ,
-		SITEID  INTEGER default null ,
-		CREATETIME  TIMESTAMP default now() ,
-		RANDNUM  INTEGER default rand() ,
+		OWNERID INTEGER default null ,
+		SITEID INTEGER default null ,
+		CREATETIME TIMESTAMP default now() ,
+		RANDNUM INTEGER default rand() ,
 		Account char(20) primary key,
 		Password char(12),
 		Name varchar(30) );
-

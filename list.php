@@ -1,6 +1,5 @@
 <?php
 session_start();
-//require_once('questionnaireMap.php');
 
 if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // 未登入
   header('Location: ./login.php');
@@ -22,7 +21,7 @@ var start=<? echo isset($_SESSION['skip_rows'])?$_SESSION['skip_rows']:0; ?>,
 
 function getList(){
   $.ajax({
-    url:'getList.php',
+    url:'rpc/getList.php',
     dataType:'json',
     type:'POST',
     data:{

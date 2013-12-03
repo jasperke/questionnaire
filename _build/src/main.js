@@ -46,7 +46,8 @@ function setQuest(direction) {
 		sub_quizzes,
 		curr_quiz_def = quizzes[q_no].toString().split(':'),
 		next_quiz_def,
-		prev_quiz_def;
+		prev_quiz_def,
+		optlistHere;
 		// ex. 'X6:X7,_X8,.....,_X22:A1,A2,...:...' 如有冒號, 冒號後表子問題群組, 可多個冒號區隔
 		// 第1個冒號後接著的表第1子群問題(主問題選第1項時才秀)
 		// 第2個冒號後接著的表第2子群問題(主問題選第2項時才秀)
@@ -124,11 +125,18 @@ function setQuest(direction) {
 		$("#send").hide();
 	}
 
-
 	$("#q_no").html((q_no + 1) + "/" + quizzes.length);
 	$('#foreword').html((quizPool[quiz_id].foreword !== undefined) ? '<h4><div class="text-danger">' + quizPool[quiz_id].foreword + '</div></h4>' : '');
 	$("#q_title").html(quizPool[quiz_id].quiz);
-	$("#optlist").empty();
+
+	optlistHere = $("#optlist");
+	optlistHere.empty();
+
+	if (quiz_id == '_SCORE_OF_PAIN') { // 疼痛指數, 特例橫排
+		optlistHere.removeClass('btn-group-vertical').addClass('btn-group');
+	} else {
+		optlistHere.removeClass('btn-group').addClass('btn-group-vertical');
+	}
 
 	if (quizPool[quiz_id].image !== undefined) {
 		$("#fore_img").append($('<img>', {src: quizPool[quiz_id].image}));
@@ -137,11 +145,17 @@ function setQuest(direction) {
 	}
 
 	$.each(quizPool[quiz_id].options || commonOptions, function (i) {
-		$("#optlist").append(
-			$("<a/>").data({q_no: q_no, sub_q_no: sub_q_no, val: i}).addClass("btn btn-default text-left").css({whiteSpace: 'normal'}).append(
-				$("<span/>").addClass("glyphicon glyphicon-unchecked")
-			).append(this)
-		);
+		var $a = $("<a/>").data({q_no: q_no, sub_q_no: sub_q_no, val: i})
+				.addClass("btn btn-default").css({whiteSpace: 'normal'})
+				.append($("<span/>").addClass("glyphicon glyphicon-unchecked"));
+		if (quiz_id != '_SCORE_OF_PAIN') {
+			$a.addClass("text-left");
+		} else { // 疼痛指數橫排項目太多, checkbox icon後需換行, 居中
+			$a.addClass('text-center')
+				.css({width: '58px'}).append($("<br/>")).append($("<br/>")).append(' ');
+		}
+		$a.append(this);
+		$("#optlist").append($a);
 	});
 	if (answer[q_no] !== undefined) {
 		if (sub_q_no == -1) {
@@ -161,7 +175,7 @@ function setQuest(direction) {
 function saveQuestionnaire(q_name, f, answer, quizzes) {
 	$("#send").hide();
 	$.ajax({
-		url: 'counter.php',
+		url: 'rpc/counter.php',
 		dataType: 'json',
 		type: 'POST',
 		data: {
@@ -176,6 +190,7 @@ function saveQuestionnaire(q_name, f, answer, quizzes) {
 		},
 		success: function (data) {
 			if (data[0][0] === 0) {
+				$("#prevQ").hide();
 				alertModal('謝謝您的合作！', '　');
 				sent = true;
 			} else {
@@ -203,25 +218,27 @@ function alertModal(msg, title) {
 function startQuest() {
 	var f = document.forms[0];
 	if (f.p_id.value === '' || f.p_name.value === '' || f.p_weight.value === '') {
-		alert('錯誤！\n\n資料輸入不完整！\n或病患基本資料尚未建立！');
+		alertModal('資料輸入不完整！\n或病患基本資料尚未建立！');
 		return;
 	} else if (isNaN(f.p_weight.value) || f.p_weight.value < 5 || f.p_weight.value > 200) {
-		alert('錯誤！\n\n輸入體重格式不正確！');
+		alertModal('輸入體重格式不正確！');
 		return;
 	}
 	if (f.p_last_weight.value !== '' && Math.abs(f.p_last_weight.value - f.p_weight.value) > 3) {
-		if (!confirm('體重與上次填問卷時的體重差異超過3公斤!\n確定正確？')) { // TODO: 等提供顯示訊息
-			return;
-		}
+		$('#weightOkButton').on('click', function () {
+			$('#confirmModal').modal('hide');
+			$('#q_no').removeClass('invisible');
+			$('#p_name').text('病患：' + f.p_name.value);
+			$('#p_id').text('(' + f.p_id.value + ')');
+			$('#door').hide();
+			$('#paper').show();
+		});
+		$('#confirmModal').modal('show');
 	}
-	$('#p_id').text(f.p_id.value);
-	$('#p_name').text(f.p_name.value);
-	$('#door').hide();
-	$('#paper').show();
 }
 function findPatient(no) {
 	$.ajax({
-		url: 'getUser.php',
+		url: 'rpc/getUser.php',
 		dataType: 'json',
 		type: 'POST',
 		data: {no: no},
@@ -231,16 +248,16 @@ function findPatient(no) {
 		success: function (data) {
 			if (data[0][0] !== 0) {
 				alert('錯誤！\n\n錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);
-			} else {
+			} else { // CreateTime,RandNum,No,Name,Gender,Birthday,Email,Phone,Weight
 				var p_name = '',
 					_tmp;
 				if (data[1] !== undefined) { // 名字第二字替換成○
-					_tmp = data[1][4].split('');
+					_tmp = data[1][3].split('');
 					_tmp[1] = '○';
 					p_name = _tmp.join('');
 
 					document.forms[0].p_name.value = p_name;
-					document.forms[0].p_last_weight.value = data[1][9] || '';
+					document.forms[0].p_last_weight.value = data[1][8] || '';
 				} else {
 					document.forms[0].p_name.value = '';
 					document.forms[0].p_last_weight.value = '';

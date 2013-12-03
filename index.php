@@ -10,6 +10,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 <html lang="zh-tw">
 <head>
 	<meta charset="utf-8" />
+	<meta name="viewport" content="user-scalable=no, width=device-width" />
 	<title>問卷調查</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 	<script type="text/javascript" src="js/jquery.min.js" ></script>

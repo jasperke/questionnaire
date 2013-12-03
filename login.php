@@ -35,8 +35,15 @@ if(isset($login_id,$login_pw)){
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<meta name="viewport" content="user-scalable=no, width=device-width" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title></title>
+  <style type="text/css">
+  html, body, h3 small, h4 small {
+    font-size: 17px;
+    font-family: "微軟正黑體";
+  }
+  </style>
 </head>
 
 <body bgcolor="#EEEEEE" leftmargin="0" topmargin="0" onload="document.forms[0].login_id.focus();">
@@ -52,20 +59,20 @@ if(isset($login_id,$login_pw)){
     <td>
       <table width="491" height="278" border="0" align="center" cellpadding="0" cellspacing="0" background="images/login_bg.gif">
         <tr>
-          <td><div align="center"><font color="#666666" size="6">長庚照護問卷系統</font></div></td>
+          <td><div align="center"><font color="#666666" style="font-size:36px;">長庚照護問卷系統</font></div></td>
         </tr>
         <tr>
-          <td><div align="center"><font color="#333333">帳號：</font>
-              <input name="login_id" type="text" size="15" autocomplete="off">
-              <font color="#333333">密碼：</font>
-              <input name="login_pw" type="password" size="15">
-            </div></td>
-        </tr>
-        <tr>
-          <td height="100">
-            <div align="center">
-              <input name="Submit" type="submit" value="登入">
-            </div></td>
+          <td><div align="center" style="padding:4px;"><font color="#333333" style="font-size:26px;">帳號：</font>
+              <input name="login_id" type="text" autocomplete="off" style="width:250px; font-size:24px;">
+            </div>
+            <div align="center" style="padding:4px;">
+              <font color="#333333" style="font-size:26px;">密碼：</font>
+              <input name="login_pw" type="password" style="width:250px; font-size:24px;">
+            </div>
+            <div align="center" style="padding:20px;">
+              <input name="Submit" type="submit" style="font-size:24px;" value="登入">
+            </div>
+          </td>
         </tr>
       </table>
     </td>
