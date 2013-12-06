@@ -11,6 +11,11 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title></title>
+<style type="text/css">
+<!--
+.activeRow {background-color:#FFFFD9;}
+-->
+</style>
 <script src="js/jquery.min.js" ></script>
 <script src="js/underscore-min.js" ></script>
 <script src="js/main.min.js" ></script>
@@ -87,6 +92,10 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 			<td colspan="3"><textarea name="memo" style="width:100%; height:60px;"></textarea></td>
 		</tr>
 		<tr>
+			<td bgcolor="#CCCCCC"><div align="center">問卷</div></td>
+			<td colspan="3"><span id="my_questionnaire"></span></td>
+		</tr>
+		<tr>
 			<td height="40" colspan="4">
 				<div align="center">
 					<input name="submitButton" type="button" onClick="saveUser();" value="確定">
@@ -111,16 +120,15 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<td id="userListHere" colspan="5"><table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr bgcolor="#CCCCCC">
 					<td width="6%" height="30">&nbsp;</td>
-					<td width="16%"> <form name="filerForm" style="margin:0px;"><div align="center"><font size="4">病例號</font> <input type="text" name="no_filter" style="width:60px;" onkeyup="filterUser(this.value);"></div></form></td>
+					<td width="20%"> <form name="filerForm" style="margin:0px;"><div align="center"><font size="4">病例號</font> <input type="text" name="no_filter" style="width:60px;" onkeyup="filterUser(this.value);"></div></form></td>
 					<td width="10%" bgcolor="#CCCCCC"> <div align="center">性別</div></td>
-					<td width="13%" bgcolor="#CCCCCC"><div align="center">姓名</div></td>
+					<td width="14%" bgcolor="#CCCCCC"><div align="center">姓名</div></td>
 					<td width="14%" bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
-					<td width="12%" bgcolor="#CCCCCC"><div align="center">行動電話</div></td>
-					<td width="20%" bgcolor="#CCCCCC"><div align="center">email</div></td>
-					<td width="10%"> <div align="center"><font size="4">功能</font></div></td>
+					<td width="14%" bgcolor="#CCCCCC"><div align="center">行動電話</div></td>
+					<td width="22%" bgcolor="#CCCCCC"><div align="center">email</div></td>
 				</tr>
 				<tr bgcolor="#666666">
-					<td colspan="8"><img src="images/dot.gif" width="1" height="1"></td>
+					<td colspan="7"><img src="images/dot.gif" width="1" height="1"></td>
 				</tr>
 			</table>
 		</td>
@@ -131,16 +139,15 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 </table>
 <script type="text/template" id="row_template">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-	<tr>
+	<tr data-idx="<%= idx %>">
 		<td width="6%" height="30" bgcolor="#FFFFFF" align="center"><%= start+idx+1 %>.</td>
-		<td width="16%" bgcolor="#FFFFFF" align="center"><font color="#555555" face="Arial, Helvetica, sans-serif"><%= no %></font></div></td>
+		<td width="20%" bgcolor="#FFFFFF" align="center"><font face="Arial, Helvetica, sans-serif"><%= no %></font></div></td>
 		<td width="10%" bgcolor="#FFFFFF" align="center"><%= gender?(gender==1?'男':'女'):'' %></td>
-		<td width="13%" bgcolor="#FFFFFF" align="center"><%= name %></td>
-		<td width="13%" bgcolor="#FFFFFF" align="center"><%= birthday %></td>
-		<td width="12%" bgcolor="#FFFFFF" align="center"><%= phone %></td>
-		<td width="20%" bgcolor="#FFFFFF" align="center"><%= email %></td>
-		<td width="10%" bgcolor="#FFFFFF" align="center"><a data-idx="<%= idx %>" style="cursor:pointer;">編輯</a></td></tr>
-	<tr><td colspan="9" bgcolor="#dddddd"><img src="images/dot.gif" width="1" height="1"></td></tr>
+		<td width="14%" bgcolor="#FFFFFF" align="center"><%= name %></td>
+		<td width="14%" bgcolor="#FFFFFF" align="center"><%= birthday %></td>
+		<td width="14%" bgcolor="#FFFFFF" align="center"><%= phone %></td>
+		<td width="22%" bgcolor="#FFFFFF" align="center"><%= email %></td></tr>
+	<tr><td colspan="7" bgcolor="#dddddd"><img src="images/dot.gif" width="1" height="1"></td></tr>
 </table>
 </script>
 <script>
@@ -217,6 +224,12 @@ function tableBuilder(){
 				phone: data[i][7]
 			}));
 	}
+
+	$('tr[data-idx]').css({cursor:'pointer'}).on('mouseover',function(){
+		$(this).find('td').addClass('activeRow');
+	}).on('mouseout',function(){
+		$(this).find('td').removeClass('activeRow');
+	});
 }
 function refreshPageSwitcher(){
 	var switcher=$('#pageSwitcher').empty();
@@ -252,7 +265,8 @@ function isValidDate(yy,mm,dd){
 function showEditor(opt){
 	cancerFieldBuilder.counter=0;
 
-	var f=document.editUserForm;
+	var f=document.editUserForm,
+			my_questionnaire=$('#my_questionnaire');
 	if(opt.patient_id){
 		f.patient_id.value=opt.patient_id;
 	}else{
@@ -290,6 +304,15 @@ function showEditor(opt){
 		})
 	}
 	f.memo.value=opt.memo||'';
+
+	my_questionnaire.empty();
+	if(opt.questionnaire!==undefined&&opt.questionnaire.length){
+		$(opt.questionnaire).each(function(idx){
+			my_questionnaire.append((idx>0?'、':'')+'<a href="report.php?pid='+opt.no+'&quest='+this+'" target="_blank">'+this+'</a>');
+		})
+	}else{
+		my_questionnaire.html('<font color="#666666"> -- 無 --</font>');
+	}
 
 	$('#cancer_fields').empty();
 	if(opt.cancer&&opt.cancer.length){
@@ -464,7 +487,7 @@ $(function(){
 		monthName:['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
 	});
 
-	$('#userListHere').on('click','a',function(event){
+	$('#userListHere').on('click','tr',function(event){
 		var i=$(this).data('idx'),
 				user={ // CreateTime,RandNum,No,Name,Gender,Birthday,Email,Phone,Weight,Cancer,Volition,Caregiver,FirstDate,LastDate,Memo
 					patient_id:user_list[i][0]+';'+user_list[i][1],
@@ -477,7 +500,8 @@ $(function(){
 					first_date:user_list[i][12],
 					last_data:user_list[i][13],
 					memo:user_list[i][14],
-					cancer:user_list[i][9]
+					cancer:user_list[i][9],
+					questionnaire:user_list[i][15]
 				}
 		if(user_list[i][11]!==undefined&&user_list[i][11]!=='')
 			user.caregiver=user_list[i][11];
@@ -486,6 +510,7 @@ $(function(){
 
 		showEditor(user);
 	});
+
 	row_template=_.template($("#row_template").html());
 	getUsers();
 

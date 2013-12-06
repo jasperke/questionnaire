@@ -92,6 +92,14 @@ final class Calculator{
 	private function __construct(){
 
 	}
+	public static function reset(){
+		self::$GP=array();
+		self::$GS=array();
+		self::$GE=array();
+		self::$GF=array();
+		self::$HN=array();
+		self::$detail=array();
+	}
 	public static function inputAnswer($q_id,$answer){
 		if(in_array($q_id,array('GP1','GP2','GP3','GP4','GP5','GP6','GP7'))){ // 全必填
 			$idx=(int)substr($q_id,2,1);

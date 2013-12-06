@@ -69,7 +69,9 @@ if($db!=0){
 	if($rs===false){
 		$out[0]=array(900,"資料讀取失敗(1)！(".kwcr2_geterrormsg($db,1).")");
 	}else if(isset($rs)){
+		$patients=array(); // 記病歷號
 		foreach($rs as $r){
+			$patients[]=$r[2];
 			if(strcmp($r[9],'')==0){ // 癌別json字串須轉成array
 				$r[9]=array();
 			}else{
@@ -77,6 +79,24 @@ if($db!=0){
 			}
 			$out[]=$r;
 		}
+
+		// 找出各做過哪幾種問卷
+		$questionnaires=array();
+		if(count($patients)){
+			$s="select distinct No,Questionnaire from MUST_Questionnaire where NO in ('".implode("','",$patients)."')";
+			$rs=read_multi_record($db, $s, array());
+			if($rs===false){
+				$out[0]=array(900,"資料讀取失敗(2)！$s (".kwcr2_geterrormsg($db,1).")");
+			}else if(isset($rs)){
+				foreach($rs as $r){
+					if(!isset($questionnaires[$r[0]]))
+						$questionnaires[$r[0]]=array();
+					$questionnaires[$r[0]][]=$r[1];
+				}
+			}
+		}
+		foreach($out as &$o)
+			$o[]=isset($questionnaires[$o[2]])?$questionnaires[$o[2]]:array();
 	}
 }else{
 	$out[0]=array(900,"資料庫連結失敗！");

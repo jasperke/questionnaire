@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 			// 	dest: './tmp/main.js'
 			// },
 			dev: {
-				src: ['./src/main.js','./src/quizPool.js','./src/cancerPool.js','<%= JS_PATH %>src/datePicker.js'],
+				src: ['./src/main.js','./src/quizPool.js','./src/cancerPool.js','<%= JS_PATH %>src/datePicker.js','./src/CyberChart.js'],
 				dest: '<%= JS_PATH %>main.min.js'
 			}
 		},
@@ -43,7 +43,7 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				files: {
-					'<%= JS_PATH %>main.min.js': ['<%= JS_PATH %>src/quizPool.js','<%= JS_PATH %>src/cancerPool.js','<%= JS_PATH %>src/main.js','<%= JS_PATH %>src/datePicker.js']
+					'<%= JS_PATH %>main.min.js': ['<%= JS_PATH %>src/quizPool.js','<%= JS_PATH %>src/cancerPool.js','<%= JS_PATH %>src/main.js','<%= JS_PATH %>src/datePicker.js','<%= JS_PATH %>src/CyberChart.js']
 				}
 			}
 		},
@@ -71,7 +71,7 @@ module.exports = function(grunt) {
 		watch: {
 			scripts: {
 				files: ['./src/*.js'],
-				tasks: ['dev'],
+				tasks: ['debug'],
 				options: {
 					spawn: true,
 				}
