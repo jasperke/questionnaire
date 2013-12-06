@@ -31,11 +31,7 @@ Questionnaire for ChangGung
 		VERSION smallint default null ,
 		WEIGHT DECIMAL(4, 1) default null,
 		StaffID varchar(34) default null,
-		GP smallint default null,
-		GS smallint default null,
-		GE smallint default null,
-		GF smallint default null,
-		HANDN smallint default null);
+		Dose varchar(600));
 	create index IDXQuest on MUST_QUESTIONNAIRE ("NO", Questionnaire) ;
 
 	create table MUST_QUESTIONNAIREUSER (

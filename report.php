@@ -32,7 +32,7 @@ $SiteLoginUID=kwut2_readini(CFG_FN,"KOALA","SiteUID");
 $SiteLoginPWD=kwut2_readini(CFG_FN,"KOALA","SitePWD");
 $db=kwcr2_mapdb('CyberSite',$SiteLoginUID,$SiteLoginPWD);
 if($db!=0){
-	$s="select q.CreateTime,q.Answer,q.Weight,q.StaffID,u.Name from MUST_Questionnaire q left outer join MUST_QuestionnaireUser u on q.No=u.No where q.OwnerID=? and q.Questionnaire=? and q.No=? order by q.CreateTime desc";
+	$s="select q.CreateTime,q.Answer,q.Weight,q.StaffID,u.Name,q.RandNum,q.Dose from MUST_Questionnaire q left outer join MUST_QuestionnaireUser u on q.No=u.No where q.OwnerID=? and q.Questionnaire=? and q.No=? order by q.CreateTime desc";
 	$p=array($group_id,$quest,$pid);
 	//$rs=read_multi_record($db, $s, $p, array('skip_rows'=>0,'max_fetch_raw'=>5));
 	$rs=read_multi_record($db, $s, $p);
@@ -70,7 +70,11 @@ if($db!=0){
 
 		$patient_name=$rs[0][4];
 		$doctor_id=$rs[0][3];
-		$last_date=substr($rs[0][0],0,10);
+		$current_date=substr($rs[0][0],0,10);
+		$current_record_id=global_unique_key_encode($rs[0][0],$rs[0][5]);
+		$last_dose=strcmp($rs[1][6],'')==0?'{}':$rs[1][6];
+		$last_dose_date=substr($rs[1][0],0,10);
+		$current_dose=strcmp($rs[0][6],'')==0?'{}':$rs[0][6];
 
 		$weight=array('','','');
 		$weight[0]=number_format($rs[count($rs)-1][2], 1, '.', ',');
@@ -100,11 +104,6 @@ if($db!=0){
 	$out[0]=array(900,"資料庫連結失敗！");
 }
 
-
-
-
-
-
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -115,6 +114,7 @@ if($db!=0){
 <!--
 @media print {
   .no-print {display:none !important;}
+  input {border:none; border-bottom: 1px solid #000000; text-align:center;}
 	body {margin:0mm 0mm 0mm 0mm;}
   table#main {
   	width:780px;
@@ -124,7 +124,6 @@ if($db!=0){
   table#innerTable th {border:1px solid #000000; text-align:center; font-size:10px;}
   div#hn1_chart canvas {width:250px !important; height:160px !important;}
   canvas {width:250px; height:210px;}​
-  input {border:none; border-bottom: 1px solid #000000; text-align:center;}
 }
 @media screen {
   body {margin:10px;}
@@ -142,7 +141,6 @@ if($db!=0){
   canvas {width: 350px; height: 294px;}​ /* 250x210 * 1.4 */
 }
 canvas {border:1px solid #000000;}
-/*table#main td {vertical-align:top;}*/
 
 -->
 </style>
@@ -152,13 +150,39 @@ canvas {border:1px solid #000000;}
 <!-- <script src="js/CyberChart.js" ></script> -->
 <script>
 var	data=<? echo QUtillity::decodeUnicodeString(json_encode($out)); ?>,
-	record=<? echo QUtillity::decodeUnicodeString(json_encode($record)); ?>;
-
-// 	record=[{"date":"2013-12-04","gp":17,"gs":12,"ge":15,"gf":7,"h&n":"","pain":"2","hn2":""},{"date":"2013-11-28","gp":27,"gs":0,"ge":20,"gf":0,"h&n":"","pain":"3","hn2":""},{"date":"2013-11-27","gp":16,"gs":13,"ge":14,"gf":16,"h&n":"","pain":"1","hn2":""},{"date":"2013-11-27","gp":21,"gs":7,"ge":17,"gf":8,"h&n":"","pain":"7","hn2":""},{"date":"2013-11-27","gp":18,"gs":10,"ge":12,"gf":4,"h&n":"","pain":"0","hn2":""}];
-
+	record=<? echo QUtillity::decodeUnicodeString(json_encode($record)); ?>,
+	current_record_id='<? echo $current_record_id; ?>',
+	last_dose=<? echo $last_dose; ?>,
+	last_dose_date='<? echo $last_dose_date; ?>',
+	current_dose=<? echo $current_dose; ?>;
 
 function doSave(){
-	alert('施工中');
+	var f=document.doseForm,
+		result={};
+
+	$('form :checked').each(function(){
+		result[this.name]=this.value;
+	})
+
+	$.ajax({
+		url:'rpc/updateDose.php',
+		dataType:'json',
+		type:'POST',
+		data:{
+			id:current_record_id,
+			dose:result
+		},
+		error:function(){
+			alert('error'); // TODO:
+		},
+		success:function(data){
+			if(data[0][0]!=0){
+				alert('錯誤！\n\n錯誤代碼：'+data[0][0]+'\n錯誤訊息：'+data[0][1]);
+			}else{
+				alert('資料已儲存！');
+			}
+		}
+	});
 }
 
 $(function(){
@@ -182,24 +206,15 @@ $(function(){
 		hn1Data=[],
 		i;
 	for(i=record.length-1; i>=0; i--){
-		//if(record[i]['h&n'])
 			handnData.push({label:record[i].date,value:record[i]['h&n']});
-		//if(record[i].ge)
 			geData.push({label:record[i].date,value:record[i].ge});
-		//if(record[i].gf)
 			gfData.push({label:record[i].date,value:record[i].gf});
-		//if(record[i].pain)
 			painData.push({label:record[i].date,value:record[i].pain});
-		//if(record[i].gp)
 			gpData.push({label:record[i].date,value:record[i].gp});
-		//if(record[i].gs)
 			gsData.push({label:record[i].date,value:record[i].gs});
-		//if(record[i].hn2)
 			hn2Data.push({label:record[i].date,value:record[i].hn2});
-		//if(record[i].hn1)
 			hn1Data.push({label:record[i].date,value:record[i].hn1});
 	}
-
 	new CyberChart('handn_chart', handnData, {xTitle:'H&N', yTitle:'總分', type:'line'});
 	new CyberChart('ge_chart', geData, {xTitle:'情緒', yTitle:'分數'});
 	new CyberChart('gf_chart', gfData, {xTitle:'功能', yTitle:'分數'});
@@ -219,6 +234,29 @@ $(function(){
 		$('#painDiff').html('<br>感到疼痛程度差異：'+diff);
 	}
 
+	var dose_items=["lymphedema","dermatitis","fibrosis","telangiectasia","mucosistis"
+			,"stricture","cough","laryngeal_edema","osteonecrosis","ischemia","neuropathy","hypothyroidism"];
+	for(var i=0; i<dose_items.length; i++){
+		if(current_dose[dose_items[i]]!==undefined){
+			$('[name='+dose_items[i]+']').each(function(){
+				if(this.value==current_dose[dose_items[i]]){
+					this.checked=true;
+					return;
+				}
+			});
+		}
+	}
+	var here=$('#last_dose_list'),
+		gotLast_dose=false;
+	for(var i=0; i<dose_items.length; i++){
+		if(last_dose[dose_items[i]]!==undefined){
+			here.append(dose_items[i]+'- '+last_dose[dose_items[i]]+'<br>');
+			gotLast_dose=true;
+		}
+	}
+	if(gotLast_dose){
+		here.prepend('前次紀錄日期：'+last_dose_date+'<br>--------------------------------------<br>');
+	}
 })
 </script>
 </head>
@@ -227,15 +265,16 @@ $(function(){
 <table id="main" border="0" align="center" cellspacing="5" cellpadding="0">
 	<tr><td colspan="2">病歷號：<? echo $pid,'（',$patient_name,'）'; ?></td>
 		<td colspan="2">體重：<? echo implode('&nbsp;/&nbsp;',$weight); ?></td>
-		<td colspan="2">受訪日期：<? echo $last_date; ?></td></tr>
+		<td colspan="2">受訪日期：<? echo $current_date; ?></td></tr>
 	<tr><td colspan="2">問卷別：<? echo $quest; ?></td>
 		<td colspan="2">看診醫師：<? echo $doctor_name; ?>醫師</td>
 		<td colspan="2">&nbsp;</td></tr>
 	<tr><td colspan="6">&nbsp;</td></tr>
 	<tr><td colspan="2"><div id="handn_chart"></div><!-- <img border="1" src="space.gif" width="210" height="200"><br>H&N圖 --></td>
-		<td colspan="2" style="vertical-align:top;">Pain分析值≧±2：<span id="painDiff"></span>
+		<td colspan="2" style="vertical-align:top;">Pain分析值≧±2：<div id="painDiff" style="font-size:12px;"></div>
 			<div id="hn1_chart" style="margin-top:10px;"></div></td>
-		<td colspan="2" style="vertical-align:top;">Last dose record：</td></tr>
+		<td colspan="2" style="vertical-align:top;">Last dose record：<br>
+			<div id="last_dose_list" style="font-size:12px;"></div></td></tr>
 	<tr><td colspan="2"><div id="ge_chart"></div></td>
 		<td colspan="2"><div id="gf_chart"></div></td>
 		<td colspan="2"><div id="pain_chart"></div></td></tr>
@@ -261,6 +300,7 @@ $(function(){
 					<td><input class="date" type="text" name="secondPrimDate" style="width:100px;"></td></tr></td></tr>
 		</table>
 	<tr><td colspan="6">
+		<form name="doseForm" style="margin:0px;">
 		<table id="innerTable" border="0" width="100%" cellspacing="1" cellpadding="1">
 			<tr><th>&nbsp;</th>
 				<th>1</th>
@@ -269,82 +309,83 @@ $(function(){
 				<th>4</th>
 				<th>5</th></tr>
 			<tr><td>lymphedema</td>
-				<td><label><input type="radio" name="lymphedema">0</label></td>
-				<td><label><input type="radio" name="lymphedema">localized / disability(-)</label></td>
-				<td><label><input type="radio" name="lymphedema">localized / disability(+)</label></td>
-				<td><label><input type="radio" name="lymphedema">generalized / disability(+)</label></td>
-				<td><label><input type="radio" name="lymphedema">ulceration / cerebral edema / tube</label></td>
+				<td><label><input type="radio" name="lymphedema" value="0">0</label></td>
+				<td><label><input type="radio" name="lymphedema" value="1">localized / disability(-)</label></td>
+				<td><label><input type="radio" name="lymphedema" value="2">localized / disability(+)</label></td>
+				<td><label><input type="radio" name="lymphedema" value="3">generalized / disability(+)</label></td>
+				<td><label><input type="radio" name="lymphedema" value="4">ulceration / cerebral edema / tube</label></td>
 				</tr>
 			<tr><td>dermatitis</td>
-				<td><label><input type="radio" name="dermatitis">0</label></td>
-				<td><label><input type="radio" name="dermatitis">faint erythema dry</label></td>
-				<td><label><input type="radio" name="dermatitis">brisk erythema / patchy moist</label></td>
-				<td><label><input type="radio" name="dermatitis">confluent moist / touching bleeding</label></td>
-				<td><label><input type="radio" name="dermatitis">ulceration / spontaneous bleeding</label></td></tr>
+				<td><label><input type="radio" name="dermatitis" value="0">0</label></td>
+				<td><label><input type="radio" name="dermatitis" value="1">faint erythema dry</label></td>
+				<td><label><input type="radio" name="dermatitis" value="2">brisk erythema / patchy moist</label></td>
+				<td><label><input type="radio" name="dermatitis" value="3">confluent moist / touching bleeding</label></td>
+				<td><label><input type="radio" name="dermatitis" value="4">ulceration / spontaneous bleeding</label></td></tr>
 			<tr><td>fibrosis</td>
-				<td><label><input type="radio" name="fibrosis">0</label></td>
-				<td><label><input type="radio" name="fibrosis">increase density</label></td>
-				<td><label><input type="radio" name="fibrosis">ADL(-) / firm / tightness</label></td>
-				<td><label><input type="radio" name="fibrosis">ADL(+) / fixation or retraction</label></td>
+				<td><label><input type="radio" name="fibrosis" value="0">0</label></td>
+				<td><label><input type="radio" name="fibrosis" value="1">increase density</label></td>
+				<td><label><input type="radio" name="fibrosis" value="2">ADL(-) / firm / tightness</label></td>
+				<td><label><input type="radio" name="fibrosis" value="3">ADL(+) / fixation or retraction</label></td>
 				<td>&nbsp;</td></tr>
 			<tr><td>telangiectasia</td>
-				<td><label><input type="radio" name="telangiectasia">0</label></td>
-				<td><label><input type="radio" name="telangiectasia">few</label></td>
-				<td><label><input type="radio" name="telangiectasia">moderate</label></td>
-				<td><label><input type="radio" name="telangiectasia">many / confluence</label></td>
+				<td><label><input type="radio" name="telangiectasia" value="0">0</label></td>
+				<td><label><input type="radio" name="telangiectasia" value="1">few</label></td>
+				<td><label><input type="radio" name="telangiectasia" value="2">moderate</label></td>
+				<td><label><input type="radio" name="telangiectasia" value="3">many / confluence</label></td>
 				<td>&nbsp;</td></tr>
 			<tr><td>mucosistis(E)</td>
-				<td><label><input type="radio" name="mucosistis">0</label></td>
-				<td><label><input type="radio" name="mucosistis">erythema</label></td>
-				<td><label><input type="radio" name="mucosistis">patchy</label></td>
-				<td><label><input type="radio" name="mucosistis">confluence / touch bleeding</label></td>
-				<td><label><input type="radio" name="mucosistis">necrosis spontaneous bleeding</label></td></tr>
+				<td><label><input type="radio" name="mucosistis" value="0">0</label></td>
+				<td><label><input type="radio" name="mucosistis" value="1">erythema</label></td>
+				<td><label><input type="radio" name="mucosistis" value="2">patchy</label></td>
+				<td><label><input type="radio" name="mucosistis" value="3">confluence / touch bleeding</label></td>
+				<td><label><input type="radio" name="mucosistis" value="4">necrosis spontaneous bleeding</label></td></tr>
 			<tr><td>stricture</td>
-				<td><label><input type="radio" name="stricture">0</label></td>
-				<td><label><input type="radio" name="stricture">asymptomatic</label></td>
-				<td><label><input type="radio" name="stricture">altered dietary habits</label></td>
-				<td><label><input type="radio" name="stricture">tube feeding</label></td>
-				<td><label><input type="radio" name="stricture">op indicated / life threatening</label></td></tr>
+				<td><label><input type="radio" name="stricture" value="0">0</label></td>
+				<td><label><input type="radio" name="stricture" value="1">asymptomatic</label></td>
+				<td><label><input type="radio" name="stricture" value="2">altered dietary habits</label></td>
+				<td><label><input type="radio" name="stricture" value="3">tube feeding</label></td>
+				<td><label><input type="radio" name="stricture" value="4">op indicated / life threatening</label></td></tr>
 			<tr><td>cough</td>
-				<td><label><input type="radio" name="cough">0</label></td>
-				<td><label><input type="radio" name="cough">codeine(-)</label></td>
-				<td><label><input type="radio" name="cough">codeine(+)</label></td>
-				<td><label><input type="radio" name="cough">ADL(+) / insomnia</label></td>
+				<td><label><input type="radio" name="cough" value="0">0</label></td>
+				<td><label><input type="radio" name="cough" value="1">codeine(-)</label></td>
+				<td><label><input type="radio" name="cough" value="2">codeine(+)</label></td>
+				<td><label><input type="radio" name="cough" value="3">ADL(+) / insomnia</label></td>
 				<td>&nbsp;</td></tr>
 			<tr><td>laryngeal edema</td>
-				<td><label><input type="radio" name="laryngeal_edema">0</label></td>
-				<td><label><input type="radio" name="laryngeal_edema">asymptomatic(E)</label></td>
-				<td><label><input type="radio" name="laryngeal_edema">sorethroat / hoarseness</label></td>
-				<td><label><input type="radio" name="laryngeal_edema">ADL(+) /stridor</label></td>
-				<td><label><input type="radio" name="laryngeal_edema">life threatening / tracheostomy</label></td></tr>
+				<td><label><input type="radio" name="laryngeal_edema" value="0">0</label></td>
+				<td><label><input type="radio" name="laryngeal_edema" value="1">asymptomatic(E)</label></td>
+				<td><label><input type="radio" name="laryngeal_edema" value="2">sorethroat / hoarseness</label></td>
+				<td><label><input type="radio" name="laryngeal_edema" value="3">ADL(+) /stridor</label></td>
+				<td><label><input type="radio" name="laryngeal_edema" value="4">life threatening / tracheostomy</label></td></tr>
 			<tr><td>osteonecrosis</td>
-				<td><label><input type="radio" name="osteonecrosis">0</label></td>
-				<td><label><input type="radio" name="osteonecrosis">asymptomatic(E)</label></td>
-				<td><label><input type="radio" name="osteonecrosis">ADL(-) / Symptomatic</label></td>
-				<td><label><input type="radio" name="osteonecrosis">ADL(+) / HBO / OP</label></td>
-				<td><label><input type="radio" name="osteonecrosis">disabling</label></td></tr>
+				<td><label><input type="radio" name="osteonecrosis" value="0">0</label></td>
+				<td><label><input type="radio" name="osteonecrosis" value="1">asymptomatic(E)</label></td>
+				<td><label><input type="radio" name="osteonecrosis" value="2">ADL(-) / Symptomatic</label></td>
+				<td><label><input type="radio" name="osteonecrosis" value="3">ADL(+) / HBO / OP</label></td>
+				<td><label><input type="radio" name="osteonecrosis" value="4">disabling</label></td></tr>
 			<tr><td>ischemia</td>
-				<td><label><input type="radio" name="ischemia">0</label></td>
+				<td><label><input type="radio" name="ischemia" value="0">0</label></td>
 				<td>&nbsp;</td>
-				<td><label><input type="radio" name="ischemia">asymptomatic(E)</label></td>
-				<td><label><input type="radio" name="ischemia">TIA &lt; 24 hrs</label></td>
-				<td><label><input type="radio" name="ischemia">stroke(+)</label></td>
+				<td><label><input type="radio" name="ischemia" value="2">asymptomatic(E)</label></td>
+				<td><label><input type="radio" name="ischemia" value="3">TIA &lt; 24 hrs</label></td>
+				<td><label><input type="radio" name="ischemia" value="4">stroke(+)</label></td>
 			</tr>
 			<tr><td>neuropathy</td>
-				<td><label><input type="radio" name="neuropathy">0</label></td>
-				<td><label><input type="radio" name="neuropathy">asymptomatic(E)</label></td>
-				<td><label><input type="radio" name="neuropathy">ADL(-) / symptomatic</label></td>
-				<td><label><input type="radio" name="neuropathy">ADL(+)</label></td>
-				<td><label><input type="radio" name="neuropathy">life threatening / disabling</label></td></tr>
+				<td><label><input type="radio" name="neuropathy" value="0">0</label></td>
+				<td><label><input type="radio" name="neuropathy" value="1">asymptomatic(E)</label></td>
+				<td><label><input type="radio" name="neuropathy" value="2">ADL(-) / symptomatic</label></td>
+				<td><label><input type="radio" name="neuropathy" value="3">ADL(+)</label></td>
+				<td><label><input type="radio" name="neuropathy" value="4">life threatening / disabling</label></td></tr>
 			<tr><td>hypothyroidism</td>
-				<td><label><input type="radio" name="hypothyroidism">0</label></td>
-				<td><label><input type="radio" name="hypothyroidism">asymptomatic(E)</label></td>
-				<td><label><input type="radio" name="hypothyroidism">ADL(-) / replacement</label></td>
+				<td><label><input type="radio" name="hypothyroidism" value="0">0</label></td>
+				<td><label><input type="radio" name="hypothyroidism" value="1">asymptomatic(E)</label></td>
+				<td><label><input type="radio" name="hypothyroidism" value="2">ADL(-) / replacement</label></td>
 				<td>&nbsp;</td>
-				<td><label><input type="radio" name="hypothyroidism">life threatening / coma</label></td></tr>
+				<td><label><input type="radio" name="hypothyroidism" value="4">life threatening / coma</label></td></tr>
 		</table>
+		<div class="no-print" style="padding-top:16px; text-align:center;"><input type="button" name="saveButton" value="儲存" onclick="doSave();"></div>
+	</form>
 		</td></tr>
-	<tr><td colspan="6" align="center"><div class="no-print"><input type="button" name="saveButton" value="儲存" onclick="doSave();"></div></td></tr>
 </table>
 </body>
 </html>

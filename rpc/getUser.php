@@ -51,7 +51,7 @@ if($db!=0){
 			$r=read_one_record($db, $s, $p);
 			if($r===false||!isset($r)){
 				$out[0]=array(900,"讀取資料失敗(0)！".kwcr2_geterrormsg($db, 1));
-				echo json_encode($out);
+				echo QUtillity::decodeUnicodeString(json_encode($out));
 				exit;
 			}else{
 				$out[1]=array($r[0],$filterNo);
@@ -102,5 +102,5 @@ if($db!=0){
 	$out[0]=array(900,"資料庫連結失敗！");
 //	return;
 }
-echo json_encode($out);
+echo QUtillity::decodeUnicodeString(json_encode($out));
 ?>

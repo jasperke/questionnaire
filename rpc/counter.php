@@ -59,11 +59,6 @@ if($db!=0){
 	$s2='?,?,?,?,?,?';
 	$p=array($group_id,$questionnaire,$p_id,json_encode($answer),$p_weight,$_SESSION['staffId']);
 	if($score!==null){$s1.=',Score'; $s2.=',?'; $p[]=$score;}
-	if(isset($detail['GP'])){$s1.=',GP'; $s2.=',?'; $p[]=$detail['GP'];}
-	if(isset($detail['GS'])){$s1.=',GS'; $s2.=',?'; $p[]=$detail['GS'];}
-	if(isset($detail['GE'])){$s1.=',GE'; $s2.=',?'; $p[]=$detail['GE'];}
-	if(isset($detail['GF'])){$s1.=',GF'; $s2.=',?'; $p[]=$detail['GF'];}
-	if(isset($detail['H&N'])){$s1.=',HANDN'; $s2.=',?'; $p[]=$detail['H&N'];}
 	if(!kwcr2_rawqueryexec($db, "insert into MUST_Questionnaire ($s1) values ($s2)", $p, "")){
 		$out[0]=array(900,"資料儲存失敗(1)！(".kwcr2_geterrormsg($db,1).")");
 		kwcr2_rollbacktransaction($db);
