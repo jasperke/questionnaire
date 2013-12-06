@@ -200,7 +200,7 @@ $(function(){
 			hn1Data.push({label:record[i].date,value:record[i].hn1});
 	}
 
-	new CyberChart('handn_chart', handnData, {xTitle:'H&N', yTitle:'總分'});
+	new CyberChart('handn_chart', handnData, {xTitle:'H&N', yTitle:'總分', type:'line'});
 	new CyberChart('ge_chart', geData, {xTitle:'情緒', yTitle:'分數'});
 	new CyberChart('gf_chart', gfData, {xTitle:'功能', yTitle:'分數'});
 	new CyberChart('pain_chart', painData, {xTitle:'感到疼痛程度', yTitle:'分數', yScale:[0,2,4,6,8,10]});
@@ -208,10 +208,6 @@ $(function(){
 	new CyberChart('gs_chart', gsData, {xTitle:'社會/家庭', yTitle:'分數'});
 	new CyberChart('hn2_chart', hn2Data, {xTitle:'失眠程度', yTitle:'分數', yScale:[0,1,2,3]});
 	new CyberChart('hn1_chart', hn1Data, {xTitle:'疲勞', yTitle:'分數', yScale:[0,1,2,3], width:1000, height:640});
-
-		// width: 1000, // UI列印時用250x210, UI螢幕顯示用 *1.4, 此處繪製時用 *4 (畫高解析,印時才不會鋸齒)
-		// height: 840,
-
 
 	if(record.length>=2&&record[0].pain!==''&&record[1].pain!==''){
 		var diff=record[0].pain-record[1].pain;

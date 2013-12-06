@@ -13,7 +13,8 @@ CyberChart = function (el, data, options) {
 		yTitle: '',
 		xLength: 760, // X軸長
 		yLength: 500, // Y軸長
-		yScale: [0, 5, 10, 15, 20, 25, 30] // 未特別指定者,Y軸於此刻度處畫橫線及label
+		yScale: [0, 5, 10, 15, 20, 25, 30], // 未特別指定者,Y軸於此刻度處畫橫線及label
+		type: 'bar' // 支援 bar, line 兩種
 	};
 	$.extend(this.options, options);
 	//setTimeout($.proxy(this._prepare,this),0); /* IE使用explorercanvas, 以動態產生canvas, 同thread立即執行getContext()會有錯 */
@@ -143,20 +144,26 @@ CyberChart.prototype = {
 			barSpace = Math.round(xDistance / 4 * 1),
 			x, y,
 			datePart,
-			fontDim;
+			fontDim,
+			linePos = []; // 畫折線時記線的座標[[x,y],[x1,y1],...]
 
 		for (i = 0; i < data.length; i++) {
 			if (data[i].value === '')
 				continue;
 
-			x = barSpace + i * xDistance + 0.5;
 			y = Math.round(yLength - (data[i].value - yScale[0]) * factor) - 0.5;
+			if (this.get('type') == 'bar') {
+				x = barSpace + i * xDistance + 0.5;
 
-			// bar顏色
-			this._context2d.fillStyle = "rgba(180,180,180,0.7)";
-			this._context2d.lineWidth = 5;
-			this._context2d.fillRect(x, y, barWidth, data[i].value * factor);
-			this._context2d.strokeRect(x, y, barWidth, data[i].value * factor);
+				// bar顏色
+				this._context2d.fillStyle = "rgba(180,180,180,0.7)";
+				this._context2d.lineWidth = 5;
+				this._context2d.fillRect(x, y, barWidth, data[i].value * factor);
+				this._context2d.strokeRect(x, y, barWidth, data[i].value * factor);
+			} else if (this.get('type') == 'line') {
+				x = Math.round((xDistance / 2) + (i * xDistance)) + 0.5;
+				linePos.push([x, y]); // 先記下各點座標, 之後一次畫
+			}
 
 			// time label
 			this._context2d.fillStyle = '#000000';
@@ -170,6 +177,44 @@ CyberChart.prototype = {
 			this._context2d.fillText(datePart[1] + '/' + datePart[2], Math.round(i * xDistance + (xDistance - fontDim.width) / 2), yLength + 60);
 			fontDim = this._context2d.measureText(datePart[0]);
 			this._context2d.fillText(datePart[0], Math.round(i * xDistance + (xDistance - fontDim.width) / 2), yLength + 100);
+		}
+
+		if (this.get('type') == 'line' && linePos.length) { // 畫折線
+			this._drawBrokenLine(linePos);
+			this._drawDot(linePos);
+		}
+		this._context2d.restore();
+	},
+	_drawBrokenLine: function (linePos) {
+		this._context2d.save();
+
+		this._context2d.strokeStyle = "rgba(180,180,180,0.7)";
+		this._context2d.lineWidth = 16;
+
+		this._context2d.beginPath();
+		for (var i = 0; i < linePos.length; i++) {
+			if (i == 0) {
+				this._context2d.moveTo(linePos[i][0], linePos[i][1]);
+			} else {
+				this._context2d.lineTo(linePos[i][0], linePos[i][1]);
+			}
+		}
+		this._context2d.stroke();
+		this._context2d.restore();
+	},
+	_drawDot: function (linePos) {
+		this._context2d.save();
+
+		this._context2d.strokeStyle = "rgba(100,100,100,0.7)";
+		this._context2d.lineWidth = 12;
+		this._context2d.fillStyle = '#ffffff';
+
+		for (var i = 0; i < linePos.length; i++) {
+			this._context2d.beginPath();
+			this._context2d.arc(linePos[i][0], linePos[i][1], 7, 0, Math.PI * 2, false);
+			this._context2d.closePath();
+			this._context2d.stroke();
+			this._context2d.fill();
 		}
 
 		this._context2d.restore();
