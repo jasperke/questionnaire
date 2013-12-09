@@ -1,14 +1,10 @@
-if (!this.CyberChart) {
-	this.CyberChart = {};
-}
-
 CyberChart = function (el, data, options) {
-	//this._element = el;
 	this._element = (typeof(el) == 'string') ? $('#' + el) : $(el);
 	this._data = data;
 	this.options = {
 		width: 1000, // UI列印時用250x210, UI螢幕顯示用 *1.4, 此處繪製時用 *4 (畫高解析,印時才不會鋸齒)
 		height: 840,
+		barWidth: 0.6, // 柱狀圖, bar的寬度%
 		xTitle: '',
 		yTitle: '',
 		xLength: 760, // X軸長
@@ -97,7 +93,7 @@ CyberChart.prototype = {
 
 		// Y軸上刻度線
 		for (i = 0; i < yScale.length; i++) { // i=0即X軸
-			y = Math.round(yLength - (yScale[i] - yScale[0]) * factor) + 0.5;
+			y = Math.round(yLength - (yScale[i] - yScale[0]) * factor);
 			this._context2d.beginPath();
 
 			this._context2d.save(); // Y軸用到虛線, 之後須恢復直線
@@ -140,8 +136,8 @@ CyberChart.prototype = {
 			factor = yLength / (yScale[yScale.length - 1] - yScale[0]),
 			i = 0,
 			xDistance = Math.floor(xLength / 5), // X軸刻度間距
-			barWidth = Math.round(xDistance / 4 * 2),
-			barSpace = Math.round(xDistance / 4 * 1),
+			barWidth = this.get('barWidth') * xDistance, //    Math.round(xDistance / 4 * 2),
+			barSpace = (1 - this.get('barWidth')) / 2 * xDistance, // Math.round(xDistance / 4 * 1),
 			x, y,
 			datePart,
 			fontDim,
@@ -151,9 +147,9 @@ CyberChart.prototype = {
 			if (data[i].value === '')
 				continue;
 
-			y = Math.round(yLength - (data[i].value - yScale[0]) * factor) - 0.5;
+			y = Math.round(yLength - (data[i].value - yScale[0]) * factor);
 			if (this.get('type') == 'bar') {
-				x = barSpace + i * xDistance + 0.5;
+				x = barSpace + i * xDistance;
 
 				// bar顏色
 				this._context2d.fillStyle = "rgba(180,180,180,0.7)";
@@ -161,7 +157,7 @@ CyberChart.prototype = {
 				this._context2d.fillRect(x, y, barWidth, data[i].value * factor);
 				this._context2d.strokeRect(x, y, barWidth, data[i].value * factor);
 			} else if (this.get('type') == 'line') {
-				x = Math.round((xDistance / 2) + (i * xDistance)) + 0.5;
+				x = Math.round((xDistance / 2) + (i * xDistance));
 				linePos.push([x, y]); // 先記下各點座標, 之後一次畫
 			}
 
@@ -170,9 +166,6 @@ CyberChart.prototype = {
 			this._context2d.font = '34px sans-serif';
 			datePart = data[i].label.split('-');
 			fontDim = this._context2d.measureText(datePart[1] + '/' + datePart[2]);
-
-			// this._context2d.fillText(datePart[1] + '/' + datePart[2], x - 6, yLength + 60);
-			// this._context2d.fillText(datePart[0], x - 2, yLength + 100);
 
 			this._context2d.fillText(datePart[1] + '/' + datePart[2], Math.round(i * xDistance + (xDistance - fontDim.width) / 2), yLength + 60);
 			fontDim = this._context2d.measureText(datePart[0]);
@@ -188,7 +181,7 @@ CyberChart.prototype = {
 	_drawBrokenLine: function (linePos) {
 		this._context2d.save();
 
-		this._context2d.strokeStyle = "rgba(180,180,180,0.7)";
+		this._context2d.strokeStyle = "rgba(160,160,160,0.7)";
 		this._context2d.lineWidth = 16;
 
 		this._context2d.beginPath();
@@ -219,50 +212,6 @@ CyberChart.prototype = {
 
 		this._context2d.restore();
 	},
-/*	_drawBrokenLine: function () {
-		var now = (new Date()).getTime() / 1000,
-			i, x;
-		while ((now - this.startSecond) > this.clientDiffSecond) { // 避免電腦忙碌, 未能每秒執行1次, 導致startSecond未反應真正時間
-			this.startSecond++;
-		}
-		for (i = 0; i < this._data.length; i++) {
-			if (this._data[i][0] < this.startSecond) {
-				this._data.shift();
-				i--;
-			} else {
-				break;
-			}
-		}
-		this.startSecond++;
-
-		this._context2d.save();
-		this._context2d.setTransform(1, 0, 0, -1, 0, this.get('height') - 20); // 座標轉換成以左下角為原點,x軸正向往右,y軸正向往上
-
-		this._context2d.strokeStyle = this.get('color');
-		this._context2d.lineWidth = 1;
-		this._context2d.beginPath();
-
-		x = 30;
-		for (i = 0; i < this._data.length; i++) {
-			if (this._data[i][1] === null) {
-				x -= this.get('offset');
-				continue;
-			} else {
-				this._context2d.moveTo(x, this._data[i][1]);
-				i++;
-				break;
-			}
-		}
-		this._xScale = [];
-
-		for (; i < this._data.length; i++) {
-			this._context2d.lineTo(x -= this.get('offset'), this._data[i][1]);
-			if (this._data[i][0] % 60 === 0)
-				this._xScale.push([x, this._data[i][0]]);
-		}
-		this._context2d.stroke();
-		this._context2d.restore();
-	},*/
 	_drawYTitle: function () {
 		this._context2d.save();
 		this._context2d.fillStyle = '#000000';

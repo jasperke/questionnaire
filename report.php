@@ -105,10 +105,11 @@ if($db!=0){
 }
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!doctype html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset=utf-8>
+<meta name="viewport" content="user-scalable=yes, width=device-width" />
 <title></title>
 <style type="text/css">
 <!--
@@ -159,6 +160,39 @@ var	data=<? echo QUtillity::decodeUnicodeString(json_encode($out)); ?>,
 function doSave(){
 	var f=document.doseForm,
 		result={};
+
+	if(f.tr[0].checked){
+		result.tr=1;
+	}else if(f.tr[1].checked){
+		result.tr=0;
+	}
+	if(f.trDate.value){
+		result.trDate=f.trDate.value;
+	}
+	if(f.nr[0].checked){
+		result.nr=1;
+	}else if(f.nr[1].checked){
+		result.nr=0;
+	}
+	if(f.nrDate.value){
+		result.nrDate=f.nrDate.value;
+	}
+	if(f.mr[0].checked){
+		result.mr=1;
+	}else if(f.mr[1].checked){
+		result.mr=0;
+	}
+	if(f.mrDate.value){
+		result.mrDate=f.mrDate.value;
+	}
+	if(f.secondPrim[0].checked){
+		result.secondPrim=1;
+	}else if(f.secondPrim[1].checked){
+		result.secondPrim=0;
+	}
+	if(f.secondPrimDate.value){
+		result.secondPrimDate=f.secondPrimDate.value;
+	}
 
 	$('form :checked').each(function(){
 		result[this.name]=this.value;
@@ -234,8 +268,22 @@ $(function(){
 		$('#painDiff').html('<br>感到疼痛程度差異：'+diff);
 	}
 
-	var dose_items=["lymphedema","dermatitis","fibrosis","telangiectasia","mucosistis"
-			,"stricture","cough","laryngeal_edema","osteonecrosis","ischemia","neuropathy","hypothyroidism"];
+	// Tr,Nr,Mr...
+	var fourItem=['tr','nr','mr','secondPrim'],
+			fourDate=['trDate','nrDate','mrDate','secondPrimDate'],
+			i;
+	for(i=0; i<4; i++){
+		if(current_dose[fourItem[i]]!==undefined){
+			document.doseForm[fourItem[i]][current_dose[fourItem[i]]==1?0:1].checked=true;
+		}
+	}
+	for(i=0; i<4; i++){
+		if(current_dose[fourDate[i]]!==undefined){
+			document.doseForm[fourDate[i]].value=current_dose[fourDate[i]];
+		}
+	}
+	// 勾選下方dose表格
+	var dose_items=["lymphedema","dermatitis","fibrosis","telangiectasia","mucosistis","stricture","cough","laryngeal_edema","osteonecrosis","ischemia","neuropathy","hypothyroidism"];
 	for(var i=0; i<dose_items.length; i++){
 		if(current_dose[dose_items[i]]!==undefined){
 			$('[name='+dose_items[i]+']').each(function(){
@@ -246,6 +294,7 @@ $(function(){
 			});
 		}
 	}
+	// 顯示右上last dose record
 	var here=$('#last_dose_list'),
 		gotLast_dose=false;
 	for(var i=0; i<dose_items.length; i++){
@@ -255,13 +304,14 @@ $(function(){
 		}
 	}
 	if(gotLast_dose){
-		here.prepend('前次紀錄日期：'+last_dose_date+'<br>--------------------------------------<br>');
+		here.prepend('前次紀錄日期：'+last_dose_date+'<br>--------------------------------------------<br>');
 	}
 })
 </script>
 </head>
 
 <body bgcolor="#EEEEEE">
+<form name="doseForm" style="margin:0px;">
 <table id="main" border="0" align="center" cellspacing="5" cellpadding="0">
 	<tr><td colspan="2">病歷號：<? echo $pid,'（',$patient_name,'）'; ?></td>
 		<td colspan="2">體重：<? echo implode('&nbsp;/&nbsp;',$weight); ?></td>
@@ -287,20 +337,19 @@ $(function(){
 		<br>
 		<table border="0" width="100%" cellspacing="0" cellpadding="2">
 			<tr><td align="right">Tr</td>
-					<td align="center"><small><label><input type="radio" name="Tr" value="Y">Y</label><br><label><input type="radio" name="Tr" value="N">N</label></small></td>
-					<td><input class="date" type="text" name="TrDate" style="width:100px;"></td>
+					<td align="center"><small><label><input type="radio" name="tr" value="1">Y</label><br><label><input type="radio" name="tr" value="0">N</label></small></td>
+					<td><input class="date" type="text" name="trDate" style="width:100px;"></td>
 					<td align="right">Nr</td>
-					<td align="center"><small><label><input type="radio" name="Nr" value="Y">Y</label><br><label><input type="radio" name="Nr" value="N">N</label></small></td>
-					<td><input class="date" type="text" name="NrDate" style="width:100px;"></td>
+					<td align="center"><small><label><input type="radio" name="nr" value="1">Y</label><br><label><input type="radio" name="nr" value="0">N</label></small></td>
+					<td><input class="date" type="text" name="nrDate" style="width:100px;"></td>
 					<td align="right">Mr</td>
-					<td align="center" class="smaller"><small><label><input type="radio" name="Mr" value="Y">Y</label><br><label><input type="radio" name="Mr" value="N">N</label></small></td>
-					<td><input class="date" type="text" name="MrDate" style="width:100px;"></td>
+					<td align="center" class="smaller"><small><label><input type="radio" name="mr" value="1">Y</label><br><label><input type="radio" name="mr" value="0">N</label></small></td>
+					<td><input class="date" type="text" name="mrDate" style="width:100px;"></td>
 					<td align="right">2nd Prim</td>
-					<td align="center" class="smaller"><small><label><input type="radio" name="secondPrim" value="Y">Y</label><br><label><input type="radio" name="secondPrim" value="N">N</label></small></td>
+					<td align="center" class="smaller"><small><label><input type="radio" name="secondPrim" value="1">Y</label><br><label><input type="radio" name="secondPrim" value="0">N</label></small></td>
 					<td><input class="date" type="text" name="secondPrimDate" style="width:100px;"></td></tr></td></tr>
 		</table>
 	<tr><td colspan="6">
-		<form name="doseForm" style="margin:0px;">
 		<table id="innerTable" border="0" width="100%" cellspacing="1" cellpadding="1">
 			<tr><th>&nbsp;</th>
 				<th>1</th>
@@ -384,8 +433,8 @@ $(function(){
 				<td><label><input type="radio" name="hypothyroidism" value="4">life threatening / coma</label></td></tr>
 		</table>
 		<div class="no-print" style="padding-top:16px; text-align:center;"><input type="button" name="saveButton" value="儲存" onclick="doSave();"></div>
-	</form>
 		</td></tr>
 </table>
+</form>
 </body>
 </html>
