@@ -1,4 +1,4 @@
-CyberChart = function (el, data, options) {
+function CyberChart(el, data, options) {
 	this._element = (typeof(el) == 'string') ? $('#' + el) : $(el);
 	this._data = data;
 	this.options = {
@@ -15,7 +15,7 @@ CyberChart = function (el, data, options) {
 	$.extend(this.options, options);
 	//setTimeout($.proxy(this._prepare,this),0); /* IE使用explorercanvas, 以動態產生canvas, 同thread立即執行getContext()會有錯 */
 	this._prepare();
-};
+}
 CyberChart.prefixZero = function (n) {
 	return n >= 10 ? n : '0' + n;
 };
@@ -23,7 +23,7 @@ CyberChart.prototype = {
 	_prepare: function () {
 		this.set({xLength: this.get('width') - 190 - 50, yLength: this.get('height') - 100 - 240});
 
-		var jCanvas = $("<canvas/>").attr({width: this.get('width'), height: this.get('height')}).appendTo(this._element);
+		var jCanvas = $('<canvas/>').attr({width: this.get('width'), height: this.get('height')}).appendTo(this._element);
 		// 預設以width*height顯示, 若需縮小顯示, 可自行於html中css, 設定canvas的寬高
 
 		//	if(!jCanvas[0].getContext){ // 不考慮IE舊版
@@ -50,8 +50,9 @@ CyberChart.prototype = {
 	},
 	set: function (obj) {
 		for (var p in obj) {
-			if (obj.hasOwnProperty(p))
+			if (obj.hasOwnProperty(p)) {
 				this.options[p] = obj[p];
+			}
 		}
 	},
 	get: function (p) {
@@ -83,7 +84,7 @@ CyberChart.prototype = {
 			factor = yLength / (yScale[yScale.length - 1] - yScale[0]),
 			y,
 			i,
-			xDistance = Math.floor(xLength / 5); // X軸刻度間距
+			xDistance = Math.floor(xLength / Math.max(5, this._data.length)); // X軸刻度間距, 至少5項
 
 		// Y軸
 		this._context2d.beginPath();
@@ -135,7 +136,7 @@ CyberChart.prototype = {
 			data = this._data, // [{label:'2013-12-12',value:20},{},...]
 			factor = yLength / (yScale[yScale.length - 1] - yScale[0]),
 			i = 0,
-			xDistance = Math.floor(xLength / 5), // X軸刻度間距
+			xDistance = Math.floor(xLength / Math.max(5, this._data.length)), // X軸刻度間距
 			barWidth = this.get('barWidth') * xDistance, //    Math.round(xDistance / 4 * 2),
 			barSpace = (1 - this.get('barWidth')) / 2 * xDistance, // Math.round(xDistance / 4 * 1),
 			x, y,
@@ -144,15 +145,16 @@ CyberChart.prototype = {
 			linePos = []; // 畫折線時記線的座標[[x,y],[x1,y1],...]
 
 		for (i = 0; i < data.length; i++) {
-			if (data[i].value === '')
+			if (data[i].value === '') {
 				continue;
+			}
 
 			y = Math.round(yLength - (data[i].value - yScale[0]) * factor);
 			if (this.get('type') == 'bar') {
 				x = barSpace + i * xDistance;
 
 				// bar顏色
-				this._context2d.fillStyle = "rgba(180,180,180,0.7)";
+				this._context2d.fillStyle = 'rgba(180,180,180,0.7)';
 				this._context2d.lineWidth = 5;
 				this._context2d.fillRect(x, y, barWidth, data[i].value * factor);
 				this._context2d.strokeRect(x, y, barWidth, data[i].value * factor);
@@ -181,7 +183,7 @@ CyberChart.prototype = {
 	_drawBrokenLine: function (linePos) {
 		this._context2d.save();
 
-		this._context2d.strokeStyle = "rgba(160,160,160,0.7)";
+		this._context2d.strokeStyle = 'rgba(160,160,160,0.7)';
 		this._context2d.lineWidth = 16;
 
 		this._context2d.beginPath();
@@ -198,7 +200,7 @@ CyberChart.prototype = {
 	_drawDot: function (linePos) {
 		this._context2d.save();
 
-		this._context2d.strokeStyle = "rgba(100,100,100,0.7)";
+		this._context2d.strokeStyle = 'rgba(100,100,100,0.7)';
 		this._context2d.lineWidth = 12;
 		this._context2d.fillStyle = '#ffffff';
 
