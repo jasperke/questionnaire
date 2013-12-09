@@ -31,7 +31,7 @@ Questionnaire for ChangGung
 		VERSION smallint default null ,
 		WEIGHT DECIMAL(4, 1) default null,
 		StaffID varchar(34) default null,
-		Dose varchar(600));
+		Dose varchar(600) default null);
 	create index IDXQuest on MUST_QUESTIONNAIRE ("NO", Questionnaire) ;
 
 	create table MUST_QUESTIONNAIREUSER (
@@ -49,7 +49,7 @@ Questionnaire for ChangGung
 		Weight Decimal(4, 1) default null,
 		Caregiver char(1) default null,
 		FirstDate date default null,
-		LastDate data default null,
+		LastDate date default null,
 		Memo varchar(1500) default null,
 		Cancer varchar(300) default null );
 
