@@ -39,7 +39,7 @@ if($db!=0){
 		}else{
 			$s.=",Gender=null";
 		}
-		if(isset($birthday)){
+		if(isset($birthday)&&strcmp($birthday,'')!=0){
 			$s.=",Birthday=?";
 			$p[]=$birthday;
 		}else{
@@ -73,13 +73,13 @@ if($db!=0){
 		$p=array($group_id,$no,json_encode($cancer),$memo);
 		if(isset($patient_name)){$s1.=',Name'; $s2.=',?'; $p[]=$patient_name;}
 		if(isset($gender)){$s1.=',Gender'; $s2.=',?'; $p[]=$gender;}
-		if(isset($birthday)){$s1.=',Birthday'; $s2.=',?'; $p[]=$birthday;}
+		if(isset($birthday)&&strcmp($birthday,'')!=0){$s1.=',Birthday'; $s2.=',?'; $p[]=$birthday;}
 		if(isset($email)){$s1.=',Email'; $s2.=',?'; $p[]=$email;}
 		if(isset($phone)){$s1.=',Phone'; $s2.=',?'; $p[]=$phone;}
-		if(isset($first_date)){$s1.=',FirstDate'; $s2.=',?'; $p[]=$first_date;}
-		if(isset($last_date)){$s1.=',LastDate'; $s2.=',?'; $p[]=$last_date;}
-		if(isset($caregiver)){$s1.=',Caregiver'; $s2.=',?'; $p[]=$caregiver;}
-		if(isset($volition)){$s1.=',Volition'; $s2.=',?'; $p[]=$volition;}
+		if(isset($first_date)&&strcmp($first_date,'')!=0){$s1.=',FirstDate'; $s2.=',?'; $p[]=$first_date;}
+		if(isset($last_date)&&strcmp($last_date,'')!=0){$s1.=',LastDate'; $s2.=',?'; $p[]=$last_date;}
+		if(isset($caregiver)&&strcmp($caregiver,'')!=0){$s1.=',Caregiver'; $s2.=',?'; $p[]=$caregiver;}
+		if(isset($volition)&&strcmp($volition,'')!=0){$s1.=',Volition'; $s2.=',?'; $p[]=$volition;}
 		$s="insert into MUST_QuestionnaireUser ($s1) values ($s2)";
 	}
 //error_log("\n".vsprintf(str_replace('?','%s',$s),$p), 3,'/tmp/jasper.log');

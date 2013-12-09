@@ -224,17 +224,24 @@ function startQuest() {
 		alertModal('輸入體重格式不正確！');
 		return;
 	}
+
 	if (f.p_last_weight.value !== '' && Math.abs(f.p_last_weight.value - f.p_weight.value) > 3) {
 		$('#weightOkButton').on('click', function () {
 			$('#confirmModal').modal('hide');
-			$('#q_no').removeClass('invisible');
-			$('#p_name').text('病患：' + f.p_name.value);
-			$('#p_id').text('(' + f.p_id.value + ')');
-			$('#door').hide();
-			$('#paper').show();
+			startQuestCore();
 		});
 		$('#confirmModal').modal('show');
+	} else {
+		startQuestCore();
 	}
+}
+function startQuestCore() {
+	var f = document.forms[0];
+	$('#q_no').removeClass('invisible');
+	$('#p_name').text('病患：' + f.p_name.value);
+	$('#p_id').text('(' + f.p_id.value + ')');
+	$('#door').hide();
+	$('#paper').show();
 }
 function findPatient(no) {
 	$.ajax({
