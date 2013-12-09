@@ -33,7 +33,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 				<div align="center" style="color:#ffffff; font-size:20px;">編輯病患基本資料</div></td>
 		</tr>
 		<tr>
-			<td width="146" bgcolor="#CCCCCC"><div align="center">病例號</div></td>
+			<td width="146" bgcolor="#CCCCCC"><div align="center">病歷號</div></td>
 			<td width="252" colspan="3"><input type="text" name="no" onkeyup="checkPatient(this.value);"></td>
 		</tr>
 		<tr>
@@ -120,7 +120,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<td id="userListHere" colspan="5"><table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr bgcolor="#CCCCCC">
 					<td width="6%" height="30">&nbsp;</td>
-					<td width="20%"> <form name="filerForm" style="margin:0px;"><div align="center"><font size="4">病例號</font> <input type="text" name="no_filter" style="width:60px;" onkeyup="filterUser(this.value);"></div></form></td>
+					<td width="20%"> <form name="filerForm" style="margin:0px;"><div align="center"><font size="4">病歷號</font> <input type="text" name="no_filter" style="width:60px;" onkeyup="filterUser(this.value);"></div></form></td>
 					<td width="10%" bgcolor="#CCCCCC"> <div align="center">性別</div></td>
 					<td width="14%" bgcolor="#CCCCCC"><div align="center">姓名</div></td>
 					<td width="14%" bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
