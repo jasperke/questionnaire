@@ -115,7 +115,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	</nav>
 	<div class="container">
 		<h4 style="margin:0;">
-			<span id="questionnaire_name"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="q_no" class="text-warning invisible"></span> <span class="pull-right text-info"><span id="p_name"></span> <span id="p_id"></span>&nbsp;&nbsp;&nbsp;&nbsp;醫師：<?php echo  $_SESSION['doctor'];?></span>
+			<span id="questionnaire_name"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="q_no" class="text-warning invisible"></span> <span class="pull-right text-info"><span id="span_p_name"></span> <span id="span_p_id"></span>&nbsp;&nbsp;&nbsp;&nbsp;醫師：<?php echo  $_SESSION['doctor'];?></span>
 		</h4>
 	</div>
 

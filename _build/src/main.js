@@ -217,8 +217,9 @@ function alertModal(msg, title) {
 }
 function startQuest() {
 	var f = document.forms[0];
-	if (f.p_id.value === '' || f.p_name.value === '' || f.p_weight.value === '') {
-		alertModal('資料輸入不完整！\n或病患基本資料尚未建立！');
+	f.p_id.value = $.trim(f.p_id.value);
+	if (f.p_id.value === '' || f.p_weight.value === '') {
+		alertModal('資料輸入不完整！');
 		return;
 	} else if (isNaN(f.p_weight.value) || f.p_weight.value < 5 || f.p_weight.value > 200) {
 		alertModal('輸入體重格式不正確！');
@@ -238,8 +239,8 @@ function startQuest() {
 function startQuestCore() {
 	var f = document.forms[0];
 	$('#q_no').removeClass('invisible');
-	$('#p_name').text('病患：' + f.p_name.value);
-	$('#p_id').text('(' + f.p_id.value + ')');
+	$('#span_p_name').text('病患：' + f.p_name.value);
+	$('#span_p_id').text('(' + f.p_id.value + ')');
 	$('#door').hide();
 	$('#paper').show();
 }

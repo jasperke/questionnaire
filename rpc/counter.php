@@ -40,10 +40,12 @@ foreach($answer as $idx=>$ans){
 }
 $detail=Calculator::outSum();
 $score=$detail['SUM'];
+$need2UpdateWeight=true;
 
 $out=array(array(0,''));
 $group_id=2; // OwnerID
 $dbid=2;
+
 
 $SiteLoginUID=kwut2_readini(CFG_FN,"KOALA","SiteUID");
 $SiteLoginPWD=kwut2_readini(CFG_FN,"KOALA","SitePWD");
@@ -55,24 +57,45 @@ if($db!=0){
 		exit;
 	}
 
+	$s="select count(*) from MUST_QuestionnaireUser where No=?";
+	$r=read_one_record($db, $s, array($p_id));
+	if($r===false||!isset($r)){
+		$out[0]=array(900,"資料儲存失敗(0)！(".kwcr2_geterrormsg($db,1).")");
+		echo QUtillity::decodeUnicodeString(json_encode($out));
+		exit;
+	}else{
+		if($r[0]==0){ // 病患不存在, 須新增
+			$need2UpdateWeight=false;
+			$s="insert into MUST_QuestionnaireUser (OwnerID,No,Volition,Weight,LastDate) values (?,?,?,?,now())";
+			$p=array($group_id,$p_id,1,$p_weight);
+			if(!kwcr2_rawqueryexec($db, $s, $p, "")){
+				$out[0]=array(900,"資料儲存失敗(1)！".vsprintf(str_replace('?','%s',$s),$p).kwcr2_geterrormsg($db,1).")");
+				echo QUtillity::decodeUnicodeString(json_encode($out));
+				exit;
+			}
+		}
+	}
+
 	$s1='OwnerID,Questionnaire,No,Answer,Weight,StaffID';
 	$s2='?,?,?,?,?,?';
 	$p=array($group_id,$questionnaire,$p_id,json_encode($answer),$p_weight,$_SESSION['staffId']);
 	if($score!==null){$s1.=',Score'; $s2.=',?'; $p[]=$score;}
 	if(!kwcr2_rawqueryexec($db, "insert into MUST_Questionnaire ($s1) values ($s2)", $p, "")){
-		$out[0]=array(900,"資料儲存失敗(1)！(".kwcr2_geterrormsg($db,1).")");
+		$out[0]=array(900,"資料儲存失敗(2)！(".kwcr2_geterrormsg($db,1).")");
 		kwcr2_rollbacktransaction($db);
 		echo QUtillity::decodeUnicodeString(json_encode($out));
 		exit;
 	}
 	// 記最近體重
-	$s="update MUST_QuestionnaireUser set Weight=? where No=?";
-	$p=array($p_weight,$p_id);
-	if(!kwcr2_rawqueryexec($db, $s, $p, "")){
-		$out[0]=array(900,"資料儲存失敗(2)！(".kwcr2_geterrormsg($db,1).")");
-		kwcr2_rollbacktransaction($db);
-		echo QUtillity::decodeUnicodeString(json_encode($out));
-		exit;
+	if($need2UpdateWeight){
+		$s="update MUST_QuestionnaireUser set Weight=? where No=?";
+		$p=array($p_weight,$p_id);
+		if(!kwcr2_rawqueryexec($db, $s, $p, "")){
+			$out[0]=array(900,"資料儲存失敗(3)！(".kwcr2_geterrormsg($db,1).")");
+			kwcr2_rollbacktransaction($db);
+			echo QUtillity::decodeUnicodeString(json_encode($out));
+			exit;
+		}
 	}
 
 	kwcr2_committransaction($db);
