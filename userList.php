@@ -45,7 +45,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		</tr>
 		<tr>
 			<td bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
-			<td><input class="date" name="birthday" type="text" size="16"></td>
+			<td><input class="date" name="birthday" type="text" size="24"></td>
 			<td bgcolor="#CCCCCC"><div align="center">行動電話</div></td>
 			<td><input name="phone" type="text" size="22"></td>
 		</tr>
@@ -54,9 +54,9 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 			<td colspan="3"><input name="email" type="text" size="70"></td>
 		</tr>
 		<tr><td bgcolor="#CCCCCC"><div align="center">第一次訪談日</div></td>
-			<td><input class="date" name="first_date" type="text" size="16"></td>
+			<td><input class="date" name="first_date" type="text" size="24"></td>
 			<td bgcolor="#CCCCCC"><div align="center">最近一次訪談日</div></td>
-			<td><input class="date" name="last_date" type="text" size="16"></td></tr>
+			<td><input class="date" name="last_date" type="text" size="24"></td></tr>
 		<tr>
 			<td bgcolor="#CCCCCC"><div align="center">主要照顧者</div></td>
 			<td><label><input type="radio" name="caregiver" value="0">配偶</label>&nbsp;
@@ -78,8 +78,8 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 				<input type="text" name="cancer_code_<%= idx %>" size="6" readOnly>
 				<select data-rowid="<%= idx %>" name="cancer_category_<%= idx %>"></select>
 				<select data-rowid="<%= idx %>" name="cancer_<%= idx %>"></select>
-				<div style="margin:0px 0px 0px 76px; font-size:13px;">開始日：<input class="date" type="text" name="cancerStartDate_<%= idx %>" value="<%= startDate %>" size="16">&nbsp;
-				結束日：<input class="date" type="text" name="cancerEndDate_<%= idx %>" value="<%= endDate %>" size="16">
+				<div style="margin:0px 0px 0px 76px; font-size:13px;">開始日：<input class="date" type="text" name="cancerStartDate_<%= idx %>" value="<%= startDate %>" size="24">&nbsp;
+				結束日：<input class="date" type="text" name="cancerEndDate_<%= idx %>" value="<%= endDate %>" size="24">
 				</div>
 			</div>
 </script>
@@ -120,10 +120,10 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<td id="userListHere" colspan="5"><table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr bgcolor="#CCCCCC">
 					<td width="6%" height="30">&nbsp;</td>
-					<td width="20%"> <form name="filerForm" style="margin:0px;"><div align="center"><font size="4">病歷號</font> <input type="text" name="no_filter" style="width:60px;" onkeyup="filterUser(this.value);"></div></form></td>
-					<td width="10%" bgcolor="#CCCCCC"> <div align="center">性別</div></td>
+					<td width="18%"> <form name="filerForm" style="margin:0px;"><div align="center"><font size="4">病歷號</font> <input type="text" name="no_filter" style="width:60px;" onkeyup="filterUser(this.value);"></div></form></td>
+					<td width="8%" bgcolor="#CCCCCC"> <div align="center">性別</div></td>
 					<td width="14%" bgcolor="#CCCCCC"><div align="center">姓名</div></td>
-					<td width="14%" bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
+					<td width="18%" bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
 					<td width="14%" bgcolor="#CCCCCC"><div align="center">行動電話</div></td>
 					<td width="22%" bgcolor="#CCCCCC"><div align="center">email</div></td>
 				</tr>
@@ -141,10 +141,10 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr data-idx="<%= idx %>">
 		<td width="6%" height="30" bgcolor="#FFFFFF" align="center"><%= start+idx+1 %>.</td>
-		<td width="20%" bgcolor="#FFFFFF" align="center"><font face="Arial, Helvetica, sans-serif"><%= no %></font></div></td>
-		<td width="10%" bgcolor="#FFFFFF" align="center"><%= gender?(gender==1?'男':'女'):'' %></td>
+		<td width="18%" bgcolor="#FFFFFF" align="center"><font face="Arial, Helvetica, sans-serif"><%= no %></font></div></td>
+		<td width="8%" bgcolor="#FFFFFF" align="center"><%= gender?(gender==1?'男':'女'):'' %></td>
 		<td width="14%" bgcolor="#FFFFFF" align="center"><%= name %></td>
-		<td width="14%" bgcolor="#FFFFFF" align="center"><%= birthday %></td>
+		<td width="18%" bgcolor="#FFFFFF" align="center"><%= birthday %></td>
 		<td width="14%" bgcolor="#FFFFFF" align="center"><%= phone %></td>
 		<td width="22%" bgcolor="#FFFFFF" align="center"><%= email %></td></tr>
 	<tr><td colspan="7" bgcolor="#dddddd"><img src="images/dot.gif" width="1" height="1"></td></tr>
@@ -219,7 +219,7 @@ function tableBuilder(){
 				no: data[i][2],
 				name: data[i][3],
 				gender: data[i][4],
-				birthday: data[i][5],
+				birthday: toEra(data[i][5],true),
 				email: data[i][6],
 				phone: data[i][7]
 			}));
@@ -284,11 +284,11 @@ function showEditor(opt){
 			this.checked=false;
 		})
 	}
-	f.birthday.value=opt.birthday||'';
+	f.birthday.value=toEra(opt.birthday||'',true);
 	f.phone.value=opt.phone||'';
 	f.email.value=opt.email||'';
-	f.first_date.value=opt.first_date||'';
-	f.last_date.value=opt.last_data||'';
+	f.first_date.value=toEra(opt.first_date||'',true);
+	f.last_date.value=toEra(opt.last_data||'',true);
 	if(opt.caregiver!==undefined&&opt.caregiver!==''){
 		f.caregiver[opt.caregiver].checked=true;
 	}else{
@@ -329,24 +329,39 @@ function showEditor(opt){
 
 	showEditorLayer(1);
 }
+function toEra(y,reverse){
+	var dA=y.match(/(\d+)\D+(\d+)\D+(\d+)/);
+	if(dA){
+		if(reverse){ // 西元轉民國
+			dA[1]=parseInt(dA[1],10)-1911;
+			return '民國'+dA[1]+'年'+dA[2]+'月'+dA[3]+'日';
+		}else{ // 民國轉西元
+			dA[1]=parseInt(dA[1],10)+1911;
+			return dA[1]+'-'+dA[2]+'-'+dA[3];
+		}
+	}else{
+		return '';
+	}
+}
 function saveUser(){
 	var f=document.editUserForm,
-			data={no:f.no.value,
-				patient_id:f.patient_id.value,
-				patient_name:f.patient_name.value,
-				email:f.email.value,
-				phone:f.phone.value,
-				first_date:f.first_date.value,
-				last_date:f.last_date.value,
-				memo:f.memo.value
-			};
+		data={no:f.no.value,
+			patient_id:f.patient_id.value,
+			patient_name:f.patient_name.value,
+			email:f.email.value,
+			phone:f.phone.value,
+			first_date:toEra(f.first_date.value),
+			last_date:toEra(f.last_date.value),
+			memo:f.memo.value
+		},
+		dA;
 	if(f.gender[0].checked)
 		data.gender=1;
 	if(f.gender[1].checked)
 		data.gender=2;
 
 	if(f.birthday.value)
-		data.birthday=f.birthday.value;
+		data.birthday=toEra(f.birthday.value);
 
 	$(f.caregiver).each(function(){
 		if(this.checked) data.caregiver=this.value;
@@ -446,7 +461,8 @@ function cancerFieldBuilder(cancer){
 	// 癌別開始/結束日
 	$('#cancer_div_'+cancerFieldBuilder.rowid+' .date').datePicker({
 		weekName:['日','一','二','三','四','五','六'],
-		monthName:['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+		monthName:['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+		taiwan:true
 	});
 
 	for(i=0; i<cancerCategory.length; i++){
@@ -484,7 +500,8 @@ $(function(){
 	// 生日/訪談日
 	$('.date').datePicker({
 		weekName:['日','一','二','三','四','五','六'],
-		monthName:['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+		monthName:['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+		taiwan:true
 	});
 
 	$('#userListHere').on('click','tr',function(event){
