@@ -54,6 +54,7 @@ module.exports = function(grunt) {
 					{expand:true, cwd:'<%= LIB_PATH %>jquery', src:'jquery.min.js', dest:'<%= JS_PATH %>'},
 					{expand:true, cwd:'<%= LIB_PATH %>bootstrap/dist', src:'**', dest:'<%= BASE_PATH %>'},
 					{expand:true, cwd:'<%= LIB_PATH %>datePicker', src:'datePicker.js', dest:'<%= JS_PATH %>src/'},
+					{expand:true, cwd:'<%= LIB_PATH %>cyberChart', src:'CyberChart.js', dest:'<%= JS_PATH %>src/'},
 					{expand:true, cwd:'./src', src:'*.js', dest:'<%= JS_PATH %>src/'}
 				]
 			},
