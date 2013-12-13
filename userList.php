@@ -210,8 +210,8 @@ function getUsers(){
 			if(data[0][0]!=0){
 				alert('錯誤！\n\n錯誤代碼：'+data[0][0]+'\n錯誤訊息：'+data[0][1]);
 			}else{
-				if(data[1][1]!=filterUserNo) // 取回資料採非目前過濾條件者
-					return;
+				// if(data[1][1]!=filterUserNo) // 取回資料採非目前過濾條件者
+				// 	return;
 				user_total_count=data[1][0];
 				user_list=data.slice(2);
 				tableBuilder();

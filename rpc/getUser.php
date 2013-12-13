@@ -65,7 +65,7 @@ if($db!=0){
 				echo QUtillity::decodeUnicodeString(json_encode($out));
 				exit;
 			}else{
-				$out[1]=array($r[0],$filterNo);
+				$out[1]=array($r[0]);
 			}
 		}
 		$s="select CreateTime,RandNum,No,Name,Gender,Birthday,Email,Phone,Weight,Cancer,Volition,Caregiver,FirstDate,LastDate,Memo from MUST_QuestionnaireUser where OwnerID=?";
