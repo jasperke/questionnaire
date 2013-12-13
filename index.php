@@ -45,7 +45,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<div class="list-group">
 			<a id="patient" href="userList.php" class="list-group-item">患者基本資料 <i class="icon icon-chevron-right pull-right"></i></a>
 			<a id="questionnaire" href="#" class="list-group-item">填寫問卷 <i class="icon icon-chevron-right pull-right"></i></a>
-			<a id="manager" href="list.php" class="list-group-item">問卷結果 <i class="icon icon-chevron-right pull-right"></i></a>
+			<a id="manager" href="list.php" class="list-group-item">看診患者 <i class="icon icon-chevron-right pull-right"></i></a>
 		</div>
 	</div>
 	<div id="questionnaireSelector" class="container">

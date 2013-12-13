@@ -213,6 +213,8 @@ function doSave(){
 			if(data[0][0]!=0){
 				alert('錯誤！\n\n錯誤代碼：'+data[0][0]+'\n錯誤訊息：'+data[0][1]);
 			}else{
+				try{opener.getList();}
+				catch(e){}
 				alert('資料已儲存！');
 			}
 		}

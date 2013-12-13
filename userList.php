@@ -14,6 +14,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 <style type="text/css">
 <!--
 .activeRow {background-color:#FFFFD9;}
+table.listTable td {font-size:20px;}
 -->
 </style>
 <script src="js/jquery.min.js" ></script>
@@ -117,10 +118,13 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<td width="70" bgcolor="#000000"><a href="login.php?logout=1"><font color="#999999" size="4">登出</font></a></td>
 	</tr>
 	<tr>
-		<td id="userListHere" colspan="5"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<td id="userListHere" colspan="5">
+			<div><form name="filerForm" style="margin:10px;"><font size="4">搜尋病患： 病歷號 <input type="text" name="no_filter" style="width:150px;">&nbsp;&nbsp;&nbsp;姓名 <input type="text" name="name_filter" style="width:100px;">&nbsp;&nbsp;&nbsp;出生日期 <input class="date" type="text" name="birthday_filter" style="width:200px;">&nbsp;<input type="button" name="searchButton" value="搜尋" onclick="filterUser(this.form);"></font></div></form></div>
+
+			<table class="listTable" width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr bgcolor="#CCCCCC">
-					<td width="6%" height="30">&nbsp;</td>
-					<td width="18%"> <form name="filerForm" style="margin:0px;"><div align="center"><font size="4">病歷號</font> <input type="text" name="no_filter" style="width:60px;" onkeyup="filterUser(this.value);"></div></form></td>
+					<td width="6%" height="40">&nbsp;</td>
+					<td width="18%"><div align="center"><font size="4">病歷號</font></div></td>
 					<td width="8%" bgcolor="#CCCCCC"> <div align="center">性別</div></td>
 					<td width="14%" bgcolor="#CCCCCC"><div align="center">姓名</div></td>
 					<td width="18%" bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
@@ -138,9 +142,9 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	</tr>
 </table>
 <script type="text/template" id="row_template">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table class="listTable" width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr data-idx="<%= idx %>">
-		<td width="6%" height="30" bgcolor="#FFFFFF" align="center"><%= start+idx+1 %>.</td>
+		<td width="6%" height="40" bgcolor="#FFFFFF" align="center"><%= start+idx+1 %>.</td>
 		<td width="18%" bgcolor="#FFFFFF" align="center"><font face="Arial, Helvetica, sans-serif"><%= no %></font></div></td>
 		<td width="8%" bgcolor="#FFFFFF" align="center"><%= gender?(gender==1?'男':'女'):'' %></td>
 		<td width="14%" bgcolor="#FFFFFF" align="center"><%= name %></td>
@@ -154,6 +158,8 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 var start=0,
 	page_size=20,
 	filterUserNo='',
+	filterUserName='',
+	filterUserBirthday='',
 	row_template,
 	cancerField_template,
 	user_list,
@@ -169,16 +175,20 @@ function showEditorLayer(show){
 		$('#Layer1').hide();
 	}
 }
-function filterUser(no){
-	if(filterUserTimerId){
-		clearTimeout(filterUserTimerId);
+function filterUser(f){ // TODO: 搜尋患者
+	start=0;
+	filterUserNo=f.no_filter.value;
+	filterUserName=f.name_filter.value;
+	filterUserBirthday=f.birthday_filter.value;
+	if(filterUserBirthday!=''){
+		var dA=filterUserBirthday.match(/(\d+)\D+(\d+)\D+(\d+)/);
+		dA[1]=parseInt(dA[1],10)+1911;
+		filterUserBirthday=dA[1]+'-'+dA[2]+'-'+dA[3];
 	}
-	filterUserTimerId=setTimeout(function(){
-		filterUserNo=no;
-		start=0;
-		getUsers();
-	},200);
+	f.searchButton.disabled=true;
+	getUsers();
 }
+
 function getUsers(){
 	$.ajax({
 		url:'rpc/getUser.php',
@@ -188,10 +198,13 @@ function getUsers(){
 			start:start,
 			size:page_size,
 			total_count:1,
-			filterNo:filterUserNo
+			filterNo:filterUserNo,
+			filterName:filterUserName,
+			filterBirthday:filterUserBirthday
 		},
 		error:function(){
 			alert('error'); // TODO:
+			document.filerForm.searchButton.disabled=false;
 		},
 		success:function(data){
 			if(data[0][0]!=0){
@@ -204,6 +217,7 @@ function getUsers(){
 				tableBuilder();
 				refreshPageSwitcher();
 			}
+			document.filerForm.searchButton.disabled=false;
 		}
 	});
 }
@@ -328,20 +342,6 @@ function showEditor(opt){
 	}
 
 	showEditorLayer(1);
-}
-function toEra(y,reverse){
-	var dA=y.match(/(\d+)\D+(\d+)\D+(\d+)/);
-	if(dA){
-		if(reverse){ // 西元轉民國
-			dA[1]=parseInt(dA[1],10)-1911;
-			return '民國'+dA[1]+'年'+dA[2]+'月'+dA[3]+'日';
-		}else{ // 民國轉西元
-			dA[1]=parseInt(dA[1],10)+1911;
-			return dA[1]+'-'+dA[2]+'-'+dA[3];
-		}
-	}else{
-		return '';
-	}
 }
 function saveUser(){
 	var f=document.editUserForm,
@@ -529,7 +529,6 @@ $(function(){
 	});
 
 	row_template=_.template($("#row_template").html());
-	getUsers();
 
 	cancerField_template=_.template($('#cancer_template').html());
 	cancerFieldBuilder();

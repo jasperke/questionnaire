@@ -22,6 +22,10 @@ if(isset($size)&&$size!=0)
 	$fetch_range['max_fetch_raw']=(int)$size;
 if(!isset($filterNo))
 	$filterNo='';
+if(!isset($filterName))
+	$filterName='';
+if(!isset($filterBirthday))
+	$filterBirthday='';
 
 // // 列表的條件, 檢視detail.php後才能回原來的列表
 // $_SESSION['skip_rows']=$fetch_range['skip_rows'];
@@ -48,6 +52,13 @@ if($db!=0){
 				$s.=" and SUBSTRING(No,1,?)=?";
 				array_push($p,strlen($filterNo),$filterNo);
 			}
+			if(strcmp($filterName,'')!=0){
+				$s.=" and Name like '%".$filterName."%'";
+			}
+			if(strcmp($filterBirthday,'')!=0){
+				$s.=" and Birthday=?";
+				array_push($p,$filterBirthday);
+			}
 			$r=read_one_record($db, $s, $p);
 			if($r===false||!isset($r)){
 				$out[0]=array(900,"讀取資料失敗(0)！".kwcr2_geterrormsg($db, 1));
@@ -62,6 +73,13 @@ if($db!=0){
 		if(strcmp($filterNo,'')!=0){
 			$s.=" and SUBSTRING(No,1,?)=?";
 			array_push($p,strlen($filterNo),$filterNo);
+		}
+		if(strcmp($filterName,'')!=0){
+			$s.=" and Name like '%".$filterName."%'";
+		}
+		if(strcmp($filterBirthday,'')!=0){
+			$s.=" and Birthday=?";
+			array_push($p,$filterBirthday);
 		}
  		$s.=" order by CreateTime desc";
 	}

@@ -274,3 +274,17 @@ function findPatient(no) {
 		}
 	});
 }
+function toEra(y, reverse) {
+	var dA = y.match(/(\d+)\D+(\d+)\D+(\d+)/);
+	if (dA) {
+		if (reverse) { // 西元轉民國
+			dA[1] = parseInt(dA[1], 10) - 1911;
+			return '民國' + dA[1] + '年' + dA[2] + '月' + dA[3] + '日';
+		} else { // 民國轉西元
+			dA[1] = parseInt(dA[1], 10) + 1911;
+			return dA[1] + '-' + dA[2] + '-' + dA[3];
+		}
+	} else {
+		return '';
+	}
+}
