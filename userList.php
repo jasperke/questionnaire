@@ -390,7 +390,7 @@ function saveUser(){
 			if (data[0][0] === 0) {
 				alert('資料儲存完畢！');
 
-				start=0;
+				//start=0;
 				getUsers();
 			} else {
 				alert('錯誤代碼：' + data[0][0] + '\n錯誤訊息：' + data[0][1]);

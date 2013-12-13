@@ -1,3 +1,4 @@
+// main.js
 function initQuestionnaire() {
 	$('#questionnaire_name').text(q_id);
 

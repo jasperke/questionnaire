@@ -1,4 +1,4 @@
-
+// quizPool.js (問卷題庫)
 var commonOptions = ['一點也不', '有一點', '有些', '相當', '非常'], // 通用選項
 	// 題庫
 	quizPool = {

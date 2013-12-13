@@ -97,15 +97,15 @@ $(function(){
     <td colspan="5" id="listHere">
       <table class="listTable" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr bgcolor="#CCCCCC">
-          <td width="4%" height="45"> <div align="center"><font size="4" face="Arial, Helvetica, sans-serif">No.</font></div></td>
-          <td width="13%"><div align="center"><font size="4">病例號</font></div></td>
-          <td width="9%"><div align="center"><font size="4">姓名</font></div></td>
-          <td width="6%"><div align="center"><font size="4">性別</font></div></td>
-          <td width="21%"><div align="center"><font size="4">出生日期</font></div></td>
-          <td width="16%"> <div align="center"><font size="4">問卷名稱</font></div></td>
-          <td width="6%"> <div align="center"><font size="4">總分</font></div></td>
-          <td width="11%"> <div align="center"><font size="4">填寫時間</font></div>
-          <td width="14%"><div><font size="4">&nbsp;</font></div></td></tr>
+          <td width="4%" height="45"><div align="center"><font face="Arial, Helvetica, sans-serif">No.</font></div></td>
+          <td width="13%"><div align="center">病例號</div></td>
+          <td width="9%"><div align="center">姓名</div></td>
+          <td width="6%"><div align="center">性別</div></td>
+          <td width="21%"><div align="center">出生日期</div></td>
+          <td width="16%"><div align="center">問卷名稱</div></td>
+          <td width="6%"><div align="center">總分</div></td>
+          <td width="11%"><div align="center">填寫時間</div>
+          <td width="14%"><div>&nbsp;</div></td></tr>
         <tr bgcolor="#666666">
           <td colspan="9"><img src="images/dot.gif" width="1" height="1"></td>
         </tr>

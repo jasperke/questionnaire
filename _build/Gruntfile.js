@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 				 '* Project: <%= pkg.name %>',
 				 '* Version: <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd HH:MM") %>)',
 				 '* Development By: <%= pkg.author %>',
-				 '* Copyright(c): <%= grunt.template.today("yyyy") %>',
+				 '* Copyright(c): <%= grunt.template.today("yyyy") %> Jasper Ke All rights reserved.',
 				 '*/',
 				 ''
 		],
@@ -40,6 +40,7 @@ module.exports = function(grunt) {
 				sourceMapRoot: '<%= JS_PATH %>',
 				sourceMapPrefix: 2,
 				sourceMappingURL: 'main.min.map'
+				//preserveComments: 'some'
 			},
 			dist: {
 				files: {
