@@ -13,6 +13,14 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	<meta name="viewport" content="user-scalable=no, width=device-width" />
 	<title>問卷調查</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<style type="text/css">
+	a.large-btn {
+		text-align: left;
+		font-size: 24px;
+		padding: 24px 14px;
+		margin: 6px auto;
+	}
+	</style>
 	<script type="text/javascript" src="js/jquery.min.js" ></script>
 	<script type="text/javascript" src="js/bootstrap.min.js" ></script>
 </head>
@@ -43,24 +51,24 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	<div id="mainMenu" class="container">
 		<h3>請選擇：</h3>
 		<div class="list-group">
-			<a id="patient" href="userList.php" class="list-group-item">患者基本資料 <i class="icon icon-chevron-right pull-right"></i></a>
-			<a id="questionnaire" href="#" class="list-group-item">填寫問卷 <i class="icon icon-chevron-right pull-right"></i></a>
-			<a id="manager" href="list.php" class="list-group-item">看診患者 <i class="icon icon-chevron-right pull-right"></i></a>
+			<a id="patient" href="userList.php" class="list-group-item large-btn">患者基本資料 <i class="icon icon-chevron-right pull-right"></i></a>
+			<a id="questionnaire" href="#" class="list-group-item large-btn">填寫問卷 <i class="icon icon-chevron-right pull-right"></i></a>
+			<a id="manager" href="list.php" class="list-group-item large-btn">看診患者 <i class="icon icon-chevron-right pull-right"></i></a>
 		</div>
 	</div>
 	<div id="questionnaireSelector" class="container">
 		<h3>請選擇問卷：</h3>
 		<div class="list-group">
-			<a href="questionnaire.php?questionnaire=FACT-B" class="list-group-item" target="_blank">
+			<a href="questionnaire.php?questionnaire=FACT-B" class="list-group-item large-btn" target="_blank">
 				FACT - B <i class="icon icon-chevron-right pull-right"></i>
 			</a>
-			<a href="questionnaire.php?questionnaire=FACT-ECO" class="list-group-item" target="_blank">
+			<a href="questionnaire.php?questionnaire=FACT-ECO" class="list-group-item large-btn" target="_blank">
 				FACT - ECO <i class="icon icon-chevron-right pull-right"></i>
 			</a>
-			<a href="questionnaire.php?questionnaire=FACT-HN-X" class="list-group-item" target="_blank">
+			<a href="questionnaire.php?questionnaire=FACT-HN-X" class="list-group-item large-btn" target="_blank">
 				FACT - HN-X <i class="icon icon-chevron-right pull-right"></i>
 			</a>
-			<a href="questionnaire.php?questionnaire=HN.COM" class="list-group-item" target="_blank">
+			<a href="questionnaire.php?questionnaire=HN.COM" class="list-group-item large-btn" target="_blank">
 				HN.COM <i class="icon icon-chevron-right pull-right"></i>
 			</a>
 		</div>
