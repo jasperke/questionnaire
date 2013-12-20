@@ -280,7 +280,8 @@ function toEra(y, reverse) {
 	if (dA) {
 		if (reverse) { // 西元轉民國
 			dA[1] = parseInt(dA[1], 10) - 1911;
-			return '民國' + dA[1] + '年' + dA[2] + '月' + dA[3] + '日';
+			// return '民國' + dA[1] + '年' + dA[2] + '月' + dA[3] + '日';
+			return dA[1] + '年' + dA[2] + '月' + dA[3] + '日'; // 不用秀 民國
 		} else { // 民國轉西元
 			dA[1] = parseInt(dA[1], 10) + 1911;
 			return dA[1] + '-' + dA[2] + '-' + dA[3];
