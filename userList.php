@@ -23,42 +23,46 @@ table.listTable td {font-size:20px;}
 </head>
 
 <body bgcolor="#EEEEEE" leftmargin="0" topmargin="0">
-<div id="Mask" style="position:absolute; left:0px; top:0px; width:100%; z-index:1; display:none; background-color:#EEEEEE;">&nbsp;</div>
+<div id="Mask" style="position:absolute; left:0px; top:0px; width:100%; z-index:1; display:none; background-color:rgba(197, 198, 235, 0.8);">&nbsp;</div>
 <div id="Layer1" style="position:absolute; left:0px; top:0px; width:100%; z-index:2; display:none;">
-<form name='editUserForm' style='margin:50px;'>
+<form name='editUserForm' style='margin:40px 0px;'>
 <input type="hidden" name="patient_id">
 
-	<table width="900" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#eeeeee" style="padding:5px; border:1px solid #6078B9;"> <!-- bordercolor="#dddddd"  -->
+	<table width="870" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#eeeeee" style="padding:1px; border:1px solid #6078B9;"> <!-- bordercolor="#dddddd"  -->
 		<tr>
 			<td colspan="4" bgcolor="#0B1F80">
-				<div align="center" style="color:#ffffff; font-size:20px;">編輯病患基本資料</div></td>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<tr><td width="5%">&nbsp;</td>
+						<td width="90%"><div align="center" style="color:#ffffff; font-size:20px;">編輯病患基本資料</div></td>
+						<td width="5%"><div align="right" style="color:#ffffff; font-size:20px; font-family: arial; cursor:pointer;" onClick="showEditorLayer(0);">&nbsp;X&nbsp;</div></td></tr>
+				</table>
 		</tr>
-		<tr>
-			<td width="146" bgcolor="#CCCCCC"><div align="center">病歷號</div></td>
-			<td width="252" colspan="3"><input type="text" name="no" onkeyup="checkPatient(this.value);"></td>
+		<tr height="40">
+			<td width="100" bgcolor="#CCCCCC"><div align="center">病歷號</div></td>
+			<td width="770" colspan="3"><input type="text" name="no" onkeyup="checkPatient(this.value);"></td>
 		</tr>
-		<tr>
+		<tr height="40">
 			<td bgcolor="#CCCCCC"><div align="center">姓名</div></td>
 			<td><input type="text" name="patient_name"></td>
 			<td bgcolor="#CCCCCC"><div align="center">性別</div></td>
 			<td><label><input type="radio" name="gender" value="1"> 男</label>&nbsp;&nbsp;
 				<label><input type="radio" name="gender" value="2"> 女</label></td>
 		</tr>
-		<tr>
+		<tr height="40">
 			<td bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
 			<td><input class="date" name="birthday" type="text" size="24"></td>
 			<td bgcolor="#CCCCCC"><div align="center">行動電話</div></td>
 			<td><input name="phone" type="text" size="22"></td>
 		</tr>
-		<tr>
+		<tr height="40">
 			<td bgcolor="#CCCCCC"><div align="center">email</div></td>
 			<td colspan="3"><input name="email" type="text" size="70"></td>
 		</tr>
-		<tr><td bgcolor="#CCCCCC"><div align="center">第一次訪談日</div></td>
+		<tr height="40"><td bgcolor="#CCCCCC"><div align="center">第一次訪談日</div></td>
 			<td><input class="date" name="first_date" type="text" size="24"></td>
 			<td bgcolor="#CCCCCC"><div align="center">最近一次訪談日</div></td>
 			<td><input class="date" name="last_date" type="text" size="24"></td></tr>
-		<tr>
+		<tr height="40">
 			<td bgcolor="#CCCCCC"><div align="center">主要照顧者</div></td>
 			<td><label><input type="radio" name="caregiver" value="0">配偶</label>&nbsp;
 				<label><input type="radio" name="caregiver" value="1">父母</label>&nbsp;
@@ -69,14 +73,14 @@ table.listTable td {font-size:20px;}
 			<td><label><input type="radio" name="volition" value="0">不需要</label>&nbsp;
 				<label><input type="radio" name="volition" value="1">需要</label>&nbsp;
 				<label><input type="radio" name="volition" value="2">拒作</label></td></tr>
-		<tr>
+		<tr height="40">
 			<td bgcolor="#CCCCCC"><div align="center">癌別 <img src="images/plus-button.png" style="vertical-align:middle; cursor:pointer;" onclick="cancerFieldBuilder();"></div></td>
 			<td colspan="3"><div id="cancer_fields">
 
 <script type="text/template" id="cancer_template">
 			<div id="cancer_div_<%= idx %>">
 				<img data-rowid="<%= idx %>" src="images/minus-button.png" style="vertical-align:middle; cursor:pointer" onclick="removeCancer(<%= idx %>);">
-				<input type="text" name="cancer_code_<%= idx %>" size="6" readOnly>
+				<input type="text" name="cancer_code_<%= idx %>" style="width:40px" readOnly>
 				<select data-rowid="<%= idx %>" name="cancer_category_<%= idx %>"></select>
 				<select data-rowid="<%= idx %>" name="cancer_<%= idx %>"></select>
 				<div style="margin:0px 0px 0px 76px; font-size:13px;">開始日：<input class="date" type="text" name="cancerStartDate_<%= idx %>" value="<%= startDate %>" size="24">&nbsp;
@@ -88,17 +92,16 @@ table.listTable td {font-size:20px;}
 				</div>
 			</td></tr>
 		</tr>
-		<tr>
+		<tr height="40">
 			<td bgcolor="#CCCCCC"><div align="center">備註</div></td>
 			<td colspan="3"><textarea name="memo" style="width:100%; height:60px;"></textarea></td>
 		</tr>
-		<tr>
+		<tr height="40">
 			<td bgcolor="#CCCCCC"><div align="center">問卷</div></td>
 			<td colspan="3"><span id="my_questionnaire"></span></td>
 		</tr>
-		<tr>
-			<td height="40" colspan="4">
-				<div align="center">
+		<tr height="60">
+			<td height="40" colspan="4" bgcolor="#ffffff"><div align="center">
 					<input name="submitButton" type="button" onClick="saveUser();" value="確定">
 					<input name="cancelButton" type="button" onClick="showEditorLayer(0);" value="取消">
 				</div></td>
@@ -111,25 +114,25 @@ table.listTable td {font-size:20px;}
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td width="137" height="50" bgcolor="#000000">&nbsp;</td>
-		<td width="908" bgcolor="#000000">t<font color="#999999" size="4">長庚問卷調查系統
+		<td width="808" bgcolor="#000000">t<font color="#999999" size="4">長庚問卷調查系統
 			- 病患列表</font></td>
-		<td width="83" bgcolor="#000000"><a href="index.php"><font color="#999999" size="4">主選單</font></a></td>
+		<td width="183" bgcolor="#000000"><a href="index.php"><font color="#999999" size="4">主選單</font></a></td>
 		<td width="153" bgcolor="#000000"><a href="javascript:void(0);"><font color="#999999" size="4" onclick="showEditor({});">新增</font></a></td>
 		<td width="70" bgcolor="#000000"><a href="login.php?logout=1"><font color="#999999" size="4">登出</font></a></td>
 	</tr>
 	<tr>
 		<td id="userListHere" colspan="5">
-			<div><form name="filerForm" style="margin:10px;"><font size="4">搜尋病患： 病歷號 <input type="text" name="no_filter" style="width:150px;">&nbsp;&nbsp;&nbsp;姓名 <input type="text" name="name_filter" style="width:100px;">&nbsp;&nbsp;&nbsp;出生日期 <input class="date" type="text" name="birthday_filter" style="width:200px;">&nbsp;<input type="button" name="searchButton" value="搜尋" onclick="filterUser(this.form);"></font></div></form></div>
+			<div><form name="filerForm" style="margin:10px;"><font size="4">搜尋病患： 病歷號 <input type="text" name="no_filter" style="width:100px;">&nbsp;&nbsp;&nbsp;姓名 <input type="text" name="name_filter" style="width:100px;">&nbsp;&nbsp;&nbsp;出生日期 <input class="date" type="text" name="birthday_filter" style="width:130px;">&nbsp;<input type="button" name="searchButton" value="搜尋" onclick="filterUser(this.form);"></font></div></form></div>
 
 			<table class="listTable" width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr bgcolor="#CCCCCC">
 					<td width="6%" height="40">&nbsp;</td>
-					<td width="18%"><div align="center"><font size="4">病歷號</font></div></td>
+					<td width="16%"><div align="center"><font size="4">病歷號</font></div></td>
 					<td width="8%" bgcolor="#CCCCCC"> <div align="center">性別</div></td>
 					<td width="14%" bgcolor="#CCCCCC"><div align="center">姓名</div></td>
-					<td width="18%" bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
-					<td width="14%" bgcolor="#CCCCCC"><div align="center">行動電話</div></td>
-					<td width="22%" bgcolor="#CCCCCC"><div align="center">email</div></td>
+					<td width="16%" bgcolor="#CCCCCC"><div align="center">出生年月日</div></td>
+					<td width="16%" bgcolor="#CCCCCC"><div align="center">行動電話</div></td>
+					<td width="24%" bgcolor="#CCCCCC"><div align="center">email</div></td>
 				</tr>
 				<tr bgcolor="#666666">
 					<td colspan="7"><img src="images/dot.gif" width="1" height="1"></td>
@@ -137,7 +140,7 @@ table.listTable td {font-size:20px;}
 			</table>
 		</td>
 	</tr>
-	<tr>
+	<tr height="50">
 		<td colspan="5"><div align="center" style="padding:4px;"><span id="pageSwitcher"></span></div></td>
 	</tr>
 </table>
@@ -145,12 +148,12 @@ table.listTable td {font-size:20px;}
 <table class="listTable" width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr data-idx="<%= idx %>">
 		<td width="6%" height="40" bgcolor="#FFFFFF" align="center"><%= start+idx+1 %>.</td>
-		<td width="18%" bgcolor="#FFFFFF" align="center"><font face="Arial, Helvetica, sans-serif"><%= no %></font></div></td>
+		<td width="16%" bgcolor="#FFFFFF" align="center"><font face="Arial, Helvetica, sans-serif"><%= no %></font></div></td>
 		<td width="8%" bgcolor="#FFFFFF" align="center"><%= gender?(gender==1?'男':'女'):'' %></td>
 		<td width="14%" bgcolor="#FFFFFF" align="center"><%= name %></td>
-		<td width="18%" bgcolor="#FFFFFF" align="center"><%= birthday %></td>
-		<td width="14%" bgcolor="#FFFFFF" align="center"><%= phone %></td>
-		<td width="22%" bgcolor="#FFFFFF" align="center"><%= email %></td></tr>
+		<td width="16%" bgcolor="#FFFFFF" align="center"><%= birthday %></td>
+		<td width="16%" bgcolor="#FFFFFF" align="center"><%= phone %></td>
+		<td width="24%" bgcolor="#FFFFFF" align="center"><%= email %></td></tr>
 	<tr><td colspan="7" bgcolor="#dddddd"><img src="images/dot.gif" width="1" height="1"></td></tr>
 </table>
 </script>
@@ -166,10 +169,10 @@ var start=0,
 	user_total_count,
 	filterUserTimerId;
 
-function showEditorLayer(show){
+function showEditorLayer(show,topPos){
 	if(show){
 		$('#Mask').css({height:$('body').height()}).show();
-		$('#Layer1').show();
+		$('#Layer1').css({top:topPos}).show();
 	}else{
 		$('#Mask').hide();
 		$('#Layer1').hide();
@@ -233,7 +236,7 @@ function tableBuilder(){
 				no: data[i][2],
 				name: data[i][3],
 				gender: data[i][4],
-				birthday: toEra(data[i][5],true),
+				birthday: toEra(data[i][5],true).replace(/\D/g,'/').replace(/\/$/,''),
 				email: data[i][6],
 				phone: data[i][7]
 			}));
@@ -276,7 +279,7 @@ function isValidDate(yy,mm,dd){
 	}
 	return true;
 };
-function showEditor(opt){
+function showEditor(opt,topPos){
 	cancerFieldBuilder.counter=0;
 
 	var f=document.editUserForm,
@@ -341,7 +344,7 @@ function showEditor(opt){
 		cancerFieldBuilder();
 	}
 
-	showEditorLayer(1);
+	showEditorLayer(1,topPos||0);
 }
 function saveUser(){
 	var f=document.editUserForm,
@@ -525,7 +528,8 @@ $(function(){
 		if(user_list[i][10]!==undefined&&user_list[i][10]!=='')
 			user.volition=user_list[i][10];
 
-		showEditor(user);
+		//$(window).scrollTop(0);
+		showEditor(user, $(window).scrollTop());
 	});
 
 	row_template=_.template($("#row_template").html());

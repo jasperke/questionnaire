@@ -15,6 +15,8 @@ $scope=isset($_SESSION['scope'])?$_SESSION['scope']:1; // 0:all, 1:waiting
 <style type="text/css">
 <!--
 table.listTable td {font-size:24px;}
+div.first_row {padding-top:10px; text-align:center; font-color:#555555; font-family:Arial, Helvetica, sans-serif;}
+div.second_row {padding-bottom:10px; text-align:center; font-color:#555555; font-family:Arial, Helvetica, sans-serif;}
 -->
 </style>
 <script type="text/javascript" src="js/jquery.min.js" ></script>
@@ -55,10 +57,10 @@ function tableBuilder(data){
         id:data[i][0]+';'+data[i][1],
         q_id:data[i][2],
         patient_no:data[i][3],
-        score:data[i][4],
+        score:data[i][4]!==''?data[i][4]+'分':'',
         patient_name:data[i][5],
         gender:data[i][7]==1?'男':(data[i][6]==2?'女':''),
-        birthday:toEra(data[i][8],true),
+        birthday:toEra(data[i][8],true).replace(/\D/g,'/').replace(/\/$/,''),
         time:data[i][0].substr(11,8)
       }));
   }
@@ -84,8 +86,8 @@ $(function(){
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="137" height="50" bgcolor="#000000">&nbsp;</td>
-    <td width="900" bgcolor="#000000">t<font color="#999999" size="4">長庚問卷調查系統</font></td>
-    <td width="83" bgcolor="#000000"><a href="./"><font color="#999999" size="4">主選單</font></a></td>
+    <td width="800" bgcolor="#000000">t<font color="#999999" size="4">長庚問卷調查系統</font></td>
+    <td width="183" bgcolor="#000000"><a href="./"><font color="#999999" size="4">主選單</font></a></td>
     <td width="153" bgcolor="#000000">
       <select name="scope" onchange="getList();">
         <option value="0">今日全部</option>
@@ -96,18 +98,14 @@ $(function(){
   <tr>
     <td colspan="5" id="listHere">
       <table class="listTable" width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr bgcolor="#CCCCCC">
-          <td width="4%" height="45"><div align="center"><font face="Arial, Helvetica, sans-serif">No.</font></div></td>
-          <td width="13%"><div align="center">病例號</div></td>
-          <td width="9%"><div align="center">姓名</div></td>
-          <td width="6%"><div align="center">性別</div></td>
-          <td width="21%"><div align="center">出生日期</div></td>
-          <td width="16%"><div align="center">問卷名稱</div></td>
-          <td width="6%"><div align="center">總分</div></td>
-          <td width="11%"><div align="center">填寫時間</div>
-          <td width="14%"><div>&nbsp;</div></td></tr>
+        <tr bgcolor="#CCCCCC" height="50">
+          <td width="18%"><div align="center">病例號</div></td>
+          <td width="17%"><div align="center">姓名</div></td>
+          <td width="32%"><div align="center">出生日期</div></td>
+          <td width="11%"><div align="center">性別</div></td>
+          <td width="22%"><div align="center">填寫時間</div></td></tr>
         <tr bgcolor="#666666">
-          <td colspan="9"><img src="images/dot.gif" width="1" height="1"></td>
+          <td colspan="5"><img src="images/dot.gif" width="1" height="1"></td>
         </tr>
       </table>
     </td>
@@ -120,17 +118,16 @@ $(function(){
 
 <script type="text/template" id="row_template">
   <table class="listTable" width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr class="row" data-id="<%= id %>"><td width="4%" height="45" bgcolor="#FFFFFF"><div align="center"><font color="#555555" face="Arial, Helvetica, sans-serif"><%= idx %></font></div></td>
-      <td width="13%" bgcolor="#FFFFFF"><div align="center"><font color="#555555" face="Arial, Helvetica, sans-serif"><%= patient_no %></font></div></td>
-      <td width="9%" bgcolor="#FFFFFF"><div align="center"><font color="#555555" face="Arial, Helvetica, sans-serif"><%= patient_name %></font></div></td>
-      <td width="6%" bgcolor="#FFFFFF"><div align="center"><font color="#555555" face="Arial, Helvetica, sans-serif"><%= gender %></font></div></td>
-      <td width="21%" bgcolor="#FFFFFF"><div align="center"><font color="#555555" face="Arial, Helvetica, sans-serif"><%= birthday %></font></div></td>
-      <td width="16%" bgcolor="#FFFFFF"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#555555"><%= q_id %></font></div></td>
-      <td width="6%" bgcolor="#FFFFFF"><div align="center"><font face="Arial, Helvetica, sans-serif" color="#555555"><%= score %></font></div></td>
-      <td width="11%" bgcolor="#FFFFFF"><div align="center"><font color="#555555" face="Arial, Helvetica, sans-serif"><%= time %></font></div></td>
-      <td width="14%" bgcolor="#FFFFFF"><div align="center"><font color="#55555" face="Arial, Helvetica, sans-serif"><a href="javascript:void(0);" onclick="viewQuestionnaire('<%= id %>');">問卷</a>&nbsp;<a href="javascript:void(0);" onclick="viewReport('<%= patient_no %>','<%= q_id %>');">分析</a></font></div></td>
-    </tr>
-    <tr><td colspan="9" bgcolor="#dddddd"><img src="images/dot.gif" width="1" height="1"></td></tr>
+    <tr class="row" data-id="<%= id %>">
+      <td width="18%" bgcolor="#FFFFFF" valign="top"><div class="first_row"><%= patient_no %></div></td>
+      <td width="17%" bgcolor="#FFFFFF" valign="top"><div class="first_row"><%= patient_name %></div></td>
+      <td width="32%" bgcolor="#FFFFFF" valign="top"><div class="first_row"><%= birthday?birthday:'&nbsp;' %></div>
+        <div align="center" class="second_row"><font face="Arial, Helvetica, sans-serif" color="#555555"><%= q_id %></font></div></td>
+      <td width="11%" bgcolor="#FFFFFF" valign="top"><div class="first_row"><%= gender %></div>
+        <div align="center" class="second_row"><font face="Arial, Helvetica, sans-serif" color="#555555"><%= score %></font></div></td>
+      <td width="22%" bgcolor="#FFFFFF" valign="top"><div class="first_row"><%= time %></div>
+        <div align="center" class="second_row"><font color="#55555" face="Arial, Helvetica, sans-serif"><a href="javascript:void(0);" onclick="viewQuestionnaire('<%= id %>');">問卷</a>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="viewReport('<%= patient_no %>','<%= q_id %>');">分析</a></font></div></td></tr>
+    <tr><td colspan="5" bgcolor="#dddddd"><img src="images/dot.gif" width="1" height="1"></td></tr>
   </table>
 </script>
 </body>
