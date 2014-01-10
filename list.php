@@ -99,11 +99,11 @@ $(function(){
     <td colspan="5" id="listHere">
       <table class="listTable" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr bgcolor="#CCCCCC" height="50">
-          <td width="18%"><div align="center">病例號</div></td>
+          <td width="18%"><div align="center">病歷號</div></td>
           <td width="17%"><div align="center">姓名</div></td>
           <td width="32%"><div align="center">出生日期</div></td>
           <td width="11%"><div align="center">性別</div></td>
-          <td width="22%"><div align="center">填寫時間</div></td></tr>
+          <td width="22%">&nbsp;</td></tr>
         <tr bgcolor="#666666">
           <td colspan="5"><img src="images/dot.gif" width="1" height="1"></td>
         </tr>
@@ -119,14 +119,13 @@ $(function(){
 <script type="text/template" id="row_template">
   <table class="listTable" width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr class="row" data-id="<%= id %>">
-      <td width="18%" bgcolor="#FFFFFF" valign="top"><div class="first_row"><%= patient_no %></div></td>
-      <td width="17%" bgcolor="#FFFFFF" valign="top"><div class="first_row"><%= patient_name %></div></td>
-      <td width="32%" bgcolor="#FFFFFF" valign="top"><div class="first_row"><%= birthday?birthday:'&nbsp;' %></div>
+      <td width="18%" bgcolor="#FFFFFF" style="cursor:pointer;" valign="middle" align="center" onclick="viewReport('<%= patient_no %>','<%= q_id %>');"><%= patient_no %></td>
+      <td width="17%" bgcolor="#FFFFFF" style="cursor:pointer;" valign="middle" align="center" onclick="viewReport('<%= patient_no %>','<%= q_id %>');"><%= patient_name %></td>
+      <td width="32%" bgcolor="#FFFFFF" style="cursor:pointer;" valign="top" onclick="viewReport('<%= patient_no %>','<%= q_id %>');"><div class="first_row"><%= birthday?birthday:'&nbsp;' %></div>
         <div align="center" class="second_row"><font face="Arial, Helvetica, sans-serif" color="#555555"><%= q_id %></font></div></td>
-      <td width="11%" bgcolor="#FFFFFF" valign="top"><div class="first_row"><%= gender %></div>
+      <td width="11%" bgcolor="#FFFFFF" style="cursor:pointer;" valign="top" onclick="viewReport('<%= patient_no %>','<%= q_id %>');"><div class="first_row"><%= gender %></div>
         <div align="center" class="second_row"><font face="Arial, Helvetica, sans-serif" color="#555555"><%= score %></font></div></td>
-      <td width="22%" bgcolor="#FFFFFF" valign="top"><div class="first_row"><%= time %></div>
-        <div align="center" class="second_row"><font color="#55555" face="Arial, Helvetica, sans-serif"><a href="javascript:void(0);" onclick="viewQuestionnaire('<%= id %>');">問卷</a>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="viewReport('<%= patient_no %>','<%= q_id %>');">分析</a></font></div></td></tr>
+      <td width="22%" bgcolor="#FFFFFF" valign="middle" align="center"><font color="#55555" face="Arial, Helvetica, sans-serif"><a href="javascript:void(0);" onclick="viewQuestionnaire('<%= id %>');">各題答案</a></font></td></tr>
     <tr><td colspan="5" bgcolor="#dddddd"><img src="images/dot.gif" width="1" height="1"></td></tr>
   </table>
 </script>

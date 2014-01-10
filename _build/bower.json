@@ -18,7 +18,7 @@
     "bootstrap": "~3.0.0",
     "jquery": "~2.0.3",
     "underscore": "~1.5.2",
-    "datePicker": "jasperke/datePicker#~1.2.0",
-    "cyberChart": "jasperke/cyberChart#~1.1.1"
+    "datePicker": "jasperke/datePicker#~1.3.0",
+    "cyberChart": "jasperke/cyberChart#~1.2.0"
   }
 }

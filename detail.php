@@ -33,6 +33,7 @@ if($db!=0){
 	}else{
 		$out[]=$r;
 		$questionnaire=$r[0];
+		$version=$r[4];
 	}
 }else{
 	$out[0]=array(900,"資料庫連結失敗！");
@@ -45,6 +46,10 @@ if($db!=0){
 	<meta charset="utf-8" />
 	<title>問卷調查</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<style type="text/css">
+	.selectedItem {background-color: #FFDAB5;}
+	</style>
+
 	<script type="text/javascript" src="js/jquery.min.js" ></script>
 	<script type="text/javascript" src="js/underscore-min.js" ></script>
 	<script type="text/javascript" src="js/bootstrap.min.js" ></script>
@@ -52,8 +57,9 @@ if($db!=0){
 <script>
 var	data=<? echo QUtillity::decodeUnicodeString(json_encode($out)); ?>,
 	questionnaire='<? echo isset($questionnaire)?$questionnaire:"HN.COM"; ?>',
-	quizzes=<? echo json_encode($questionnaireMap[isset($questionnaire)?$questionnaire:'HN.COM']); ?>,
-	quiz_view;
+	quizzes=<? echo json_encode($questionnaireMap[$version][isset($questionnaire)?$questionnaire:'HN.COM']); ?>,
+	quiz_view,
+	health_view;
 
 $(function(){
 	if(data[0][0]!=0){
@@ -62,6 +68,7 @@ $(function(){
 		var sheet_here=$('#sheet_here'),
 			answer=$.parseJSON(data[1][2]);
 		quiz_view=_.template($("#row_template").html());
+		health_view=_.template($("#health_template").html());
 		$('#questionnaire_name').html(questionnaire);
 		$('#p_name').html('病患：'+data[1][5]+'（'+data[1][1]+'）');
 		$('#time').html('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;問卷時間：'+data[1][7].substr(0,16));
@@ -73,21 +80,27 @@ $(function(){
 				ans=answer[i].toString().split(':'),
 				n=n.split(':');
 
-			quiz=quizPool[n[0]];
-			if(quiz.foreword!==undefined)
-				sheet_here.append('<hr/><small class="text-danger">'+quiz.foreword+'</small>');
-			sheet_here.append(quiz_view({quiz:quiz.quiz,name:n,options:quiz.options||commonOptions,idx:i+1,ans:ans[0]}));
+			if (answer[i] !== '') { // 空字串表示是E1,E2,E3,G1,G2,G3這6題, 當初填問卷時選擇不必做
+				quiz=quizPool[n[0]];
+				if(quiz.foreword!==undefined)
+					sheet_here.append('<hr/><small class="text-danger">'+quiz.foreword+'</small>');
+				if(quiz.kind===undefined){
+					sheet_here.append(quiz_view({quiz:quiz.quiz,name:n,options:quiz.options||commonOptions,idx:i+1,ans:ans[0]}));
+				}else if(quiz.kind==1){
+					sheet_here.append(health_view({quiz:quiz.quiz,name:n,idx:i+1,ans:ans[0]}));
+				}
 
-			if(n.length>1){ // 有子問題群
-				var sub_ans,
-					sub_quizzes=n[parseInt(ans[0],10)+1]; // 依主問題回答找出對映的子問題群
-				if(sub_quizzes!==undefined&&sub_quizzes!==''){
-					sub_quizzes=sub_quizzes.split(',');
-					sub_ans=ans[1].split(',');
-					$.each(sub_quizzes,function(sub_i,sub_n){
-						var sub_quiz=quizPool[sub_n];
-						sheet_here.append(quiz_view({quiz:sub_quiz.quiz,name:sub_n,options:sub_quiz.options||commonOptions,idx:(i+1)+'-'+(sub_i+1),ans:sub_ans[sub_i]}));
-					})
+				if(n.length>1){ // 有子問題群
+					var sub_ans,
+						sub_quizzes=n[parseInt(ans[0],10)+1]; // 依主問題回答找出對映的子問題群
+					if(sub_quizzes!==undefined&&sub_quizzes!==''){
+						sub_quizzes=sub_quizzes.split(',');
+						sub_ans=ans[1].split(',');
+						$.each(sub_quizzes,function(sub_i,sub_n){
+							var sub_quiz=quizPool[sub_n];
+							sheet_here.append(quiz_view({quiz:sub_quiz.quiz,name:sub_n,options:sub_quiz.options||commonOptions,idx:(i+1)+'-'+(sub_i+1),ans:sub_ans[sub_i]}));
+						})
+					}
 				}
 			}
 		});
@@ -126,12 +139,20 @@ $(function(){
 		<span id="time"></span><span id="score"></span></small></h3>
 	</div>
 
+<!-- 通用選項題 -->
 <script type="text/template" id="row_template">
 	<hr/><h4><%= idx %>. <%= quiz %></h4>
 	<div class="col-lg-12">
 	<%_.forEach(options, function (o,i) {%>
-		<label class="checkbox-inline"><input type="radio" <%= (ans==i)?'checked':'' %> name="<%= name %>" value="<%= i %>"/> <%= o %></label>
+		<label class="checkbox-inline <%= (ans==i)?'selectedItem':'' %>"><input type="radio" <%= (ans==i)?'checked':'' %> name="<%= name %>" value="<%= i %>"/> <%= o %></label>
 	<%});%>
+	</div>
+</script>
+<!-- 健康刻度尺題 -->
+<script type="text/template" id="health_template">
+	<hr/><h4><%= idx %>. <%= quiz %></h4>
+	<div class="col-lg-12">
+	<label class="checkbox-inline selectedItem"><%= ans %></label>
 	</div>
 </script>
 </body>

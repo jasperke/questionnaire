@@ -6,7 +6,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	header('Location: ./login.php');
 	exit;
 }else{
-	if(!isset($questionnaire)||!isset($questionnaireMap[$questionnaire])){
+	if(!isset($questionnaire)||!isset($questionnaireMap[CURRENT_VERSION][$questionnaire])){
 		header('Location: ./');
 		exit;
 	}
@@ -125,7 +125,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 			<div class="col-sm-6 col-sm-offset-3">
 				<div class="form-group">
 					<label class="text-muted" for="p_id" style="font-size:24px;">病歷號</label>
-					<input type="text" class="form-control" style="width:100%;" id="p_id" name="p_id" onKeyup="findPatient(this.value);">
+					<input type="text" class="form-control" style="width:100%;" id="p_id" name="p_id" autocomplete="off" onKeyup="findPatient(this.value);">
 				</div>
 			</div>
 		</div>
@@ -148,6 +148,14 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		</div>
 		<div class="row">
 			<div class="col-sm-6 col-sm-offset-3">
+				<div class="form-group">
+					<label class="text-muted" for="p_base" style="font-size:24px;">基本生活情況</label>
+					&nbsp;<input type="checkbox" id="p_base" name="p_base" checked>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
 				<div class="text-center" style="margin-top:24px;">
 					<a id="startQ" onclick="startQuest();"  style="font-size:20px;" class="btn btn-default">開始</a>
 				</div>
@@ -156,14 +164,39 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 	</div>
 
 	<div id="paper" class="container" style="display:none;">
-		<div id="foreword"></div>
-		<h3><span id="q_title"></span></h3>
-		<hr/>
-		<div id="fore_img" style="padding-left:10px;"></div>
-		<div id="optlist" class="btn-group-vertical btn-group-lg"></div>
-		<hr/>
+		<div id="quizKind" style="display:none;"><!-- 通用選項格式題 -->
+			<div id="foreword"></div>
+			<h3><span id="q_title"></span></h3>
+			<hr/>
+			<div id="fore_img" style="padding-left:10px;"></div>
+			<div id="optlist" class="btn-group-vertical btn-group-lg"></div>
+			<hr/>
+		</div>
+		<div id="quizKind1" style="display:none;"><!-- 刻度尺格式題 -->
+			<div>&nbsp;</div>
+			<div class="row">
+				<div class="col-sm-8">
+					<h3><span id="q_title_kind1"></span></h3>
+					<hr/>
+					<div class="col-sm-4">
+						<a onclick="setQuest(-1);" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> 上一題</a>
+					</div>
+					<div class="col-sm-4 col-sm-offset-4">
+						<a onclick="setQuest(1);" class="btn btn-default pull-right">下一題 <i class="glyphicon glyphicon-chevron-right"></i></a>
+					</div>
 
-		<div class="row">
+				</div>
+				<div class="col-sm-4">
+					<div style="text-align:center;">想像中最好的健康狀況</div>
+					<div id="healthRuler" style="width:200px; height:680px; margin:0px auto; background-image:url('./images/health_ruler.gif'); background-repeat:no-repeat; background-position:center; cursor:pointer;">
+						<div id="healthMark" style="position:relative; top:0px; left:0px; width:200px; height:80px; visibility:hidden; cursor:pointer; background-image:url('./images/health_mark.png'); background-repeat:no-repeat; background-position:center; padding-left:140px; font-size: 22px; font-family: arial;"></div>
+					</div>
+					<div style="text-align:center;">想像中最差的健康狀況</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="commonQuizSwitcher" class="row">
 			<div class="col-sm-3">
 				<a id="prevQ" onclick="setQuest(-1);" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> 上一題</a>
 			</div>
@@ -193,6 +226,68 @@ $(function(){
 	$.getJSON('rpc/questionnaireMap.php',{q_id:q_id},function(data){
 		quizzes=data;
 		initQuestionnaire();
+	});
+	if(q_id=='HN.COM'){
+		var healthCheckbox=$('#p_base');
+		healthCheckbox.get(0).checked=false;
+		healthCheckbox.parents('.row').hide();
+	}
+	$('#healthMark').on("touchstart touchmove touchend", touchHandler)
+		.on('mousedown', function (event) {
+			var healthRuler=$('#healthRuler'),
+				healthMark=$('#healthMark'),
+				totalHeight=healthRuler.height()-80,
+				pos=healthRuler.offset(),
+				top=parseInt(event.pageY-pos.top,10)-40;
+			if(top<0)
+				top=0;
+			if(top>(totalHeight))
+				top=totalHeight;
+			healthRuler.data({active:1, top:pos.top});
+			healthMark.css({top:top+'px'});
+
+			var score=Math.round((totalHeight-top)*100/totalHeight);
+			healthMark.html(score);
+			keepAnswer(q_no, -1, score);
+		})
+		.on('mouseup mouseout', function () {
+			var healthRuler=$('#healthRuler');
+			healthRuler.data({active:0});
+		})
+		.on('mousemove', function (event) {
+			var healthRuler=$('#healthRuler'),
+				healthMark=$('#healthMark'),
+				status=healthRuler.data(),
+				totalHeight=healthRuler.height()-80,
+				top=parseInt(event.pageY-status.top,10)-40;
+			if(top<0)
+				top=0;
+			if(top>(totalHeight))
+				top=totalHeight;
+			if(status.active){
+				healthMark.css({top:top+'px'});
+
+				var score=Math.round((totalHeight-top)*100/totalHeight);
+				healthMark.html(score);
+				keepAnswer(q_no, -1, score);
+			}
+		});
+	$('#healthRuler').on("mousedown", function (event) {
+		var healthRuler=$('#healthRuler'),
+			healthMark=$('#healthMark').css({visibility:'visible'}),
+			pos=healthRuler.offset(),
+			totalHeight=healthRuler.height()-80,
+			top=parseInt(event.pageY-pos.top,10)-40;
+		if(top<0)
+			top=0;
+		if(top>totalHeight)
+			top=totalHeight;
+		healthRuler.data({active:1, top:pos.top});
+		healthMark.css({top:top+'px'});
+
+		var score=Math.round((totalHeight-top)*100/totalHeight);
+		healthMark.html(score);
+		keepAnswer(q_no, -1, score);
 	});
 });
 </script>

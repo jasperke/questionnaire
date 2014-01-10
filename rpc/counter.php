@@ -26,7 +26,7 @@ $answer說明: ex.["0","2","1:0,1,2",...] 其中"1:0,1,2" 表示主問題選1, �
 
 foreach($answer as $idx=>$ans){
 	list($a,$sub_a)=explode(':',$ans);
-	list($q_id,$sub_q)=explode(':',$questionnaireMap[$questionnaire][$idx]);
+	list($q_id,$sub_q)=explode(':',$questionnaireMap[CURRENT_VERSION][$questionnaire][$idx]);
 	Calculator::inputAnswer($q_id,$a);
 	/* 目前子問題群尚無計分狀況, 暫不需處理
 	if(isset($sub_a)&&str_cmp($sub_a,'')!=''){
@@ -76,9 +76,9 @@ if($db!=0){
 		}
 	}
 
-	$s1='OwnerID,Questionnaire,No,Answer,Weight,StaffID';
-	$s2='?,?,?,?,?,?';
-	$p=array($group_id,$questionnaire,$p_id,json_encode($answer),$p_weight,$_SESSION['staffId']);
+	$s1='OwnerID,Questionnaire,No,Answer,Weight,StaffID,Version';
+	$s2='?,?,?,?,?,?,?';
+	$p=array($group_id,$questionnaire,$p_id,json_encode($answer),$p_weight,$_SESSION['staffId'],CURRENT_VERSION);
 	if($score!==null){$s1.=',Score'; $s2.=',?'; $p[]=$score;}
 	if(!kwcr2_rawqueryexec($db, "insert into MUST_Questionnaire ($s1) values ($s2)", $p, "")){
 		$out[0]=array(900,"資料儲存失敗(2)！(".kwcr2_geterrormsg($db,1).")");

@@ -122,7 +122,7 @@ table.listTable td {font-size:20px;}
 	</tr>
 	<tr>
 		<td id="userListHere" colspan="5">
-			<div><form name="filerForm" style="margin:10px;"><font size="4">搜尋病患： 病歷號 <input type="text" name="no_filter" style="width:100px;">&nbsp;&nbsp;&nbsp;姓名 <input type="text" name="name_filter" style="width:100px;">&nbsp;&nbsp;&nbsp;出生日期 <input class="date" type="text" name="birthday_filter" style="width:130px;">&nbsp;<input type="button" name="searchButton" value="搜尋" onclick="filterUser(this.form);"></font></div></form></div>
+			<div><form name="filerForm" style="margin:14px;"><font size="5">搜尋：病歷號 <input type="text" name="no_filter" style="width:100px;">&nbsp;&nbsp;姓名 <input type="text" name="name_filter" style="width:100px;">&nbsp;&nbsp;出生日期 <input class="date" type="text" name="birthday_filter" style="width:130px;">&nbsp;<input type="button" name="searchButton" value="搜尋" onclick="filterUser(this.form);"></font></div></form></div>
 
 			<table class="listTable" width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr bgcolor="#CCCCCC">

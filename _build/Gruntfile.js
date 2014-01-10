@@ -24,7 +24,7 @@ module.exports = function(grunt) {
 			// 	dest: './tmp/main.js'
 			// },
 			dev: {
-				src: ['./src/main.js','./src/quizPool.js','./src/cancerPool.js','<%= JS_PATH %>src/datePicker.js','./src/CyberChart.js'],
+				src: ['./src/main.js','./src/quizPool.js','./src/cancerPool.js','<%= JS_PATH %>src/datePicker.js','<%= JS_PATH %>src/CyberChart.js'],
 				dest: '<%= JS_PATH %>main.min.js'
 			}
 		},

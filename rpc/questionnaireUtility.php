@@ -87,6 +87,8 @@ final class Calculator{
 	static $GE=array(); // GE1~GE6 情緒
 	static $GF=array(); // GF1~GF7 功能
 	static $HN=array(); // H&N1~H&N11 H&N
+	static $B=array(); // B1~B9,P2 Breast附加
+	static $NP=array(); // _X8~_X15 NP附加
 	static $detail=array(); // 各類小計, 及失眠/疲勞/疼痛分數
 
 	private function __construct(){
@@ -98,17 +100,22 @@ final class Calculator{
 		self::$GE=array();
 		self::$GF=array();
 		self::$HN=array();
+		self::$B=array();
+		self::$NP=array();
 		self::$detail=array();
 	}
+/*
 	public static function inputAnswer($q_id,$answer){
 		if(in_array($q_id,array('GP1','GP2','GP3','GP4','GP5','GP6','GP7'))){ // 全必填
-			$idx=(int)substr($q_id,2,1);
+			//$idx=(int)substr($q_id,2,1);
+			$idx=array_search($q_id,array('GP1','GP2','GP3','GP4','GP5','GP6','GP7'));
 			self::$GP[$idx]=4-(int)$answer;
 		}else if(in_array($q_id,array('GS1','GS2','GS3','GS4','GS5','GS6','GS7'))){
 			if($q_id=='GS7'&&$answer==5){ // GS7特殊題, 允許答5:不想回答
 				// 不必記入$GS array, 但之後除以'回答的題數'=6
 			}else{
-				$idx=(int)substr($q_id,2);
+				//$idx=(int)substr($q_id,2);
+				$idx=array_search($q_id,array('GS1','GS2','GS3','GS4','GS5','GS6','GS7'));
 				self::$GS[$idx]=(int)$answer;
 			}
 		}else if(in_array($q_id,array('GE1','GE2','GE3','GE4','GE5','GE6'))){ // 全必填
@@ -129,9 +136,54 @@ final class Calculator{
 			self::$HN[$idx]=4-(int)$answer;
 		// }else if(in_array($q_id,array('_HN1','_HN2','_SCORE_OF_PAIN'))){
 		// 	self::$detail[$q_id]=$answer;
+		}else if(in_array($q_id,array('B1','B2','B3','B4','B5','B6','B7','B8','B9','P2'))){
+
+
+		}
+	}
+*/
+	public static function inputAnswer($q_id,$answer){
+		if(($idx=array_search($q_id,array('GP1','GP2','GP3','GP4','GP5','GP6','GP7')))!==false){ // 全必填
+			self::$GP[$idx]=4-(int)$answer; // GP用4分倒扣
+		}else if(($idx=array_search($q_id,array('GS1','GS2','GS3','GS4','GS5','GS6','GS7')))!==false){
+			if($q_id=='GS7'&&$answer==5){ // GS7特殊題, 允許答5:不想回答
+				// 不必記入$GS array, 但之後除以'回答的題數'=6
+			}else{ // GS用0分往上加
+				self::$GS[$idx]=(int)$answer;
+			}
+		}else if(($idx=array_search($q_id,array('GE1','GE2','GE3','GE4','GE5','GE6')))!==false){ // 全必填
+			if($idx==1){  // GE2用0分往上加
+				self::$GE[$idx]=(int)$answer;
+			}else{ // 其餘用4分倒扣
+				self::$GE[$idx]=4-(int)$answer;
+			}
+		}else if(($idx=array_search($q_id,array('GF1','GF2','GF3','GF4','GF5','GF6','GF7')))!==false){ // 全必填
+			self::$GF[$idx]=(int)$answer; // GF用0分往上加
+
+		}else if(($idx=array_search($q_id,array('H&N1','H&N2','H&N3','H&N4','H&N5','H&N6','H&N7','H&N10','H&N11')))!==false){
+			if($idx==1||$idx==2||$idx==5){ // H&N2, H&N3, H&N6用4分倒扣
+				self::$HN[$idx]=4-(int)$answer;
+			}else{ // 其餘用0分往上加
+				self::$HN[$idx]=(int)$answer;
+			}
+		// }else if(in_array($q_id,array('_HN1','_HN2','_SCORE_OF_PAIN'))){
+		// 	self::$detail[$q_id]=$answer;
+		}else if(($idx=array_search($q_id,array('B1','B2','B3','B4','B5','B6','B7','B8','B9','P2')))!==false){
+			if($idx==3||$idx==8){ // B4, B9用0分往上加
+				self::$B[$idx]=(int)$answer;
+			}else{ // 其餘用4份倒扣
+				self::$B[$idx]=4-(int)$answer;
+			}
+		}else if(($idx=array_search($q_id,array('_X8','_X9','_X10','_X11','_X12','_X13','_X14','_X15')))!==false){
+			if($idx==6){ // _X14
+				self::$NP[$idx]=(int)$answer;
+			}else{
+				self::$NP[$idx]=4-(int)$answer;
+			}
 		}
 	}
 	public static function outSum(){
+		// FACT總分=GP總分+GS總分+GE總分+GF總分
 		$sum=0;
 		$needScore=false;
 		// [題目分數的加總]*[題數]/[回答的題數]
@@ -155,10 +207,16 @@ final class Calculator{
 			self::$detail['GF']=array_sum(self::$GF);
 			$sum+=self::$detail['GF'];
 		}
-		if(count(self::$HN)){
-			$needScore=true;
+		if(count(self::$HN)){ // HN不列入FACT總分
+			//$needScore=true;
 			self::$detail['H&N']=array_sum(self::$HN);
-			$sum+=self::$detail['H&N'];
+			//$sum+=self::$detail['H&N'];
+		}
+		if(count(self::$B)){ // B不列入FACT總分
+			self::$detail['B']=array_sum(self::$B);
+		}
+		if(count(self::$NP)){ // NP不列入FACT總分
+			self::$detail['NP']=array_sum(self::$NP);
 		}
 		self::$detail['SUM']=$needScore?$sum:null;
 

@@ -12,7 +12,8 @@ function initQuestionnaire() {
 		var sub_q_no = $(this).data('sub_q_no'),
 			q_no = $(this).data('q_no'),
 			val = $(this).data('val');
-		keepAnswer(q_no, sub_q_no, val); // 暫存答案至answer
+		q_no = keepAnswer(q_no, sub_q_no, val); // 暫存答案至answer
+												// keepAnswer內可能遇到跳題(自動給答案), 因此回傳q_no供跳題用
 
 		if (event.originalEvent && q_no < quizzes.length - 1) { // user作答完, 自動換下一題
 															// 切換上下題時, 標示已填答案也是trigger click event, 但不必換題
@@ -21,6 +22,69 @@ function initQuestionnaire() {
 			}, 300);
 		}
 	});
+}
+function jumpQuiz(q_no, val) {
+	var code = quizzes[q_no],
+		out = [];
+
+	switch (code) {
+	case 'GP1':
+		if (val == 0) { // GP1答0時, 下一題_HN1自動填0, 並跳過, 不需給user填
+			out = [{code: '_HN1', val: 0}];
+		}
+		break;
+	case 'GP2':
+		if (val == 0) {
+			out = [{code: '_HN12', val: 0}];
+		}
+		break;
+	case 'GP4':
+		if (val == 0) {
+			out = [{code: '_HN4', val: 0}];
+		}
+		break;
+	case 'GF5':
+		if (val == 4) {
+			out = [{code: '_HN2', val: 0}];
+		}
+		break;
+	case 'H&N4':
+		if (val == 4) {
+			out = [{code: '_HN18', val: 0}];
+		}
+		break;
+	case '_X11':
+		if (val == 0) {
+			out = [{code: '_HN5', val: 0}, {code: '_HN6', val: 0}];
+		}
+		break;
+	case '_X10':
+		if (val == 0) {
+			out = [{code: '_HN7', val: 0}, {code: '_HN8', val: 0}];
+		}
+		break;
+	case '_X12':
+		if (val == 0) {
+			out = [{code: '_HN9', val: 0}, {code: '_HN10', val: 0}];
+		}
+		break;
+	case 'H&N2':
+		if (val == 0) {
+			out = [{code: '_HN17', val: 0}, {code: 'X1', val: 0}, {code: 'X3', val: 0}, {code: 'X4', val: 0}, {code: 'X5', val: 0}];
+		}
+		break;
+	case 'H&N7':
+		if (val == 4) {
+			out = [{code: '_HN15', val: 0}];
+		}
+		break;
+	case '_X8':
+		if (val ==0 ) {
+			out = [{code: '_HN14', val: 0}];
+		}
+		break;
+	}
+	return out;
 }
 function keepAnswer(q_no, sub_q_no, val) {
 	var old_answer;
@@ -34,13 +98,26 @@ function keepAnswer(q_no, sub_q_no, val) {
 			}
 		} else { // 頭一次作答
 			answer[q_no] = val;
+
+			// 跳題特例
+			var skipQuiz = jumpQuiz(q_no, val);
+			if (skipQuiz) {
+				for (var i = 0; i < skipQuiz.length; i++) {
+					if (_.include(quizzes, skipQuiz[i].code)) { // jumpQuiz回傳的順序已照題目順序, 因此只要回傳的code存在於題組中, 即加入答案
+						answer[++q_no] = skipQuiz[i].val;
+						window.q_no = q_no; // 也須更正global q_no
+					}
+				}
+			}
 		}
 	} else { // 目前處在子問題
+			// 2014/1/6改版的題組中已無子問題了
 		old_answer = answer[q_no].toString().split(':');
 		sub_answer = (old_answer[1] === undefined || old_answer[1] === '') ? [] : old_answer[1].toString().split(',');
 		sub_answer[sub_q_no] = val;
 		answer[q_no] = old_answer[0] + ':' + sub_answer.join(',');
 	}
+	return q_no;
 }
 function setQuest(direction) {
 	var quiz_id,
@@ -127,54 +204,71 @@ function setQuest(direction) {
 	}
 
 	$("#q_no").html((q_no + 1) + "/" + quizzes.length);
-	$('#foreword').html((quizPool[quiz_id].foreword !== undefined) ? '<h4><div class="text-danger">' + quizPool[quiz_id].foreword + '</div></h4>' : '');
-	$("#q_title").html(quizPool[quiz_id].quiz);
+	$('div[id^="quizKind"]').hide();
+	$('#commonQuizSwitcher').show();
+	if (quizPool[quiz_id].kind === undefined) { // 通用選項格式題
+		$('#quizKind').show();
+		$('#foreword').html((quizPool[quiz_id].foreword !== undefined) ? '<h4><div class="text-danger">' + quizPool[quiz_id].foreword + '</div></h4>' : '');
+		$("#q_title").html(quizPool[quiz_id].quiz.replace(/\n/g, '<br>'));
 
-	optlistHere = $("#optlist");
-	optlistHere.empty();
+		optlistHere = $("#optlist");
+		optlistHere.empty();
 
-	if (quiz_id == '_SCORE_OF_PAIN') { // 疼痛指數, 特例橫排
-		optlistHere.removeClass('btn-group-vertical').addClass('btn-group');
-	} else {
-		optlistHere.removeClass('btn-group').addClass('btn-group-vertical');
-	}
-
-	if (quizPool[quiz_id].image !== undefined) {
-		$("#fore_img").append($('<img>', {src: quizPool[quiz_id].image}));
-	} else {
-		$("#fore_img").empty();
-	}
-
-	$.each(quizPool[quiz_id].options || commonOptions, function (i) {
-		var $a = $("<a/>").data({q_no: q_no, sub_q_no: sub_q_no, val: i})
-				.addClass("btn btn-default").css({whiteSpace: 'normal'})
-				.append($("<span/>").addClass("glyphicon glyphicon-unchecked"));
-		if (quiz_id != '_SCORE_OF_PAIN') {
-			$a.addClass("text-left");
-		} else { // 疼痛指數橫排項目太多, checkbox icon後需換行, 居中
-			$a.addClass('text-center')
-				.css({width: '58px'}).append($("<br/>")).append($("<br/>")).append(' ');
-		}
-		$a.append(this);
-		$("#optlist").append($a);
-	});
-	if (answer[q_no] !== undefined) {
-		if (sub_q_no == -1) {
-			$("#optlist").find('a.btn').eq(parseInt(answer[q_no], 10)).trigger('click');
+		if (quiz_id == '_SCORE_OF_PAIN') { // 疼痛指數, 特例橫排
+			optlistHere.removeClass('btn-group-vertical').addClass('btn-group');
 		} else {
-			sub_answer = answer[q_no].toString().split(':');
-			if (sub_answer[1] !== undefined && sub_answer[1] !== '') {
-				sub_answer = sub_answer[1].toString().split(',');
-				if (sub_answer[sub_q_no] !== undefined) {
-					$("#optlist").find('a.btn').eq(sub_answer[sub_q_no]).trigger('click');
+			optlistHere.removeClass('btn-group').addClass('btn-group-vertical');
+		}
+
+		if (quizPool[quiz_id].image !== undefined) {
+			$("#fore_img").append($('<img>', {src: quizPool[quiz_id].image}));
+		} else {
+			$("#fore_img").empty();
+		}
+		$.each(quizPool[quiz_id].options || commonOptions, function (i) {
+			var $a = $("<a/>").data({q_no: q_no, sub_q_no: sub_q_no, val: i})
+					.addClass("btn btn-default").css({whiteSpace: 'normal'})
+					.append($("<span/>").addClass("glyphicon glyphicon-unchecked"));
+			if (quiz_id != '_SCORE_OF_PAIN') {
+				$a.addClass("text-left");
+			} else { // 疼痛指數橫排項目太多, checkbox icon後需換行, 居中
+				$a.addClass('text-center')
+					.css({width: '58px'}).append($("<br/>")).append($("<br/>")).append(' ');
+			}
+			$a.append(this);
+			$("#optlist").append($a);
+		});
+
+		if (answer[q_no] !== undefined) {
+			if (sub_q_no == -1) {
+				$("#optlist").find('a.btn').eq(parseInt(answer[q_no], 10)).trigger('click');
+			} else {
+				sub_answer = answer[q_no].toString().split(':');
+				if (sub_answer[1] !== undefined && sub_answer[1] !== '') {
+					sub_answer = sub_answer[1].toString().split(',');
+					if (sub_answer[sub_q_no] !== undefined) {
+						$("#optlist").find('a.btn').eq(sub_answer[sub_q_no]).trigger('click');
+					}
 				}
 			}
 		}
+	} else if (quizPool[quiz_id].kind === 1) { // 健康刻度尺格式題
+		$('#quizKind1').show();
+		$('#q_title_kind1').html(quizPool[quiz_id].quiz.replace(/\n/g, '<br>'));
+		$('#commonQuizSwitcher').hide(); // 版面考量, 健康刻度尺題目下已自附上/下一題
 	}
+
+
 	$(window).scrollTop(0);
 }
 function saveQuestionnaire(q_name, f, answer, quizzes) {
 	$("#send").hide();
+
+	if (q_name != 'HN.COM') { // HN.COM以外的問卷, 有E1,E2,E3,G1,G2,G3 那6題
+		// 指定前面 E1,E2,E3,G1,G2,G3 6題不必做答者, 在儲存時仍需存空字串
+		// 算分時, 對映questionnaireMap.php題組時才不會錯亂
+		answer = f.p_base.checked ? answer : ['', '', '', '', '', ''].concat(answer);
+	}
 	$.ajax({
 		url: 'rpc/counter.php',
 		dataType: 'json',
@@ -239,6 +333,18 @@ function startQuest() {
 }
 function startQuestCore() {
 	var f = document.forms[0];
+
+	if (!f.p_base.checked) { // 不必做以下幾題題
+		quizzes = _.reject(quizzes, function (q) {
+			return _.include(['E1', 'E2', 'E3', 'G1', 'G2', 'G3'], q);
+		});
+		// initQuestionnaire(); // 題組有變動(因G1為第1題已產生就緒中), 需重出題
+
+		// answer = ['', '', '', '', '', '']; // 不做的幾題, 也有存, 否則計分時對映questionnaireMap.php中題組會錯亂
+		// q_no = 6;
+		setQuest(0);
+	}
+
 	$('#q_no').removeClass('invisible');
 	$('#span_p_name').text('病患：' + f.p_name.value);
 	$('#span_p_id').text('(' + f.p_id.value + ')');
@@ -289,4 +395,38 @@ function toEra(y, reverse) {
 	} else {
 		return '';
 	}
+}
+function touchHandler(e) { // touch event導向mouse event
+	var event = e.originalEvent,
+		touches = event.changedTouches,
+		first = touches[0],
+		type = '';
+	switch (event.type) {
+	case 'touchstart':
+		type = 'mousedown';
+		touchHandler.touchTargetPosition = [first.pageX, first.pageY];
+		break;
+	case 'touchmove':
+		type = 'mousemove';
+		break;
+	case 'touchend':
+		if (touchHandler.touchTargetPosition[0] == first.pageX && touchHandler.touchTargetPosition[0] == first.pageY) {
+			type = 'mouseup';
+		} else {
+			type = 'click';
+		}
+		break;
+	default:
+		return;
+	}
+	//initMouseEvent(type, canBubble, cancelable, view, clickCount,
+	//           screenX, screenY, clientX, clientY, ctrlKey,
+	//           altKey, shiftKey, metaKey, button, relatedTarget);
+	var simulatedEvent = document.createEvent('MouseEvent');
+	simulatedEvent.initMouseEvent(type, true, true, window, 1,
+		first.screenX, first.screenY,
+		first.clientX, first.clientY, false,
+		false, false, false, 0/*left*/, null);
+	first.target.dispatchEvent(simulatedEvent);
+	event.preventDefault();
 }
