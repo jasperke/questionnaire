@@ -183,8 +183,10 @@ if($db!=0){
   div#fact_chart canvas {width:350px; height:294px !important;} /* 250x210 * 1.4 */
   canvas {width: 350px; height: 273px;}​ /* 250x195 * 1.4 */
 }
-canvas {border:1px solid #000000;}
 
+}
+canvas {border:1px solid #000000;}
+input:checked + label {background-color:#FF9393;}
 -->
 </style>
 <script src="js/jquery.min.js" ></script>
@@ -476,79 +478,79 @@ function column2chart(idx){
 				<th>4</th>
 				<th>5</th></tr>
 			<tr><td>lymphedema</td>
-				<td><label><input type="radio" name="lymphedema" value="0">0</label></td>
-				<td><label><input type="radio" name="lymphedema" value="1">localized / disability(-)</label></td>
-				<td><label><input type="radio" name="lymphedema" value="2">localized / disability(+)</label></td>
-				<td><label><input type="radio" name="lymphedema" value="3">generalized / disability(+)</label></td>
-				<td><label><input type="radio" name="lymphedema" value="4">ulceration / cerebral edema / tube</label></td>
+				<td><input type="radio" id="lymphedema0" name="lymphedema" value="0"><label for="lymphedema0">0</label></td>
+				<td><input type="radio" id="lymphedema1" name="lymphedema" value="1"><label for="lymphedema1">localized / disability(-)</label></td>
+				<td><input type="radio" id="lymphedema2" name="lymphedema" value="2"><label for="lymphedema2">localized / disability(+)</label></td>
+				<td><input type="radio" id="lymphedema3" name="lymphedema" value="3"><label for="lymphedema3">generalized / disability(+)</label></td>
+				<td><input type="radio" id="lymphedema4" name="lymphedema" value="4"><label for="lymphedema4">ulceration / cerebral edema / tube</label></td>
 				</tr>
 			<tr><td>dermatitis</td>
-				<td><label><input type="radio" name="dermatitis" value="0">0</label></td>
-				<td><label><input type="radio" name="dermatitis" value="1">faint erythema dry</label></td>
-				<td><label><input type="radio" name="dermatitis" value="2">brisk erythema / patchy moist</label></td>
-				<td><label><input type="radio" name="dermatitis" value="3">confluent moist / touching bleeding</label></td>
-				<td><label><input type="radio" name="dermatitis" value="4">ulceration / spontaneous bleeding</label></td></tr>
+				<td><input type="radio" id="dermatitis0" name="dermatitis" value="0"><label for="dermatitis0">0</label></td>
+				<td><input type="radio" id="dermatitis1" name="dermatitis" value="1"><label for="dermatitis1">faint erythema dry</label></td>
+				<td><input type="radio" id="dermatitis2" name="dermatitis" value="2"><label for="dermatitis2">brisk erythema / patchy moist</label></td>
+				<td><input type="radio" id="dermatitis3" name="dermatitis" value="3"><label for="dermatitis3">confluent moist / touching bleeding</label></td>
+				<td><input type="radio" id="dermatitis4" name="dermatitis" value="4"><label for="dermatitis4">ulceration / spontaneous bleeding</label></td></tr>
 			<tr><td>fibrosis</td>
-				<td><label><input type="radio" name="fibrosis" value="0">0</label></td>
-				<td><label><input type="radio" name="fibrosis" value="1">increase density</label></td>
-				<td><label><input type="radio" name="fibrosis" value="2">ADL(-) / firm / tightness</label></td>
-				<td><label><input type="radio" name="fibrosis" value="3">ADL(+) / fixation or retraction</label></td>
+				<td><input type="radio" id="fibrosis0" name="fibrosis" value="0"><label for="fibrosis0">0</label></td>
+				<td><input type="radio" id="fibrosis1" name="fibrosis" value="1"><label for="fibrosis1">increase density</label></td>
+				<td><input type="radio" id="fibrosis2" name="fibrosis" value="2"><label for="fibrosis2">ADL(-) / firm / tightness</label></td>
+				<td><input type="radio" id="fibrosis3" name="fibrosis" value="3"><label for="fibrosis3">ADL(+) / fixation or retraction</label></td>
 				<td>&nbsp;</td></tr>
 			<tr><td>telangiectasia</td>
-				<td><label><input type="radio" name="telangiectasia" value="0">0</label></td>
-				<td><label><input type="radio" name="telangiectasia" value="1">few</label></td>
-				<td><label><input type="radio" name="telangiectasia" value="2">moderate</label></td>
-				<td><label><input type="radio" name="telangiectasia" value="3">many / confluence</label></td>
+				<td><input type="radio" id="telangiectasia0" name="telangiectasia" value="0"><label for="telangiectasia0">0</label></td>
+				<td><input type="radio" id="telangiectasia1" name="telangiectasia" value="1"><label for="telangiectasia1">few</label></td>
+				<td><input type="radio" id="telangiectasia2" name="telangiectasia" value="2"><label for="telangiectasia2">moderate</label></td>
+				<td><input type="radio" id="telangiectasia3" name="telangiectasia" value="3"><label for="telangiectasia3">many / confluence</label></td>
 				<td>&nbsp;</td></tr>
 			<tr><td>mucosistis(E)</td>
-				<td><label><input type="radio" name="mucosistis" value="0">0</label></td>
-				<td><label><input type="radio" name="mucosistis" value="1">erythema</label></td>
-				<td><label><input type="radio" name="mucosistis" value="2">patchy</label></td>
-				<td><label><input type="radio" name="mucosistis" value="3">confluence / touch bleeding</label></td>
-				<td><label><input type="radio" name="mucosistis" value="4">necrosis spontaneous bleeding</label></td></tr>
+				<td><input type="radio" id="mucosistis0" name="mucosistis" value="0"><label for="mucosistis0">0</label></td>
+				<td><input type="radio" id="mucosistis1" name="mucosistis" value="1"><label for="mucosistis1">erythema</label></td>
+				<td><input type="radio" id="mucosistis2" name="mucosistis" value="2"><label for="mucosistis2">patchy</label></td>
+				<td><input type="radio" id="mucosistis3" name="mucosistis" value="3"><label for="mucosistis3">confluence / touch bleeding</label></td>
+				<td><input type="radio" id="mucosistis4" name="mucosistis" value="4"><label for="mucosistis4">necrosis spontaneous bleeding</label></td></tr>
 			<tr><td>stricture</td>
-				<td><label><input type="radio" name="stricture" value="0">0</label></td>
-				<td><label><input type="radio" name="stricture" value="1">asymptomatic</label></td>
-				<td><label><input type="radio" name="stricture" value="2">altered dietary habits</label></td>
-				<td><label><input type="radio" name="stricture" value="3">tube feeding</label></td>
-				<td><label><input type="radio" name="stricture" value="4">op indicated / life threatening</label></td></tr>
+				<td><input type="radio" id="stricture0" name="stricture" value="0"><label for="stricture0">0</label></td>
+				<td><input type="radio" id="stricture1" name="stricture" value="1"><label for="stricture1">asymptomatic</label></td>
+				<td><input type="radio" id="stricture2" name="stricture" value="2"><label for="stricture2">altered dietary habits</label></td>
+				<td><input type="radio" id="stricture3" name="stricture" value="3"><label for="stricture3">tube feeding</label></td>
+				<td><input type="radio" id="stricture4" name="stricture" value="4"><label for="stricture4">op indicated / life threatening</label></td></tr>
 			<tr><td>cough</td>
-				<td><label><input type="radio" name="cough" value="0">0</label></td>
-				<td><label><input type="radio" name="cough" value="1">codeine(-)</label></td>
-				<td><label><input type="radio" name="cough" value="2">codeine(+)</label></td>
-				<td><label><input type="radio" name="cough" value="3">ADL(+) / insomnia</label></td>
+				<td><input type="radio" id="cough0" name="cough" value="0"><label for="cough0">0</label></td>
+				<td><input type="radio" id="cough1" name="cough" value="1"><label for="cough1">codeine(-)</label></td>
+				<td><input type="radio" id="cough2" name="cough" value="2"><label for="cough2">codeine(+)</label></td>
+				<td><input type="radio" id="cough3" name="cough" value="3"><label for="cough3">ADL(+) / insomnia</label></td>
 				<td>&nbsp;</td></tr>
 			<tr><td>laryngeal edema</td>
-				<td><label><input type="radio" name="laryngeal_edema" value="0">0</label></td>
-				<td><label><input type="radio" name="laryngeal_edema" value="1">asymptomatic(E)</label></td>
-				<td><label><input type="radio" name="laryngeal_edema" value="2">sorethroat / hoarseness</label></td>
-				<td><label><input type="radio" name="laryngeal_edema" value="3">ADL(+) /stridor</label></td>
-				<td><label><input type="radio" name="laryngeal_edema" value="4">life threatening / tracheostomy</label></td></tr>
+				<td><input type="radio" id="laryngeal_edema0" name="laryngeal_edema" value="0"><label for="laryngeal_edema0">0</label></td>
+				<td><input type="radio" id="laryngeal_edema1" name="laryngeal_edema" value="1"><label for="laryngeal_edema1">asymptomatic(E)</label></td>
+				<td><input type="radio" id="laryngeal_edema2" name="laryngeal_edema" value="2"><label for="laryngeal_edema2">sorethroat / hoarseness</label></td>
+				<td><input type="radio" id="laryngeal_edema3" name="laryngeal_edema" value="3"><label for="laryngeal_edema3">ADL(+) /stridor</label></td>
+				<td><input type="radio" id="laryngeal_edema4" name="laryngeal_edema" value="4"><label for="laryngeal_edema4">life threatening / tracheostomy</label></td></tr>
 			<tr><td>osteonecrosis</td>
-				<td><label><input type="radio" name="osteonecrosis" value="0">0</label></td>
-				<td><label><input type="radio" name="osteonecrosis" value="1">asymptomatic(E)</label></td>
-				<td><label><input type="radio" name="osteonecrosis" value="2">ADL(-) / Symptomatic</label></td>
-				<td><label><input type="radio" name="osteonecrosis" value="3">ADL(+) / HBO / OP</label></td>
-				<td><label><input type="radio" name="osteonecrosis" value="4">disabling</label></td></tr>
+				<td><input type="radio" id="osteonecrosis0" name="osteonecrosis" value="0"><label for="osteonecrosis0">0</label></td>
+				<td><input type="radio" id="osteonecrosis1" name="osteonecrosis" value="1"><label for="osteonecrosis1">asymptomatic(E)</label></td>
+				<td><input type="radio" id="osteonecrosis2" name="osteonecrosis" value="2"><label for="osteonecrosis2">ADL(-) / Symptomatic</label></td>
+				<td><input type="radio" id="osteonecrosis3" name="osteonecrosis" value="3"><label for="osteonecrosis3">ADL(+) / HBO / OP</label></td>
+				<td><input type="radio" id="osteonecrosis4" name="osteonecrosis" value="4"><label for="osteonecrosis4">disabling</label></td></tr>
 			<tr><td>ischemia</td>
-				<td><label><input type="radio" name="ischemia" value="0">0</label></td>
+				<td><input type="radio" id="ischemia0" name="ischemia" value="0"><label for="ischemia0">0</label></td>
 				<td>&nbsp;</td>
-				<td><label><input type="radio" name="ischemia" value="2">asymptomatic(E)</label></td>
-				<td><label><input type="radio" name="ischemia" value="3">TIA &lt; 24 hrs</label></td>
-				<td><label><input type="radio" name="ischemia" value="4">stroke(+)</label></td>
+				<td><input type="radio" id="ischemia2" name="ischemia" value="2"><label for="ischemia2">asymptomatic(E)</label></td>
+				<td><input type="radio" id="ischemia3" name="ischemia" value="3"><label for="ischemia3">TIA &lt; 24 hrs</label></td>
+				<td><input type="radio" id="ischemia4" name="ischemia" value="4"><label for="ischemia4">stroke(+)</label></td>
 			</tr>
 			<tr><td>neuropathy</td>
-				<td><label><input type="radio" name="neuropathy" value="0">0</label></td>
-				<td><label><input type="radio" name="neuropathy" value="1">asymptomatic(E)</label></td>
-				<td><label><input type="radio" name="neuropathy" value="2">ADL(-) / symptomatic</label></td>
-				<td><label><input type="radio" name="neuropathy" value="3">ADL(+)</label></td>
-				<td><label><input type="radio" name="neuropathy" value="4">life threatening / disabling</label></td></tr>
+				<td><input type="radio" id="neuropathy0" name="neuropathy" value="0"><label for="neuropathy0">0</label></td>
+				<td><input type="radio" id="neuropathy1" name="neuropathy" value="1"><label for="neuropathy1">asymptomatic(E)</label></td>
+				<td><input type="radio" id="neuropathy2" name="neuropathy" value="2"><label for="neuropathy2">ADL(-) / symptomatic</label></td>
+				<td><input type="radio" id="neuropathy3" name="neuropathy" value="3"><label for="neuropathy3">ADL(+)</label></td>
+				<td><input type="radio" id="neuropathy4" name="neuropathy" value="4"><label for="neuropathy4">life threatening / disabling</label></td></tr>
 			<tr><td>hypothyroidism</td>
-				<td><label><input type="radio" name="hypothyroidism" value="0">0</label></td>
-				<td><label><input type="radio" name="hypothyroidism" value="1">asymptomatic(E)</label></td>
-				<td><label><input type="radio" name="hypothyroidism" value="2">ADL(-) / replacement</label></td>
+				<td><input type="radio" id="hypothyroidism0" name="hypothyroidism" value="0"><label for="hypothyroidism0">0</label></td>
+				<td><input type="radio" id="hypothyroidism1" name="hypothyroidism" value="1"><label for="hypothyroidism1">asymptomatic(E)</label></td>
+				<td><input type="radio" id="hypothyroidism2" name="hypothyroidism" value="2"><label for="hypothyroidism2">ADL(-) / replacement</label></td>
 				<td>&nbsp;</td>
-				<td><label><input type="radio" name="hypothyroidism" value="4">life threatening / coma</label></td></tr>
+				<td><input type="radio" id="hypothyroidism4" name="hypothyroidism" value="4"><label for="hypothyroidism4">life threatening / coma</label></td></tr>
 		</table>
 		<div class="no-print" style="padding-top:16px; text-align:center;"><input type="button" name="saveButton" value="儲存" onclick="doSave();"></div>
 		</td></tr>
