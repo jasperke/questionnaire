@@ -149,7 +149,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 		<div class="row">
 			<div class="col-sm-6 col-sm-offset-3">
 				<div class="form-group">
-					<label class="text-muted" for="p_base" style="font-size:24px;">基本生活情況</label>
+					<label class="text-muted" for="p_base" style="font-size:24px;">生活基本資料</label>
 					&nbsp;<input type="checkbox" id="p_base" name="p_base" checked>
 				</div>
 			</div>
@@ -182,7 +182,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 						<a onclick="setQuest(-1);" class="btn btn-default"><i class="glyphicon glyphicon-chevron-left"></i> 上一題</a>
 					</div>
 					<div class="col-sm-4 col-sm-offset-4">
-						<a onclick="setQuest(1);" class="btn btn-default pull-right">下一題 <i class="glyphicon glyphicon-chevron-right"></i></a>
+						<a onclick="setQuest(1);" class="btn btn-default pull-right">確定<!-- <i class="glyphicon glyphicon-chevron-right"></i> --></a>
 					</div>
 
 				</div>

@@ -359,8 +359,8 @@ $(function(){
 
 	// Tr,Nr,Mr...
 	var fourItem=['tr','nr','mr','secondPrim'],
-			fourDate=['trDate','nrDate','mrDate','secondPrimDate'],
-			i;
+		fourDate=['trDate','nrDate','mrDate','secondPrimDate'],
+		i;
 	for(i=0; i<4; i++){
 		if(current_dose[fourItem[i]]!==undefined){
 			document.doseForm[fourItem[i]][current_dose[fourItem[i]]==1?0:1].checked=true;
@@ -384,12 +384,15 @@ $(function(){
 	var dose_items=["lymphedema","dermatitis","fibrosis","telangiectasia","mucosistis","stricture","cough","laryngeal_edema","osteonecrosis","ischemia","neuropathy","hypothyroidism"];
 	for(var i=0; i<dose_items.length; i++){
 		if(current_dose[dose_items[i]]!==undefined){
-			$('[name='+dose_items[i]+']').each(function(){
+			//$('[name='+dose_items[i]+']').each(function(){
+			$(document.doseForm[dose_items[i]]).each(function(){
 				if(this.value==current_dose[dose_items[i]]){
 					this.checked=true;
 					return;
 				}
 			});
+		}else{ // 預設勾0
+			document.doseForm[dose_items[i]][0].checked=true;
 		}
 	}
 	// 顯示右上last dose record

@@ -5,7 +5,7 @@ define(CURRENT_VERSION, 1); // 目前使用題組版本
 
 $questionnaireMap=array();
 
-// [0]舊版題組
+// 注意: [0]是舊版題組
 $questionnaireMap[0]=array();
 $questionnaireMap[0]["HN.COM"]=array('_HN1','_HN2','_HN3','_HN4','_HN5','_HN6','_HN7','_HN8','_HN9','_HN10',
 	'_HN11','_HN12','_HN13','_HN14','_HN15','_HN16','_HN17','_HN18','_HN19','_HN20','_HN21','_HN22',
@@ -44,8 +44,7 @@ $questionnaireMap[1]["HN.COM"]=array('_HN1','_HN2','_HN3','_HN4','_HN5','_HN6','
 	'_HN11','_HN12','_HN13','_HN14','_HN15','_HN16','_HN17','_HN18','_HN19','_HN20','_HN21','_HN22',
 	'EQ5D1','EQ5D2','EQ5D3','EQ5D4','EQ5D5',
 	'HEALTH','_PART_OF_PAIN','_SCORE_OF_PAIN');
-$questionnaireMap[1]["FACT-B"]=array('E1','E2','E3',
-	'G1','G2','G3',
+$questionnaireMap[1]["FACT-B"]=array('G3','G2','G1','E2','E1','E3',
 	'GP1','_HN1','GP2','GP3','GP4','GP5','GP6','GP7',
 	'GS1','GS2','GS3','GS4','GS5','GS6','GS7',
 	'GE1','GE2','GE3','GE4','GE5','GE6',
@@ -55,8 +54,7 @@ $questionnaireMap[1]["FACT-B"]=array('E1','E2','E3',
 	'P2',
 	'EQ5D1','EQ5D2','EQ5D3','EQ5D4','EQ5D5',
 	'HEALTH','_PART_OF_PAIN','_SCORE_OF_PAIN');
-$questionnaireMap[1]["FACT-ECO"]=array('E1','E2','E3',
-	'G1','G2','G3',
+$questionnaireMap[1]["FACT-ECO"]=array('G3','G2','G1','E2','E1','E3',
 	'GP1','_HN1','GP2','GP3','GP4','GP5','GP6','GP7',
 	'GS1','GS2','GS3','GS4','GS5','GS6','GS7',
 	'GE1','GE2','GE3','GE4','GE5','GE6',
@@ -64,8 +62,7 @@ $questionnaireMap[1]["FACT-ECO"]=array('E1','E2','E3',
 	'_HN3',
 	'EQ5D1','EQ5D2','EQ5D3','EQ5D4','EQ5D5',
 	'HEALTH','_PART_OF_PAIN','_SCORE_OF_PAIN');
-$questionnaireMap[1]["FACT-HN-X"]=array('E1','E2','E3',
-	'G1','G2','G3',
+$questionnaireMap[1]["FACT-HN-X"]=array('G3','G2','G1','E2','E1','E3',
 	'GP1','_HN1','GP2','_HN12','_HN13','GP3','GP4','_HN4','GP5','GP6','GP7',
 	'GS1','GS2','GS3','GS4','GS5','GS6','GS7',
 	'GE1','GE2','GE3','GE4','GE5','GE6',

@@ -4,7 +4,7 @@
   "homepage": "",
   "author": "Jasper <jasperke@kinghood.com.tw>",
   "main": "index.php",
-  "version": "1.15.0",
+  "version": "2.1.0",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-uglify": "~0.2.4",
