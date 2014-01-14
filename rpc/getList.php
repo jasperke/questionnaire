@@ -16,7 +16,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
 }
 
 if(!isset($scopeMode))
-	$scopeMode=1; // 0:all, 1:waiting
+	$scopeMode=1; // 0:all, 1:waiting, 2:逾期waiting(不含今日)
 $_SESSION['scope']=$scopeMode;
 
 $out=array(array(0,''));
@@ -30,8 +30,10 @@ $db=kwcr2_mapdb('CyberSite',$SiteLoginUID,$SiteLoginPWD);
 if($db!=0){
 	if(strcmp($scopeMode,'0')==0){ // 今日全部病患
 		$s="select q.CreateTime,q.RandNum,q.Questionnaire,q.No,q.Score,u.Name,q.Weight,u.Gender,u.Birthday from MUST_Questionnaire q left outer join MUST_QuestionnaireUser u on q.No=u.No where q.OwnerID=? and q.StaffID=? and DATEPART(q.CreateTime)=CURDATE() order by q.CreateTime asc";
-	}else{ // 今日待診病患
+	}else if(strcmp($scopeMode,'1')==0){ // 今日待診病患
 		$s="select q.CreateTime,q.RandNum,q.Questionnaire,q.No,q.Score,u.Name,q.Weight,u.Gender,u.Birthday from MUST_Questionnaire q left outer join MUST_QuestionnaireUser u on q.No=u.No where q.OwnerID=? and q.StaffID=? and DATEPART(q.CreateTime)=CURDATE() and Dose is null order by q.CreateTime asc";
+	}else{ // 逾期
+		$s="select q.CreateTime,q.RandNum,q.Questionnaire,q.No,q.Score,u.Name,q.Weight,u.Gender,u.Birthday from MUST_Questionnaire q left outer join MUST_QuestionnaireUser u on q.No=u.No where q.OwnerID=? and q.StaffID=? and DATEPART(q.CreateTime)<CURDATE() and Dose is null order by q.CreateTime asc";
 	}
 	$rs=read_multi_record($db, $s, array($group_id, $_SESSION['staffId']));
 	if($rs===false){

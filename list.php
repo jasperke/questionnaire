@@ -5,7 +5,7 @@ if(!isset($_SESSION['admin'])||strcmp($_SESSION['admin'],'changgung')!=0){ // �
   header('Location: ./login.php');
   exit;
 }
-$scope=isset($_SESSION['scope'])?$_SESSION['scope']:1; // 0:all, 1:waiting
+$scope=isset($_SESSION['scope'])?$_SESSION['scope']:1; // 0:all, 1:waiting, 2:逾期waiting
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -92,6 +92,7 @@ $(function(){
       <select name="scope" onchange="getList();">
         <option value="0">今日全部</option>
         <option selected value="1">等待看診</option>
+        <option selected value="2">往日未編輯</option>
       </select></td>
     <td width="78" bgcolor="#000000"><a href="login.php?logout=1"><font color="#999999" size="4">登出</font></a></td>
   </tr>

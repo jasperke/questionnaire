@@ -183,8 +183,6 @@ if($db!=0){
   div#fact_chart canvas {width:350px; height:294px !important;} /* 250x210 * 1.4 */
   canvas {width: 350px; height: 273px;}​ /* 250x195 * 1.4 */
 }
-
-}
 canvas {border:1px solid #000000;}
 input:checked + label {background-color:#FF9393;}
 -->
@@ -366,6 +364,8 @@ $(function(){
 	for(i=0; i<4; i++){
 		if(current_dose[fourItem[i]]!==undefined){
 			document.doseForm[fourItem[i]][current_dose[fourItem[i]]==1?0:1].checked=true;
+		}else{
+			document.doseForm[fourItem[i]][1].checked=true;
 		}
 	}
 	for(i=0; i<4; i++){

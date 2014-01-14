@@ -79,8 +79,13 @@ function jumpQuiz(q_no, val) {
 		}
 		break;
 	case '_X8':
-		if (val ==0 ) {
+		if (val == 0) {
 			out = [{code: '_HN14', val: 0}];
+		}
+		break;
+	case 'X6':
+		if (val == 1) {
+			out = [{code: 'X7', val: 0}];
 		}
 		break;
 	}
